@@ -9,6 +9,14 @@ AUI.add(
 		var FormBuilder = A.Component.create(
 			{
 				ATTRS: {
+					container: {
+						getter: function() {
+							var instance = this;
+
+							return instance.get('contentBox');
+						}
+					},
+
 					definition: {
 						validator: Lang.isObject
 					},
@@ -18,9 +26,8 @@ AUI.add(
 					},
 
 					fieldTypes: {
-						getter: function() {
-							return FieldTypes.getAll();
-						}
+						setter: '_setFieldTypes',
+						valueFn: '_valueFieldTypes'
 					},
 
 					layouts: {
@@ -38,6 +45,8 @@ AUI.add(
 					}
 				},
 
+				AUGMENTS: [Liferay.DDM.Renderer.NestedFieldsSupport],
+
 				CSS_PREFIX: 'form-builder',
 
 				EXTENDS: A.FormBuilder,
@@ -50,7 +59,9 @@ AUI.add(
 
 						var boundingBox = instance.get('boundingBox');
 
-						boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a');
+						instance._eventHandlers = [
+							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a')
+						];
 					},
 
 					renderUI: function() {
@@ -129,6 +140,28 @@ AUI.add(
 						return fields;
 					},
 
+					_getPageManagerInstance: function(config) {
+						var instance = this;
+
+						var contentBox = instance.get('contentBox');
+
+						if (!instance._pageManager) {
+							instance._pageManager = new Liferay.DDL.FormBuilderPagesManager(
+								A.merge(
+									{
+										pageHeader: contentBox.one('.form-builder-pages-header'),
+										pagesQuantity: instance.get('layouts').length,
+										paginationContainer: contentBox.one('.form-builder-pages'),
+										tabviewContainer: contentBox.one('.form-builder-tabs')
+									},
+									config
+								)
+							);
+						}
+
+						return instance._pageManager;
+					},
+
 					_getVisitor: function(visitor) {
 						var instance = this;
 
@@ -187,14 +220,32 @@ AUI.add(
 						pages._uiSetActivePageNumber(pages.get('activePageNumber'));
 					},
 
+					_setFieldTypes: function(fieldTypes) {
+						var instance = this;
+
+						return AArray.filter(
+							fieldTypes,
+							function(item) {
+								return !item.get('system');
+							}
+						);
+					},
+
 					_valueDeserializer: function() {
 						var instance = this;
 
 						return new Liferay.DDL.LayoutDeserializer(
 							{
+								builder: instance,
 								definition: instance.get('definition')
 							}
 						);
+					},
+
+					_valueFieldTypes: function() {
+						var instance = this;
+
+						return FieldTypes.getAll();
 					},
 
 					_valueLayouts: function() {
@@ -224,6 +275,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );
