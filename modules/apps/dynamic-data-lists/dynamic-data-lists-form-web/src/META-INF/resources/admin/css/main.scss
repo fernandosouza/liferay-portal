@@ -11,18 +11,21 @@
 		position: relative;
 	}
 
-	.liferay-ddl-form-builder-header-controls {
-		position: absolute;
-		right: 20px;
-		top: 40px;
+	.form-builder-page-header {
+		position: relative;
+	}
 
-		.form-builder-header-controls-trigger {
-			font-size: 20px;
+	.form-builder-page-header,
+	.form-builder-tabview {
+		.form-builder-controls-trigger  {
+			position: absolute;
+			right: 20px;
+			top: 40px;
 		}
+	}
 
-		.dropdown-menu {
-			box-shadow: 0 2px 10px rgba(52,73,94,0.26);
-		}
+	.form-builder-controls-trigger {
+		font-size: 20px;
 	}
 
 	.ddl-form-builder-basic-info {
