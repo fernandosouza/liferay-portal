@@ -49,7 +49,7 @@ AUI.add(
 							size: column.get('size')
 						};
 
-						serializedColumn.fieldNames = instance._visitFields(fieldsList.get('fields'));
+						serializedColumn.fieldNames = (fieldsList) ? instance._visitFields(fieldsList.get('fields')) : [];
 
 						return serializedColumn;
 					},
