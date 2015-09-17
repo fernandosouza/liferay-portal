@@ -133,11 +133,14 @@
 					&.form-builder-page-header-description {
 						margin-bottom: 17px;
 						padding-top: 0;
+						color: #728694;
 					}
 
 					&.form-builder-page-header-title {
+						font-size: 19px;
 						margin: 19px 0 0 0;
 						padding-bottom: 0;
+						color: #728694;
 					}
 
 					&:focus {
@@ -280,5 +283,20 @@
 		font-weight: 400;
 		line-height: 16px;
 		padding: 11px 0 11px 0;
+	}
+}
+
+
+.multi-step-progress-bar {
+	li:last-child {
+		.divider:before {
+			content: '\f10c';
+    		display: block;
+    		font-family: 'fontawesome-alloy';
+    		right: -12px;
+    		position: absolute;
+    		top: 50%;
+    		transform: translateY(-50%);
+		}
 	}
 }
