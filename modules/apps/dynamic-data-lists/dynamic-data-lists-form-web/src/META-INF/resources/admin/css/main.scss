@@ -1,6 +1,8 @@
 @import "bourbon";
 
 .portlet-forms {
+	$side-spacing: 34px;
+
 	.aspect-ratio img {
 	    top: 0;
 	}
@@ -175,13 +177,33 @@
 			cursor: pointer;
 		}
 	}
-}
 
-.form-builder-field {
-	border-radius: 0;
-	border-width: 0;
-	box-shadow: none;
-	margin: 0;
+	/*
+	 * Probabily these rules must be in another file. Check it later.
+	 */
+
+	.form-builder-field {
+		border-radius: 0;
+		border-width: 0;
+		box-shadow: none;
+		margin: 0;
+		padding: 10px $side-spacing 10px $side-spacing;
+	}
+
+	.form-builder-field-list-add-button {
+		width: auto;
+		margin: 0 $side-spacing;
+		cursor: pointer;
+	}
+
+	.form-builder-field-list-add-button-label {
+		margin-bottom: 5px;
+		color: #4a90e2;
+	}
+
+	/*
+	 * Probabily these rules must be in another file. Check it later.
+	 */
 }
 
 .lfr-ddl-field-settings-modal.form-builder-field-settings {

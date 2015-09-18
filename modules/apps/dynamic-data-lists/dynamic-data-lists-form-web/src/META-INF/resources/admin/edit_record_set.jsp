@@ -74,12 +74,13 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 
 		<div class="loading-animation" id="<portlet:namespace />loader"></div>
 
-		<aui:button-row cssClass="ddl-form-builder-buttons">
-			<aui:button label="save" primary="<%= true %>" type="submit" />
+		<div class="container-fluid-1280">
+			<aui:button-row cssClass="ddl-form-builder-buttons">
+				<aui:button label="save" primary="<%= true %>" type="submit" />
 
-			<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
-		</aui:button-row>
-
+				<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
+			</aui:button-row>
+		</div>
 		<aui:script>
 			var initHandler = Liferay.after(
 				'form:registered',
