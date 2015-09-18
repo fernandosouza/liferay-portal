@@ -152,6 +152,49 @@ recordSetSearch.setOrderByType(orderByType);
 
 			<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 		</liferay-ui:search-container>
+
+		<aui:script use="aui-tooltip">
+			var delegate = new A.TooltipDelegate(
+				{
+					duration: .5,
+					html: true,
+					opacity: 0.95,
+					trigger: '.portlet-forms .entry-display-style'
+				}
+			);
+
+			var container = A.one('.portlet-forms');
+
+			var tooltip = delegate.getTooltip();
+
+			container.delegate('click', A.bind(tooltip.hide, tooltip), '.aspect-ratio img');
+
+			tooltip.after(
+				'triggerChange',
+				function(event) {
+					var trigger = event.newVal;
+
+					var image = trigger.one('.aspect-ratio img');
+
+					var preview = '<img class="tooltip-preview" src="' + image.attr('src') + '" />';
+
+					tooltip.set('bodyContent', preview);
+
+					tooltip.suggestAlignment(trigger);
+				}
+			);
+
+			var clearTooltipHandler = function(event) {
+				if (event.portletId === '<%= portletDisplay.getRootPortletId() %>') {
+					tooltip.hide();
+					delegate.destroy();
+
+					Liferay.detach('destroyPortlet', clearTooltipHandler);
+				}
+			};
+
+			Liferay.on('destroyPortlet', clearTooltipHandler);
+		</aui:script>
 	</aui:form>
 </div>
 
