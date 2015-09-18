@@ -101,7 +101,7 @@ recordSetSearch.setOrderByType(orderByType);
 
 							<%
 							User userDisplay = UserLocalServiceUtil.fetchUserById(recordSet.getUserId());
-							
+
 							DDLFormAdminPortletUtil.saveThumbnail(recordSet.getRecordSetId());
 							%>
 
@@ -159,7 +159,8 @@ recordSetSearch.setOrderByType(orderByType);
 					duration: .5,
 					html: true,
 					opacity: 0.95,
-					trigger: '.portlet-forms .entry-display-style'
+					trigger: '.portlet-forms .entry-display-style',
+					zIndex: 5
 				}
 			);
 

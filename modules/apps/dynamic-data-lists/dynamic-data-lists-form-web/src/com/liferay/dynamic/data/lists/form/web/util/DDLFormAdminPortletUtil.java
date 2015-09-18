@@ -20,6 +20,8 @@ import java.io.IOException;
 
 import com.liferay.dynamic.data.lists.form.web.configuration.DDLFormWebConfigurationUtil;
 import com.liferay.dynamic.data.lists.model.DDLRecord;
+import com.liferay.dynamic.data.lists.model.DDLRecordSet;
+import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
 import com.liferay.dynamic.data.lists.util.comparator.DDLRecordIdComparator;
 import com.liferay.dynamic.data.lists.util.comparator.DDLRecordModifiedDateComparator;
 import com.liferay.portal.kernel.image.ImageBag;
@@ -55,26 +57,28 @@ public class DDLFormAdminPortletUtil {
 	}
 	
 	public static void saveThumbnail(long recordSetId) throws Exception {
+		DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
+
+		String thumbName = String.valueOf(recordSetId) + "_" + recordSet.getModifiedDate().getTime();
+
+		String thumbPath = DDLFormWebConfigurationUtil.get("thumb.path") + thumbName + ".png";
+
+		File thumbFile = new File(thumbPath);
+
+		if (thumbFile.exists()) {
+			return;
+		}
+
 		String url = 
 			"http://localhost:8080/o/ddm-form-renderer-servlet?recordSetId=" + recordSetId;
-		
-		String thumbPath = DDLFormWebConfigurationUtil.get("thumb.path") + recordSetId + ".png";
-		
+
 		ProcessBuilder processBuilder = new ProcessBuilder(
-			DDLFormWebConfigurationUtil.get("wkhtmltoimage.path"), "-f", "png", "--height", "800", url, thumbPath);
-		
+			DDLFormWebConfigurationUtil.get("wkhtmltoimage.path"),
+			"-f", "png", "--height", "800", url, thumbPath);
+
 		Process process = processBuilder.start();
-		
+
 		process.waitFor();
-		
-//		ImageBag imageBag  = ImageToolUtil.read(
-//			FileUtil.getBytes(new File(thumbPath)));
-//		
-//		RenderedImage renderedImage = ImageToolUtil.scale(imageBag.getRenderedImage(), 500, 400);
-//		
-//		byte[] bytes = ImageToolUtil.getBytes(renderedImage, "image/png");
-//		
-//		FileUtil.write(thumbPath, bytes);
 	}
 
 }
