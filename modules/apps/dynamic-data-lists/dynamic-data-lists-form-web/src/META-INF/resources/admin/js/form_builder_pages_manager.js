@@ -80,6 +80,13 @@ AUI.add(
 						var switchViewNode = pageHeader.one('.' + CSS_FORM_BUILDER_SWITCH_VIEW);
 
 						switchViewNode.toggle(event.newVal <= 1);
+
+						if (event.newVal > 1) {
+							A.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_SWITCH_MODE).show();
+						}
+						else {
+							A.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_SWITCH_MODE).hide();
+						}
 					},
 
 					_afterTitlesChange: function(event) {
@@ -99,15 +106,6 @@ AUI.add(
 							pagination.set('page', selectedWizard + 1);
 
 							instance.set('activePageNumber', selectedWizard + 1);
-						}
-
-						if (event.newVal > 1) {
-							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).hide();
-							A.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_SWITCH_MODE).show();
-						}
-						else {
-							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).show();
-							A.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_SWITCH_MODE).hide();
 						}
 						
 					},
@@ -142,14 +140,6 @@ AUI.add(
 							A.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_SWITCH_MODE).hide();
 						}
 
-						popover.get('boundingBox').one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_ADD_PAGE_LAST_POSITION).on('click',
-							A.bind(this._onAddLastPageClick, this)
-						);
-
-						popover.get('boundingBox').one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_DELETE_PAGE).on('click',
-							A.bind(this._onRemovePageClick, this)
-						);
-
 						var popoverBoundingBox = popover.get('boundingBox');
 
 						popoverBoundingBox.one('.' + CSS_FORM_BUILDER_PAGE_MANAGER_ADD_PAGE_LAST_POSITION).on('click', A.bind('_onAddLastPageClick', instance));
@@ -175,21 +165,14 @@ AUI.add(
 							}
 						);
 
-						if (instance.get('pagesQuantity') > 1) {
-							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).hide();
-						}
-						else {
-							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).show();
-						}
-
-						boundingBox.one('.' + CSS_FORM_BUILDER_TABVIEW).append(topControlTrigger);
-
 						var leftControlTrigger = A.Lang.sub(
 							instance.TPL_PAGE_CONTROL_TRIGGER,
 							{
 								position: 'left'
 							}
 						);
+
+						boundingBox.one('.' + CSS_FORM_BUILDER_TABVIEW).append(topControlTrigger);
 
 						boundingBox.one('.' + CSS_FORM_BUILDER_PAGE_CONTROLS).append(leftControlTrigger);
 
@@ -198,6 +181,13 @@ AUI.add(
 						boundingBox.delegate('click', A.bind(instance._onPageControlOptionClick, instance), '.' + CSS_FORM_BUILDER_SWITCH_VIEW);
 
 						boundingBox.all('.' + CSS_FORM_BUILDER_SWITCH_VIEW).on('clickoutside', popover.hide, popover);
+
+						if (instance.get('pagesQuantity') > 1) {
+							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).hide();
+						}
+						else {
+							A.one('.' + CSS_PAGE_HEADER).one('.' + CSS_FORM_BUILDER_SWITCH_VIEW).show();
+						}
 					},
 
 					_createWizardItems: function() {
