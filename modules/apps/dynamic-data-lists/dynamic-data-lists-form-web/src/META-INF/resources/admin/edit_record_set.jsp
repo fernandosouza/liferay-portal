@@ -51,14 +51,14 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 			<div class="container-fluid-1280">
 				<div class="ddl-form-builder-name">
 					<h2>
-						<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>" editorName="alloyeditor" name="nameEditor" placeholder="name" showSource="<%= false %>" />
+						<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>" editorName="alloyeditor" name="nameEditor" placeholder="Form name" showSource="<%= false %>" />
 					</h2>
 				</div>
 
 				<aui:input name="name" type="hidden" />
 
 				<div class="ddl-form-builder-description">
-					<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>" editorName="alloyeditor" name="descriptionEditor" placeholder="description" showSource="<%= false %>" />
+					<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>" editorName="alloyeditor" name="descriptionEditor" placeholder="Short description" showSource="<%= false %>" />
 				</div>
 
 				<aui:input name="description" type="hidden" />
