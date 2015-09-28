@@ -33,8 +33,6 @@ public interface DDMDisplay {
 
 	public String getAvailableFields();
 
-	public DDMPermissionHandler getDDMPermissionHandler();
-
 	public String getEditStructureDefaultValuesURL(
 			LiferayPortletRequest liferayPortletRequest,
 			LiferayPortletResponse liferayPortletResponse,
@@ -102,6 +100,8 @@ public interface DDMDisplay {
 	public String getViewTemplatesTitle(DDMStructure structure, Locale locale);
 
 	public boolean isShowAddStructureButton();
+
+	public boolean isShowBackURLInTitleBar();
 
 	public boolean isShowStructureSelector();
 

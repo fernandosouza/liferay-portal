@@ -17,13 +17,13 @@ AUI.add(
 
 			strings: {
 				value: {
-					defaultValidationMessage: Liferay.Language.get('unknown-error'),
+					defaultErrorMessage: Liferay.Language.get('unknown-error'),
 					requestErrorMessage: Liferay.Language.get('there-was-an-error-when-trying-to-validate-your-form')
 				}
 			},
 
-			validationExpression: {
-				value: ''
+			validation: {
+				value: {}
 			}
 		};
 
@@ -34,24 +34,45 @@ AUI.add(
 				var evaluator = instance.get('evaluator');
 
 				instance._eventHandlers.push(
-					evaluator.after('evaluationEnded', A.bind('_afterEvaluationEnded', instance)),
-					evaluator.after('evaluationStarted', A.bind('_afterEvaluationStarted', instance)),
-					instance.after('blur', instance._afterBlur)
+					evaluator.after('evaluationEnded', A.bind('_afterValidationEvaluationEnded', instance)),
+					instance.after('blur', instance._afterBlur),
+					instance.after('parentChange', instance._afterParentChange)
 				);
 			},
 
 			hasErrors: function() {
 				var instance = this;
 
-				return instance.get('validationMessages').length > 0;
+				return !!instance.get('errorMessage');
 			},
 
 			hasValidation: function() {
 				var instance = this;
 
-				var validationExpression = instance.get('validationExpression');
+				var required = instance.get('required');
 
-				return !!validationExpression && validationExpression !== 'true';
+				var validation = instance.get('validation');
+
+				var expression = validation.expression;
+
+				return required || (!!expression && expression !== 'true');
+			},
+
+			processEvaluation: function(result) {
+				var instance = this;
+
+				if (result && Lang.isObject(result)) {
+					instance.processValidation(result);
+
+					instance.showValidationStatus();
+				}
+				else {
+					var root = instance.getRoot();
+
+					var strings = instance.get('strings');
+
+					root.showAlert(strings.requestErrorMessage);
+				}
 			},
 
 			processValidation: function(result) {
@@ -59,22 +80,23 @@ AUI.add(
 
 				var instanceId = instance.get('instanceId');
 
-				var validation = Util.getFieldByKey(result, instanceId, 'instanceId');
+				var fieldData = Util.getFieldByKey(result, instanceId, 'instanceId');
 
-				if (validation) {
-					var messages = validation.messages;
+				if (fieldData) {
+					instance.hideErrorMessage();
 
-					if (!messages && !validation.valid) {
-						var strings = instance.get('strings');
+					if (fieldData.visible) {
+						var errorMessage = fieldData.errorMessage;
 
-						messages = [strings.defaultValidationMessage];
-					}
+						if (!errorMessage && !fieldData.valid) {
+							var strings = instance.get('strings');
 
-					if (messages && messages.length) {
-						instance.set('validationMessages', messages);
-					}
-					else {
-						instance.clearValidationMessages();
+							errorMessage = strings.defaultErrorMessage;
+						}
+
+						if (errorMessage) {
+							instance.set('errorMessage', errorMessage);
+						}
 					}
 				}
 			},
@@ -84,6 +106,8 @@ AUI.add(
 
 				if (instance.hasValidation()) {
 					var evaluator = instance.get('evaluator');
+
+					instance.showLoadingFeedback();
 
 					evaluator.evaluate(
 						function(result) {
@@ -110,31 +134,22 @@ AUI.add(
 				instance.validate();
 			},
 
-			_afterEvaluationEnded: function(event) {
+			_afterParentChange: function(event) {
+				var instance = this;
+
+				var evaluator = instance.get('evaluator');
+
+				evaluator.set('form', event.newVal);
+			},
+
+			_afterValidationEvaluationEnded: function(event) {
 				var instance = this;
 
 				var result = event.result;
 
 				instance.hideFeedback();
 
-				if (result && Lang.isObject(result)) {
-					instance.processValidation(result);
-
-					instance.showValidationStatus();
-				}
-				else {
-					var root = instance.getRoot();
-
-					var strings = instance.get('strings');
-
-					root.showAlert(strings.requestErrorMessage);
-				}
-			},
-
-			_afterEvaluationStarted: function() {
-				var instance = this;
-
-				instance.showLoadingFeedback();
+				instance.processEvaluation(result);
 			},
 
 			_valueEvaluator: function() {

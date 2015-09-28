@@ -20,29 +20,29 @@
 PanelCategory panelCategory = (PanelCategory)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY);
 PanelCategoryRegistry panelCategoryRegistry = (PanelCategoryRegistry)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY_REGISTRY);
 
-PanelCategory allSitesPanelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITES_ALL_SITES);
+PanelCategory mySitesPanelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITES_ADMINISTRATION_MY_SITES);
 
 Group group = themeDisplay.getSiteGroup();
 %>
 
-<div class="toolbar">
-	<c:if test="<%= (allSitesPanelCategory != null) && allSitesPanelCategory.hasAccessPermission(permissionChecker, group) %>">
+<div class="site-administration-toolbar toolbar">
+	<c:if test="<%= (mySitesPanelCategory != null) && mySitesPanelCategory.hasAccessPermission(permissionChecker, group) %>">
 		<div class="toolbar-group-field">
-			<a class="icon-angle-left icon-monospaced" href="javascript:;" id="<portlet:namespace />allSitesLink"></a>
+			<a class="icon-angle-left icon-monospaced" href="javascript:;" id="<portlet:namespace />mySitesLink"></a>
 		</div>
 
 		<aui:script sandbox="<%= true %>">
-			$('#<portlet:namespace />allSitesLink').on(
+			$('#<portlet:namespace />mySitesLink').on(
 				'click',
 				function(event) {
-					$('#<portlet:namespace /><%= allSitesPanelCategory.getKey() %>TabLink').tab('show');
+					$('#<portlet:namespace /><%= AUIUtil.normalizeId(mySitesPanelCategory.getKey()) %>TabLink').tab('show');
 				}
 			);
 		</aui:script>
 	</c:if>
 
 	<div class="toolbar-group-content">
-		<aui:a href="<%= group.getDisplayURL(themeDisplay) %>">
+		<aui:a cssClass="site-administration-title" href="<%= group.getDisplayURL(themeDisplay) %>">
 			<%= group.getDescriptiveName(locale) %>
 
 			<c:if test="<%= themeDisplay.isShowStagingIcon() %>">

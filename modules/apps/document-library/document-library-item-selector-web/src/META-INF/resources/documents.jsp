@@ -23,10 +23,16 @@ ItemSelectorCriterion itemSelectorCriterion = dlItemSelectorViewDisplayContext.g
 
 SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "curDocuments", SearchContainer.DEFAULT_DELTA, dlItemSelectorViewDisplayContext.getPortletURL(request, liferayPortletResponse), null, LanguageUtil.get(request, "there-are-no-documents-or-media-files-in-this-folder"));
 
+String orderByCol = ParamUtil.getString(request, "orderByCol", "title");
+String orderByType = ParamUtil.getString(request, "orderByType", "asc");
+
+OrderByComparator<?> orderByComparator = DLUtil.getRepositoryModelOrderByComparator(orderByCol, orderByType, true);
+
+searchContainer.setOrderByComparator(orderByComparator);
+
 List results = null;
 int total = 0;
 
-long repositoryId = dlItemSelectorViewDisplayContext.getRepositoryId(request);
 long folderId = dlItemSelectorViewDisplayContext.getFolderId(request);
 String[] mimeTypes = dlItemSelectorViewDisplayContext.getMimeTypes();
 
@@ -38,7 +44,7 @@ if (dlItemSelectorViewDisplayContext.isSearch()) {
 	searchContext.setFolderIds(new long[] {dlItemSelectorViewDisplayContext.getFolderId(request)});
 	searchContext.setStart(searchContainer.getStart());
 
-	Hits hits = DLAppServiceUtil.search(repositoryId, searchContext);
+	Hits hits = DLAppServiceUtil.search(themeDisplay.getScopeGroupId(), searchContext);
 
 	total = hits.getLength();
 
@@ -68,8 +74,8 @@ if (dlItemSelectorViewDisplayContext.isSearch()) {
 	}
 }
 else {
-	total = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(repositoryId, folderId, WorkflowConstants.STATUS_APPROVED, mimeTypes, false);
-	results = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcuts(repositoryId, folderId, WorkflowConstants.STATUS_APPROVED, mimeTypes, false, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+	total = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(themeDisplay.getScopeGroupId(), folderId, WorkflowConstants.STATUS_APPROVED, mimeTypes, false);
+	results = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcuts(themeDisplay.getScopeGroupId(), folderId, WorkflowConstants.STATUS_APPROVED, mimeTypes, false, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 }
 
 searchContainer.setTotal(total);

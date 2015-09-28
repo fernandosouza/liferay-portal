@@ -223,12 +223,12 @@ String displayStyle = journalDisplayContext.getDisplayStyle();
 
 <liferay-ui:search-container
 	searchContainer="<%= articleSearchContainer %>"
+	total="<%= total %>"
 	totalVar="articleSearchContainerTotal"
 >
 	<liferay-ui:search-container-results
 		results="<%= results %>"
 		resultsVar="articleSearchContainerResults"
-		total="<%= total %>"
 	/>
 
 	<liferay-ui:search-container-row
@@ -275,8 +275,6 @@ String displayStyle = journalDisplayContext.getDisplayStyle();
 				rowURL.setParameter("articleId", curArticle.getArticleId());
 				rowURL.setParameter("version", String.valueOf(curArticle.getVersion()));
 				rowURL.setParameter("displayStyle", displayStyle);
-
-				request.setAttribute("view_entries.jsp-rowURL", rowURL);
 				%>
 
 				<c:choose>
@@ -288,6 +286,7 @@ String displayStyle = journalDisplayContext.getDisplayStyle();
 
 						<liferay-ui:search-container-column-jsp
 							colspan="2"
+							href="<%= rowURL %>"
 							path="/view_article_descriptive.jsp"
 						/>
 
@@ -336,6 +335,7 @@ String displayStyle = journalDisplayContext.getDisplayStyle();
 						/>
 
 						<liferay-ui:search-container-column-jsp
+							href="<%= rowURL %>"
 							name="title"
 							path="/article_title.jsp"
 							truncate="<%= true %>"
@@ -497,9 +497,5 @@ String displayStyle = journalDisplayContext.getDisplayStyle();
 		</c:choose>
 	</liferay-ui:search-container-row>
 
-	<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" paginate="<%= false %>" searchContainer="<%= articleSearchContainer %>" />
+	<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" searchContainer="<%= articleSearchContainer %>" />
 </liferay-ui:search-container>
-
-<div class="article-entries-pagination">
-	<liferay-ui:search-paginator searchContainer="<%= articleSearchContainer %>" />
-</div>

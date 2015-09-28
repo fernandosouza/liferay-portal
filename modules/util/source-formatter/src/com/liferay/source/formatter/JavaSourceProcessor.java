@@ -900,6 +900,17 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 					"modules: " + fileName);
 		}
 
+		// LPS-58529
+
+		if (portalSource && newContent.contains("ResourceBundle.getBundle(") &&
+			!fileName.endsWith("ResourceBundleUtil.java")) {
+
+			processErrorMessage(
+				fileName,
+				"Use ResourceBundleUtil.getBundle instead of " +
+					"ResourceBundle.getBundle: " + fileName);
+		}
+
 		newContent = getCombinedLinesContent(
 			newContent, _combinedLinesPattern1);
 		newContent = getCombinedLinesContent(
@@ -1465,9 +1476,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 							StringPool.TAB);
 					}
 
-					line = formatIncorrectSyntax(line, ",}", "}");
+					line = formatIncorrectSyntax(line, ",}", "}", false);
 
-					line = formatWhitespace(line, trimmedLine);
+					line = formatWhitespace(line, trimmedLine, true);
 				}
 
 				if (line.contains(StringPool.TAB + "for (") &&
@@ -2239,8 +2250,15 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 				firstLine = StringUtil.replaceLast(
 					firstLine, StringUtil.trim(linePart), StringPool.BLANK);
 
-				secondLine = StringUtil.replaceLast(
-					line, StringPool.TAB, StringPool.TAB + linePart);
+				if (extraSpace) {
+					secondLine = StringUtil.replaceLast(
+						line, StringPool.TAB,
+						StringPool.TAB + linePart + StringPool.SPACE);
+				}
+				else {
+					secondLine = StringUtil.replaceLast(
+						line, StringPool.TAB, StringPool.TAB + linePart);
+				}
 			}
 			else {
 				processErrorMessage(
@@ -2283,13 +2301,19 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		if (previousLine.endsWith(" extends")) {
 			return getCombinedLinesContent(
 				content, fileName, line, trimmedLine, lineLength, lineCount,
-				previousLine, "extends", tabDiff, false, false, 0);
+				previousLine, "extends", tabDiff, false, true, 0);
 		}
 
 		if (previousLine.endsWith(" implements")) {
 			return getCombinedLinesContent(
 				content, fileName, line, trimmedLine, lineLength, lineCount,
-				previousLine, "implements ", tabDiff, false, false, 0);
+				previousLine, "implements ", tabDiff, false, true, 0);
+		}
+
+		if (previousLine.endsWith("= new")) {
+			return getCombinedLinesContent(
+				content, fileName, line, trimmedLine, lineLength, lineCount,
+				previousLine, "new", tabDiff, false, true, 0);
 		}
 
 		if (trimmedLine.startsWith("+ ") || trimmedLine.startsWith("- ") ||

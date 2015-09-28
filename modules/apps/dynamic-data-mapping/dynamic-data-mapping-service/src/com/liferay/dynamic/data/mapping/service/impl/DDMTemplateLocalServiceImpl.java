@@ -15,6 +15,7 @@
 package com.liferay.dynamic.data.mapping.service.impl;
 
 import com.liferay.dynamic.data.mapping.configuration.DDMServiceConfigurationKeys;
+import com.liferay.dynamic.data.mapping.configuration.DDMServiceConfigurationUtil;
 import com.liferay.dynamic.data.mapping.exception.InvalidTemplateVersionException;
 import com.liferay.dynamic.data.mapping.exception.NoSuchTemplateException;
 import com.liferay.dynamic.data.mapping.exception.RequiredTemplateException;
@@ -27,6 +28,7 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateVersion;
 import com.liferay.dynamic.data.mapping.service.base.DDMTemplateLocalServiceBaseImpl;
+import com.liferay.dynamic.data.mapping.service.permission.DDMTemplatePermission;
 import com.liferay.dynamic.data.mapping.util.DDMXMLUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -50,7 +52,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.permission.ModelPermissions;
 import com.liferay.portal.service.persistence.ImageUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.util.xml.XMLUtil;
 
 import java.io.File;
@@ -100,12 +101,12 @@ public class DDMTemplateLocalServiceImpl
 	 *         template's resource model
 	 * @param  nameMap the template's locales and localized names
 	 * @param  descriptionMap the template's locales and localized descriptions
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
-	 * @param  mode the template's mode. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
+	 * @param  mode the template's mode. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  language the template's script language. For more information,
-	 *         see {@link DDMTemplateConstants}.
+	 *         see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  script the template's script
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         UUID, creation date, modification date, guest permissions, and
@@ -141,12 +142,12 @@ public class DDMTemplateLocalServiceImpl
 	 *         (optionally <code>null</code>)
 	 * @param  nameMap the template's locales and localized names
 	 * @param  descriptionMap the template's locales and localized descriptions
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
-	 * @param  mode the template's mode. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
+	 * @param  mode the template's mode. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  language the template's script language. For more information,
-	 *         see {@link DDMTemplateConstants}.
+	 *         see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  script the template's script
 	 * @param  cacheable whether the template is cacheable
 	 * @param  smallImage whether the template has a small image
@@ -273,11 +274,14 @@ public class DDMTemplateLocalServiceImpl
 			boolean addGuestPermissions)
 		throws PortalException {
 
+		String resourceName =
+			DDMTemplatePermission.getTemplateModelResourceName(
+				template.getResourceClassNameId());
+
 		resourceLocalService.addResources(
 			template.getCompanyId(), template.getGroupId(),
-			template.getUserId(), DDMTemplate.class.getName(),
-			template.getTemplateId(), false, addGroupPermissions,
-			addGuestPermissions);
+			template.getUserId(), resourceName, template.getTemplateId(), false,
+			addGroupPermissions, addGuestPermissions);
 	}
 
 	/**
@@ -292,10 +296,14 @@ public class DDMTemplateLocalServiceImpl
 			DDMTemplate template, ModelPermissions modelPermissions)
 		throws PortalException {
 
+		String resourceName =
+			DDMTemplatePermission.getTemplateModelResourceName(
+				template.getResourceClassNameId());
+
 		resourceLocalService.addModelResources(
 			template.getCompanyId(), template.getGroupId(),
-			template.getUserId(), DDMTemplate.class.getName(),
-			template.getTemplateId(), modelPermissions);
+			template.getUserId(), resourceName, template.getTemplateId(),
+			modelPermissions);
 	}
 
 	/**
@@ -351,8 +359,8 @@ public class DDMTemplateLocalServiceImpl
 	 *         related model
 	 * @param  oldClassPK the primary key of the old template's related entity
 	 * @param  newClassPK the primary key of the new template's related entity
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         creation date, modification date, guest permissions, and group
 	 *         permissions for the new templates.
@@ -699,8 +707,8 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  classNameId the primary key of the class name for the template's
 	 *         related model
 	 * @param  classPK the primary key of the template's related entity
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @return the matching templates
 	 */
 	@Override
@@ -719,10 +727,10 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  classNameId the primary key of the class name for the template's
 	 *         related model
 	 * @param  classPK the primary key of the template's related entity
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
-	 * @param  mode the template's mode. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
+	 * @param  mode the template's mode. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @return the matching templates
 	 */
 	@Override
@@ -799,11 +807,12 @@ public class DDMTemplateLocalServiceImpl
 	 */
 	@Override
 	public List<DDMTemplate> getTemplatesByStructureClassNameId(
-		long groupId, long structureClassNameId, int start, int end,
+		long groupId, long structureClassNameId, int status, int start, int end,
 		OrderByComparator<DDMTemplate> orderByComparator) {
 
-		return ddmTemplateFinder.findByG_SC(
-			groupId, structureClassNameId, start, end, orderByComparator);
+		return ddmTemplateFinder.findByG_SC_S(
+			groupId, structureClassNameId, status, start, end,
+			orderByComparator);
 	}
 
 	/**
@@ -817,9 +826,10 @@ public class DDMTemplateLocalServiceImpl
 	 */
 	@Override
 	public int getTemplatesByStructureClassNameIdCount(
-		long groupId, long structureClassNameId) {
+		long groupId, long structureClassNameId, int status) {
 
-		return ddmTemplateFinder.countByG_SC(groupId, structureClassNameId);
+		return ddmTemplateFinder.countByG_SC_S(
+			groupId, structureClassNameId, status);
 	}
 
 	/**
@@ -917,9 +927,11 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  keywords the keywords (space separated), which may occur in the
 	 *         template's name or description (optionally <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  start the lower bound of the range of templates to return
 	 * @param  end the upper bound of the range of templates to return (not
 	 *         inclusive)
@@ -931,11 +943,12 @@ public class DDMTemplateLocalServiceImpl
 	public List<DDMTemplate> search(
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, String keywords, String type, String mode,
-		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 
 		return ddmTemplateFinder.findByKeywords(
 			companyId, groupId, classNameId, classPK, resourceClassNameId,
-			keywords, type, mode, start, end, orderByComparator);
+			keywords, type, mode, status, start, end, orderByComparator);
 	}
 
 	/**
@@ -964,12 +977,14 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  description the description keywords (optionally
 	 *         <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  language the template's script language (optionally
-	 *         <code>null</code>). For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 *         <code>null</code>). For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  andOperator whether every field must match its keywords, or just
 	 *         one field
 	 * @param  start the lower bound of the range of templates to return
@@ -983,12 +998,12 @@ public class DDMTemplateLocalServiceImpl
 	public List<DDMTemplate> search(
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, String name, String description, String type,
-		String mode, String language, boolean andOperator, int start, int end,
-		OrderByComparator<DDMTemplate> orderByComparator) {
+		String mode, String language, int status, boolean andOperator,
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 
-		return ddmTemplateFinder.findByC_G_C_C_R_N_D_T_M_L(
+		return ddmTemplateFinder.findByC_G_C_C_R_N_D_T_M_L_S(
 			companyId, groupId, classNameId, classPK, resourceClassNameId, name,
-			description, type, mode, language, andOperator, start, end,
+			description, type, mode, language, status, andOperator, start, end,
 			orderByComparator);
 	}
 
@@ -1017,9 +1032,11 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  keywords the keywords (space separated), which may occur in the
 	 *         template's name or description (optionally <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  start the lower bound of the range of templates to return
 	 * @param  end the upper bound of the range of templates to return (not
 	 *         inclusive)
@@ -1031,11 +1048,12 @@ public class DDMTemplateLocalServiceImpl
 	public List<DDMTemplate> search(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, String keywords, String type, String mode,
-		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 
 		return ddmTemplateFinder.findByKeywords(
 			companyId, groupIds, classNameIds, classPKs, resourceClassNameId,
-			keywords, type, mode, start, end, orderByComparator);
+			keywords, type, mode, status, start, end, orderByComparator);
 	}
 
 	/**
@@ -1064,12 +1082,14 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  description the description keywords (optionally
 	 *         <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  language the template's script language (optionally
-	 *         <code>null</code>). For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 *         <code>null</code>). For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  andOperator whether every field must match its keywords, or just
 	 *         one field.
 	 * @param  start the lower bound of the range of templates to return
@@ -1083,13 +1103,13 @@ public class DDMTemplateLocalServiceImpl
 	public List<DDMTemplate> search(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, String name, String description, String type,
-		String mode, String language, boolean andOperator, int start, int end,
-		OrderByComparator<DDMTemplate> orderByComparator) {
+		String mode, String language, int status, boolean andOperator,
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 
-		return ddmTemplateFinder.findByC_G_C_C_R_N_D_T_M_L(
+		return ddmTemplateFinder.findByC_G_C_C_R_N_D_T_M_L_S(
 			companyId, groupIds, classNameIds, classPKs, resourceClassNameId,
-			name, description, type, mode, language, andOperator, start, end,
-			orderByComparator);
+			name, description, type, mode, language, status, andOperator, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -1107,19 +1127,22 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  keywords the keywords (space separated), which may occur in the
 	 *         template's name or description (optionally <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @return the number of matching templates
 	 */
 	@Override
 	public int searchCount(
 		long companyId, long groupId, long classNameId, long classPK,
-		long resourceClassNameId, String keywords, String type, String mode) {
+		long resourceClassNameId, String keywords, String type, String mode,
+		int status) {
 
 		return ddmTemplateFinder.countByKeywords(
 			companyId, groupId, classNameId, classPK, resourceClassNameId,
-			keywords, type, mode);
+			keywords, type, mode, status);
 	}
 
 	/**
@@ -1137,12 +1160,14 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  description the description keywords (optionally
 	 *         <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  language the template's script language (optionally
-	 *         <code>null</code>). For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 *         <code>null</code>). For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  andOperator whether every field must match its keywords, or just
 	 *         one field.
 	 * @return the number of matching templates
@@ -1151,11 +1176,11 @@ public class DDMTemplateLocalServiceImpl
 	public int searchCount(
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, String name, String description, String type,
-		String mode, String language, boolean andOperator) {
+		String mode, String language, int status, boolean andOperator) {
 
-		return ddmTemplateFinder.countByC_G_C_C_R_N_D_T_M_L(
+		return ddmTemplateFinder.countByC_G_C_C_R_N_D_T_M_L_S(
 			companyId, groupId, classNameId, classPK, resourceClassNameId, name,
-			description, type, mode, language, andOperator);
+			description, type, mode, language, status, andOperator);
 	}
 
 	/**
@@ -1173,19 +1198,22 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  keywords the keywords (space separated), which may occur in the
 	 *         template's name or description (optionally <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @return the number of matching templates
 	 */
 	@Override
 	public int searchCount(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
-		long resourceClassNameId, String keywords, String type, String mode) {
+		long resourceClassNameId, String keywords, String type, String mode,
+		int status) {
 
 		return ddmTemplateFinder.countByKeywords(
 			companyId, groupIds, classNameIds, classPKs, resourceClassNameId,
-			keywords, type, mode);
+			keywords, type, mode, status);
 	}
 
 	/**
@@ -1203,12 +1231,14 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  description the description keywords (optionally
 	 *         <code>null</code>)
 	 * @param  type the template's type (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  mode the template's mode (optionally <code>null</code>). For more
-	 *         information, see {@link DDMTemplateConstants}.
+	 *         information, see DDMTemplateConstants in the
+	 *         dynamic-data-mapping-api module.
 	 * @param  language the template's script language (optionally
-	 *         <code>null</code>). For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 *         <code>null</code>). For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  andOperator whether every field must match its keywords, or just
 	 *         one field.
 	 * @return the number of matching templates
@@ -1217,11 +1247,11 @@ public class DDMTemplateLocalServiceImpl
 	public int searchCount(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, String name, String description, String type,
-		String mode, String language, boolean andOperator) {
+		String mode, String language, int status, boolean andOperator) {
 
-		return ddmTemplateFinder.countByC_G_C_C_R_N_D_T_M_L(
+		return ddmTemplateFinder.countByC_G_C_C_R_N_D_T_M_L_S(
 			companyId, groupIds, classNameIds, classPKs, resourceClassNameId,
-			name, description, type, mode, language, andOperator);
+			name, description, type, mode, language, status, andOperator);
 	}
 
 	/**
@@ -1233,12 +1263,12 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  nameMap the template's new locales and localized names
 	 * @param  descriptionMap the template's new locales and localized
 	 *         description
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
-	 * @param  mode the template's mode. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
+	 * @param  mode the template's mode. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  language the template's script language. For more information,
-	 *         see {@link DDMTemplateConstants}.
+	 *         see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  script the template's script
 	 * @param  cacheable whether the template is cacheable
 	 * @param  smallImage whether the template has a small image
@@ -1311,8 +1341,6 @@ public class DDMTemplateLocalServiceImpl
 		template.setSmallImage(smallImage);
 		template.setSmallImageURL(smallImageURL);
 
-		ddmTemplatePersistence.update(template);
-
 		// Small image
 
 		saveImages(
@@ -1321,7 +1349,12 @@ public class DDMTemplateLocalServiceImpl
 
 		// Template version
 
-		addTemplateVersion(user, template, version, serviceContext);
+		DDMTemplateVersion ddmTemplateVersion = addTemplateVersion(
+			user, template, version, serviceContext);
+
+		if (ddmTemplateVersion.isApproved()) {
+			ddmTemplatePersistence.update(template);
+		}
 
 		return template;
 	}
@@ -1335,12 +1368,12 @@ public class DDMTemplateLocalServiceImpl
 	 * @param  nameMap the template's new locales and localized names
 	 * @param  descriptionMap the template's new locales and localized
 	 *         description
-	 * @param  type the template's type. For more information, see {@link
-	 *         DDMTemplateConstants}.
-	 * @param  mode the template's mode. For more information, see {@link
-	 *         DDMTemplateConstants}.
+	 * @param  type the template's type. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
+	 * @param  mode the template's mode. For more information, see
+	 *         DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  language the template's script language. For more information,
-	 *         see {@link DDMTemplateConstants}.
+	 *         see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	 * @param  script the template's script
 	 * @param  cacheable whether the template is cacheable
 	 * @param  serviceContext the service context to be applied. Can set the
@@ -1392,7 +1425,7 @@ public class DDMTemplateLocalServiceImpl
 
 		int status = GetterUtil.getInteger(
 			serviceContext.getAttribute("status"),
-			WorkflowConstants.STATUS_DRAFT);
+			WorkflowConstants.STATUS_APPROVED);
 
 		templateVersion.setStatus(status);
 
@@ -1530,9 +1563,8 @@ public class DDMTemplateLocalServiceImpl
 
 		validate(nameMap, script);
 
-		String[] imageExtensions = PrefsPropsUtil.getStringArray(
-			DDMServiceConfigurationKeys.DYNAMIC_DATA_MAPPING_IMAGE_EXTENSIONS,
-			StringPool.COMMA);
+		String[] imageExtensions = DDMServiceConfigurationUtil.getArray(
+			DDMServiceConfigurationKeys.DYNAMIC_DATA_MAPPING_IMAGE_EXTENSIONS);
 
 		if (!smallImage || Validator.isNotNull(smallImageURL) ||
 			(smallImageFile == null) || (smallImageBytes == null)) {
@@ -1559,9 +1591,10 @@ public class DDMTemplateLocalServiceImpl
 			throw new TemplateSmallImageNameException(smallImageName);
 		}
 
-		long smallImageMaxSize = PrefsPropsUtil.getLong(
-			DDMServiceConfigurationKeys.
-				DYNAMIC_DATA_MAPPING_IMAGE_SMALL_MAX_SIZE);
+		long smallImageMaxSize = GetterUtil.getLong(
+			DDMServiceConfigurationUtil.get(
+				DDMServiceConfigurationKeys.
+					DYNAMIC_DATA_MAPPING_IMAGE_SMALL_MAX_SIZE));
 
 		if ((smallImageMaxSize > 0) &&
 			(smallImageBytes.length > smallImageMaxSize)) {

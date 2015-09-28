@@ -76,17 +76,22 @@ public class DDMFormFactory {
 
 		DDMFormField ddmFormField = new DDMFormField(name, type);
 
+		Map<String, String> properties = ddmFormFactoryHelper.getProperties();
+
+		for (Map.Entry<String, String> entry : properties.entrySet()) {
+			ddmFormField.setProperty(entry.getKey(), entry.getValue());
+		}
+
 		ddmFormField.setDataType(
 			ddmFormFactoryHelper.getDDMFormFieldDataType());
+		ddmFormField.setDDMFormFieldOptions(
+			ddmFormFactoryHelper.getDDMFormFieldOptions());
+		ddmFormField.setDDMFormFieldValidation(
+			ddmFormFactoryHelper.getDDMFormFieldValidation());
 		ddmFormField.setLabel(ddmFormFactoryHelper.getDDMFormFieldLabel());
 		ddmFormField.setLocalizable(
 			ddmFormFactoryHelper.isDDMFormFieldLocalizable(method));
-		ddmFormField.setDDMFormFieldOptions(
-			ddmFormFactoryHelper.getDDMFormFieldOptions());
-		ddmFormField.setValidationExpression(
-			ddmFormFactoryHelper.getDDMFormFieldValidationExpression());
-		ddmFormField.setValidationMessage(
-			ddmFormFactoryHelper.getDDMFormFieldValidationMessage());
+		ddmFormField.setRequired(ddmFormFactoryHelper.isDDMFormFieldRequired());
 		ddmFormField.setVisibilityExpression(
 			ddmFormFactoryHelper.getDDMFormFieldVisibilityExpression());
 

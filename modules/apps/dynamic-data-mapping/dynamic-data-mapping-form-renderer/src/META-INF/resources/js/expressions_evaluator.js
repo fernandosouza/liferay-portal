@@ -4,11 +4,11 @@ AUI.add(
 		var ExpressionsEvaluator = A.Component.create(
 			{
 				ATTRS: {
-					form: {
-					},
-
 					evaluationURL: {
 						value: '/o/ddm-form-evaluator/'
+					},
+
+					form: {
 					}
 				},
 
@@ -25,7 +25,9 @@ AUI.add(
 					evaluate: function(callback) {
 						var instance = this;
 
-						if (!instance.evaluating()) {
+						var form = instance.get('form');
+
+						if (form && !instance.evaluating()) {
 							instance.fire('evaluationStarted');
 
 							instance._evaluate(

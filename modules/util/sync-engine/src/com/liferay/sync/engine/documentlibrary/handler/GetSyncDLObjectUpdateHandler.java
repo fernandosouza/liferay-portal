@@ -201,7 +201,17 @@ public class GetSyncDLObjectUpdateHandler extends BaseSyncDLObjectHandler {
 
 			syncSite.setRemoteSyncTime(_syncDLObjectUpdate.getLastAccessTime());
 
+			if (_syncDLObjectUpdate.getResultsTotal() <= syncFiles.size()) {
+				syncSite.setState(SyncSite.STATE_SYNCED);
+			}
+
 			SyncSiteService.update(syncSite);
+
+			if (_syncDLObjectUpdate.getResultsTotal() > syncFiles.size()) {
+				FileEventUtil.getUpdates(
+					syncSite.getCompanyId(), syncSite.getGroupId(),
+					getSyncAccountId(), syncSite);
+			}
 		}
 	}
 
@@ -265,12 +275,7 @@ public class GetSyncDLObjectUpdateHandler extends BaseSyncDLObjectHandler {
 				targetSyncFile.getFilePathName());
 		}
 
-		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
-			sourceSyncFile.getSyncAccountId());
-
-		Path tempFilePath = FileUtil.getFilePath(
-			syncAccount.getFilePathName(), ".data",
-			String.valueOf(targetSyncFile.getSyncFileId()));
+		Path tempFilePath = FileUtil.getTempFilePath(targetSyncFile);
 
 		Files.copy(
 			Paths.get(sourceSyncFile.getFilePathName()), tempFilePath,

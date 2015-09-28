@@ -28,6 +28,7 @@ import com.liferay.gradle.plugins.js.transpiler.JSTranspilerPlugin;
 import com.liferay.gradle.plugins.js.transpiler.TranspileJSTask;
 import com.liferay.gradle.plugins.lang.builder.BuildLangTask;
 import com.liferay.gradle.plugins.lang.builder.LangBuilderPlugin;
+import com.liferay.gradle.plugins.node.tasks.PublishNodeModuleTask;
 import com.liferay.gradle.plugins.patcher.PatchTask;
 import com.liferay.gradle.plugins.service.builder.BuildServiceTask;
 import com.liferay.gradle.plugins.service.builder.ServiceBuilderPlugin;
@@ -134,6 +135,9 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 	public static final String AUTO_CLEAN_PROPERTY_NAME = "autoClean";
 
 	public static final String CLEAN_DEPLOYED_PROPERTY_NAME = "cleanDeployed";
+
+	public static final String DELETE_LIFERAY_HOME_PROPERTY_NAME =
+		"deleteLiferayHome";
 
 	public static final String DEPLOY_TASK_NAME = "deploy";
 
@@ -601,6 +605,13 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 
 				@Override
 				public void execute(Task task) {
+					boolean deleteLiferayHome = GradleUtil.getProperty(
+						task, DELETE_LIFERAY_HOME_PROPERTY_NAME, true);
+
+					if (!deleteLiferayHome) {
+						return;
+					}
+
 					Project project = task.getProject();
 
 					LiferayExtension liferayExtension = GradleUtil.getExtension(
@@ -1751,6 +1762,130 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 		jar.setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE);
 	}
 
+	protected void configureTaskPublishNodeModule(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		configureTaskPublishNodeModuleAuthor(publishNodeModuleTask);
+		configureTaskPublishNodeModuleBugsUrl(publishNodeModuleTask);
+		configureTaskPublishNodeModuleLicense(publishNodeModuleTask);
+		configureTaskPublishNodeModuleNpmEmailAddress(publishNodeModuleTask);
+		configureTaskPublishNodeModuleNpmPassword(publishNodeModuleTask);
+		configureTaskPublishNodeModuleNpmUserName(publishNodeModuleTask);
+		configureTaskPublishNodeModuleRepository(publishNodeModuleTask);
+	}
+
+	protected void configureTaskPublishNodeModuleAuthor(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getModuleAuthor())) {
+			return;
+		}
+
+		String author = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.module.author",
+			(String)null);
+
+		if (Validator.isNotNull(author)) {
+			publishNodeModuleTask.setModuleAuthor(author);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleBugsUrl(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getModuleBugsUrl())) {
+			return;
+		}
+
+		String bugsUrl = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.module.bugs.url",
+			(String)null);
+
+		if (Validator.isNotNull(bugsUrl)) {
+			publishNodeModuleTask.setModuleBugsUrl(bugsUrl);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleLicense(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getModuleLicense())) {
+			return;
+		}
+
+		String license = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.module.license",
+			(String)null);
+
+		if (Validator.isNotNull(license)) {
+			publishNodeModuleTask.setModuleLicense(license);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleNpmEmailAddress(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getNpmEmailAddress())) {
+			return;
+		}
+
+		String emailAddress = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.email",
+			(String)null);
+
+		if (Validator.isNotNull(emailAddress)) {
+			publishNodeModuleTask.setNpmEmailAddress(emailAddress);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleNpmPassword(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getNpmPassword())) {
+			return;
+		}
+
+		String password = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.password",
+			(String)null);
+
+		if (Validator.isNotNull(password)) {
+			publishNodeModuleTask.setNpmPassword(password);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleNpmUserName(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getNpmUserName())) {
+			return;
+		}
+
+		String userName = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.user",
+			(String)null);
+
+		if (Validator.isNotNull(userName)) {
+			publishNodeModuleTask.setNpmUserName(userName);
+		}
+	}
+
+	protected void configureTaskPublishNodeModuleRepository(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		if (Validator.isNotNull(publishNodeModuleTask.getModuleRepository())) {
+			return;
+		}
+
+		String repository = GradleUtil.getProperty(
+			publishNodeModuleTask.getProject(), "nodejs.npm.module.repository",
+			(String)null);
+
+		if (Validator.isNotNull(repository)) {
+			publishNodeModuleTask.setModuleRepository(repository);
+		}
+	}
+
 	protected void configureTasks(
 		Project project, LiferayExtension liferayExtension) {
 
@@ -1769,6 +1904,7 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 
 		configureTasksAppServer(project, liferayExtension);
 		configureTasksDirectDeploy(project);
+		configureTasksPublishNodeModule(project);
 	}
 
 	protected void configureTasksAppServer(
@@ -1864,6 +2000,23 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 
 		setupTestableTomcatTask.setModuleFrameworkBaseDir(
 			moduleFrameworkBaseDir);
+	}
+
+	protected void configureTasksPublishNodeModule(Project project) {
+		TaskContainer taskContainer = project.getTasks();
+
+		taskContainer.withType(
+			PublishNodeModuleTask.class,
+			new Action<PublishNodeModuleTask>() {
+
+				@Override
+				public void execute(
+					PublishNodeModuleTask publishNodeModuleTask) {
+
+					configureTaskPublishNodeModule(publishNodeModuleTask);
+				}
+
+			});
 	}
 
 	protected void configureTaskStartTestableTomcat(

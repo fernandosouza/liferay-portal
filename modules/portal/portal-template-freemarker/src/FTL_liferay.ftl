@@ -60,10 +60,6 @@ LPS-30525.
 >
 ${dateUtil.getCurrentDate(format, locale)}</#macro>
 
-<#macro dockbar>
-	${theme.runtime("145")}
-</#macro>
-
 <#macro js
 	file_name
 >
@@ -104,7 +100,7 @@ ${languageUtil.format(locale, key, arguments)}</#macro>
 >
 	<#if $is_setup_complete && $is_signed_in>
 		<div class="${state} lfr-product-menu-panel sidenav-fixed sidenav-menu-slider" id="sidenavSliderId">
-			<div class="product-menu sidebar sidebar-inverse sidenav-menu">
+			<div class="product-menu sidebar sidenav-menu">
 				<@liferay.product_menu() />
 			</div>
 		</div>

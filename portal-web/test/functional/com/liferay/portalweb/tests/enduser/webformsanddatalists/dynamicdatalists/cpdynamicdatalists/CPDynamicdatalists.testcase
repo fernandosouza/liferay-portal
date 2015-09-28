@@ -21,7 +21,7 @@
 		<execute macro="Page#tearDownPG" />
 	</tear-down>
 
-	<command name="AddDisplayTemplateFreeMarker" priority="5">
+	<command name="AddDisplayTemplateFreeMarker" priority="4">
 		<var name="ddlDataDefinitionName" value="Data Definition" />
 		<var name="ddlDisplayTemplateLanguage" value="FreeMarker (.ftl)" />
 		<var name="ddlDisplayTemplateName" value="Data Definition FreeMarker Display Template Name" />
@@ -58,7 +58,9 @@
 		</execute>
 	</command>
 
-	<command name="AddDisplayTemplateVelocity" priority="4">
+	<command name="AddDisplayTemplateVelocity" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="ddlDataDefinitionName" value="Data Definition" />
 		<var name="ddlDisplayTemplateLanguage" value="Velocity (.vm)" />
 		<var name="ddlDisplayTemplateName" value="Data Definition Velocity Display Template Name" />
@@ -982,7 +984,7 @@
 		<var name="document" value="Document_1.txt" />
 		<var name="field" value="Documents and Media" />
 		<var name="fieldFieldLabel" value="Documents and Media" />
-		<var name="fieldName" value="Documents_and_Media" />
+		<var name="fieldName" value="DocumentsAndMedia" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Dynamic Data Lists" />
@@ -1322,7 +1324,7 @@
 		<var name="ddlRecordFieldData" value="Test Page" />
 		<var name="field" value="Link to Page" />
 		<var name="fieldFieldLabel" value="Link to Page" />
-		<var name="fieldName" value="Link_to_Page" />
+		<var name="fieldName" value="LinkToPage" />
 
 		<execute macro="Page#addPG">
 			<var name="pageName" value="${ddlRecordFieldData}" />
@@ -1666,7 +1668,7 @@
 		<var name="ddlRecordFieldData" value="Text Box Data" />
 		<var name="field" value="Text Box" />
 		<var name="fieldFieldLabel" value="Text Box" />
-		<var name="fieldName" value="Text_Box" />
+		<var name="fieldName" value="TextBox" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Dynamic Data Lists" />
@@ -2489,7 +2491,7 @@
 		<var name="fieldFieldLabel" value="Boolean" />
 		<var name="fieldFieldLabelEdit" value="Boolean Edit" />
 		<var name="fieldName" value="Boolean" />
-		<var name="fieldNameEdit" value="Boolean_Edit" />
+		<var name="fieldNameEdit" value="BooleanEdit" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Dynamic Data Lists" />
@@ -2533,7 +2535,6 @@
 		<execute macro="DDLDataDefinition#viewCP">
 			<var name="ddlDataDefinitionName" value="${ddlDataDefinitionName}" />
 			<var name="fieldFieldLabel" value="${fieldFieldLabelEdit}" />
-			<var name="fieldFieldLabel" value="${fieldFieldLabel}" />
 		</execute>
 
 		<execute macro="DynamicDataMapping#viewField">
@@ -2595,7 +2596,7 @@
 		<var name="field" value="Boolean" />
 		<var name="fieldFieldLabel" value="Boolean" />
 		<var name="fieldName" value="Boolean" />
-		<var name="fieldNameEdit" value="Boolean_Edit" />
+		<var name="fieldNameEdit" value="BooleanEdit" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Dynamic Data Lists" />
@@ -2693,7 +2694,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-51721" name="EditBooleanFieldShowLabel" priority="4">
+	<command name="EditBooleanFieldShowLabel" priority="4">
 		<var name="ddlDataDefinitionName" value="Data Definition" />
 		<var name="ddlListName" value="List Name" />
 		<var name="ddlRecordFieldData" value="Yes" />
@@ -3822,7 +3823,6 @@
 		<var name="character29"><![CDATA[?]]></var>
 		<var name="character30"><![CDATA[_]]></var>
 		<var name="character31" value="test space" />
-		<var name="character32" value=" frontSpace" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Dynamic Data Lists" />
@@ -3839,7 +3839,7 @@
 			<var name="fieldName" value="Text" />
 		</execute>
 
-		<for list="${character1},${character2},${character3},${character4},${character5},${character6},${character7},${character8},${character9},${character10},${character11},${character12},${character13},${character14},${character15},${character16},${character17}.${character18},${character19},${character20},${character21},${character22},${character23},${character24},${character25},${character26},${character27},${character28},${character29},${character30},${character31},${character32}" param="fieldName">
+		<for list="${character1},${character2},${character3},${character4},${character5},${character6},${character7},${character8},${character9},${character10},${character11},${character12},${character13},${character14},${character15},${character16},${character17}.${character18},${character19},${character20},${character21},${character22},${character23},${character24},${character25},${character26},${character27},${character28},${character29},${character30},${character31}" param="fieldName">
 			<execute macro="DynamicDataMapping#editFieldNameInvalidCharacter">
 				<var name="field" value="Text" />
 				<var name="fieldFieldLabel" value="Text" />

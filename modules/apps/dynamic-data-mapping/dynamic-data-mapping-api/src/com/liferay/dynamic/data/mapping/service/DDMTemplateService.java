@@ -62,13 +62,12 @@ public interface DDMTemplateService extends BaseService {
 	template's resource model
 	* @param nameMap the template's locales and localized names
 	* @param descriptionMap the template's locales and localized descriptions
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param serviceContext the service context to be applied. Must have the
 	<code>ddmResource</code> attribute to check permissions. Can set
@@ -100,13 +99,12 @@ public interface DDMTemplateService extends BaseService {
 	(optionally <code>null</code>)
 	* @param nameMap the template's locales and localized names
 	* @param descriptionMap the template's locales and localized descriptions
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param cacheable whether the template is cacheable
 	* @param smallImage whether the template has a small image
@@ -174,8 +172,8 @@ public interface DDMTemplateService extends BaseService {
 	* @param resourceClassNameId the primary key of the class name for
 	template's resource model
 	* @param newClassPK the primary key of the new template's related entity
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param serviceContext the service context to be applied. Must have the
 	<code>ddmResource</code> attribute to check permissions. Can set
 	the UUID, creation date, modification date, guest permissions,
@@ -277,68 +275,63 @@ public interface DDMTemplateService extends BaseService {
 	public com.liferay.dynamic.data.mapping.model.DDMTemplate getTemplate(
 		long templateId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, boolean includeAncestorTemplates, int status)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, int status);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, java.lang.String type, java.lang.String mode,
+		int status);
+
 	/**
-	* Returns all the templates matching the group and class name ID.
+	* Returns all the templates matching the group, class name ID, class PK,
+	* resource class name ID, and type.
 	*
+	* @param companyId the primary key of the template's company
 	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
+	* @param classNameId the primary key of the class name for the template's
 	related model
+	* @param classPK the primary key of the template's related entity
+	* @param resourceClassNameId the primary key of the class name for the
+	template's resource model
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @return the matching templates
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
-		long groupId, long classNameId);
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, java.lang.String type, int status);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
+		long companyId, long groupId, long classNameId,
+		long resourceClassNameId, int status);
 
 	/**
-	* Returns all the templates matching the group, class name ID, and class
-	* PK.
+	* Returns all the templates matching the group, class PK, and resource
+	* class name ID.
 	*
-	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
-	related model
-	* @param classPK the primary key of the template's related entity
-	* @return the matching templates
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
-		long groupId, long classNameId, long classPK);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
-		long groupId, long classNameId, long classPK,
-		boolean includeAncestorTemplates) throws PortalException;
-
-	/**
-	* Returns all the templates matching the class name ID, class PK, type, and
-	* mode.
-	*
-	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
-	related model
-	* @param classPK the primary key of the template's related entity
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @return the matching templates
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
-		long groupId, long classNameId, long classPK, java.lang.String type);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplates(
-		long groupId, long classNameId, long classPK, java.lang.String type,
-		java.lang.String mode);
-
-	/**
-	* Returns all the templates matching the group and class PK.
-	*
+	* @param companyId the primary key of the template's company
 	* @param groupId the primary key of the group
 	* @param classPK the primary key of the template's related entity
+	* @param resourceClassNameId the primary key of the class name for the
+	template's resource model
 	* @return the matching templates
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplatesByClassPK(
-		long groupId, long classPK);
+		long companyId, long groupId, long classPK, long resourceClassNameId,
+		int status);
 
 	/**
 	* Returns an ordered range of all the templates matching the group and
@@ -349,8 +342,7 @@ public interface DDMTemplateService extends BaseService {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -367,7 +359,8 @@ public interface DDMTemplateService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> getTemplatesByStructureClassNameId(
-		long groupId, long structureClassNameId, int start, int end,
+		long groupId, long structureClassNameId, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator);
 
 	/**
@@ -383,7 +376,7 @@ public interface DDMTemplateService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getTemplatesByStructureClassNameIdCount(long groupId,
-		long structureClassNameId);
+		long structureClassNameId, int status);
 
 	public void revertTemplate(long templateId, java.lang.String version,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -399,8 +392,7 @@ public interface DDMTemplateService extends BaseService {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -414,11 +406,11 @@ public interface DDMTemplateService extends BaseService {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode (optionally <code>null</code>) For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
+	* @param mode the template's mode (optionally <code>null</code>). For more
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param start the lower bound of the range of templates to return
 	* @param end the upper bound of the range of templates to return (not
 	inclusive)
@@ -430,7 +422,8 @@ public interface DDMTemplateService extends BaseService {
 	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> search(
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, java.lang.String keywords,
-		java.lang.String type, java.lang.String mode, int start, int end,
+		java.lang.String type, java.lang.String mode, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator);
 
 	/**
@@ -443,8 +436,7 @@ public interface DDMTemplateService extends BaseService {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -459,14 +451,14 @@ public interface DDMTemplateService extends BaseService {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @param start the lower bound of the range of templates to return
@@ -481,8 +473,8 @@ public interface DDMTemplateService extends BaseService {
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, java.lang.String name,
 		java.lang.String description, java.lang.String type,
-		java.lang.String mode, java.lang.String language, boolean andOperator,
-		int start, int end,
+		java.lang.String mode, java.lang.String language, int status,
+		boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator);
 
 	/**
@@ -495,8 +487,7 @@ public interface DDMTemplateService extends BaseService {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -510,11 +501,11 @@ public interface DDMTemplateService extends BaseService {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param start the lower bound of the range of templates to return
 	* @param end the upper bound of the range of templates to return (not
 	inclusive)
@@ -526,7 +517,8 @@ public interface DDMTemplateService extends BaseService {
 	public java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> search(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, java.lang.String keywords,
-		java.lang.String type, java.lang.String mode, int start, int end,
+		java.lang.String type, java.lang.String mode, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator);
 
 	/**
@@ -539,8 +531,7 @@ public interface DDMTemplateService extends BaseService {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -555,14 +546,14 @@ public interface DDMTemplateService extends BaseService {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @param start the lower bound of the range of templates to return
@@ -577,8 +568,8 @@ public interface DDMTemplateService extends BaseService {
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, java.lang.String name,
 		java.lang.String description, java.lang.String type,
-		java.lang.String mode, java.lang.String language, boolean andOperator,
-		int start, int end,
+		java.lang.String mode, java.lang.String language, int status,
+		boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator);
 
 	/**
@@ -596,17 +587,17 @@ public interface DDMTemplateService extends BaseService {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @return the number of matching templates
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int searchCount(long companyId, long groupId, long classNameId,
 		long classPK, long resourceClassNameId, java.lang.String keywords,
-		java.lang.String type, java.lang.String mode);
+		java.lang.String type, java.lang.String mode, int status);
 
 	/**
 	* Returns the number of templates matching the group, class name ID, class
@@ -623,14 +614,14 @@ public interface DDMTemplateService extends BaseService {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @return the number of matching templates
@@ -639,7 +630,8 @@ public interface DDMTemplateService extends BaseService {
 	public int searchCount(long companyId, long groupId, long classNameId,
 		long classPK, long resourceClassNameId, java.lang.String name,
 		java.lang.String description, java.lang.String type,
-		java.lang.String mode, java.lang.String language, boolean andOperator);
+		java.lang.String mode, java.lang.String language, int status,
+		boolean andOperator);
 
 	/**
 	* Returns the number of templates matching the group IDs, class name IDs,
@@ -656,17 +648,18 @@ public interface DDMTemplateService extends BaseService {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @return the number of matching templates
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int searchCount(long companyId, long[] groupIds,
 		long[] classNameIds, long[] classPKs, long resourceClassNameId,
-		java.lang.String keywords, java.lang.String type, java.lang.String mode);
+		java.lang.String keywords, java.lang.String type,
+		java.lang.String mode, int status);
 
 	/**
 	* Returns the number of templates matching the group IDs, class name IDs,
@@ -683,14 +676,14 @@ public interface DDMTemplateService extends BaseService {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @return the number of matching templates
@@ -700,7 +693,7 @@ public interface DDMTemplateService extends BaseService {
 		long[] classNameIds, long[] classPKs, long resourceClassNameId,
 		java.lang.String name, java.lang.String description,
 		java.lang.String type, java.lang.String mode,
-		java.lang.String language, boolean andOperator);
+		java.lang.String language, int status, boolean andOperator);
 
 	/**
 	* Sets the Spring bean ID for this bean.
@@ -717,13 +710,12 @@ public interface DDMTemplateService extends BaseService {
 	* @param nameMap the template's new locales and localized names
 	* @param descriptionMap the template's new locales and localized
 	description
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param cacheable whether the template is cacheable
 	* @param serviceContext the service context to be applied. Can set the
@@ -749,13 +741,12 @@ public interface DDMTemplateService extends BaseService {
 	* @param nameMap the template's new locales and localized names
 	* @param descriptionMap the template's new locales and localized
 	description
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param cacheable whether the template is cacheable
 	* @param smallImage whether the template has a small image

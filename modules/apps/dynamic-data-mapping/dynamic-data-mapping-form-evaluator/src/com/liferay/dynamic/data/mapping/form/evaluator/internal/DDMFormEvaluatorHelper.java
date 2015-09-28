@@ -18,12 +18,14 @@ import com.liferay.dynamic.data.mapping.form.evaluator.DDMFormEvaluationResult;
 import com.liferay.dynamic.data.mapping.form.evaluator.DDMFormFieldEvaluationResult;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.portal.expression.Expression;
 import com.liferay.portal.expression.ExpressionFactory;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -107,14 +109,30 @@ public class DDMFormEvaluatorHelper {
 			new DDMFormFieldEvaluationResult(
 				ddmFormFieldValue.getName(), ddmFormFieldValue.getInstanceId());
 
-		boolean valid = evaluateBooleanExpression(
-			ddmFormField.getValidationExpression(), ancestorDDMFormFieldValues);
+		if (ddmFormField.isRequired() &&
+			isDDMFormFieldValueEmpty(ddmFormFieldValue)) {
 
-		ddmFormFieldEvaluationResult.setValid(valid);
+			ddmFormFieldEvaluationResult.setErrorMessage(
+				LanguageUtil.get(_locale, "this-field-is-required"));
 
-		if (!valid) {
-			ddmFormFieldEvaluationResult.setValidationMessage(
-				ddmFormField.getValidationMessage());
+			ddmFormFieldEvaluationResult.setValid(false);
+		}
+		else {
+			DDMFormFieldValidation ddmFormFieldValidation =
+				ddmFormField.getDDMFormFieldValidation();
+
+			String validationExpression = getValidationExpression(
+				ddmFormFieldValidation);
+
+			boolean valid = evaluateBooleanExpression(
+				validationExpression, ancestorDDMFormFieldValues);
+
+			ddmFormFieldEvaluationResult.setValid(valid);
+
+			if (!valid) {
+				ddmFormFieldEvaluationResult.setErrorMessage(
+					ddmFormFieldValidation.getErrorMessage());
+			}
 		}
 
 		boolean visible = evaluateBooleanExpression(
@@ -150,6 +168,28 @@ public class DDMFormEvaluatorHelper {
 		}
 
 		return ddmFormFieldEvaluationResults;
+	}
+
+	protected String getValidationExpression(
+		DDMFormFieldValidation ddmFormFieldValidation) {
+
+		if (ddmFormFieldValidation == null) {
+			return null;
+		}
+
+		return ddmFormFieldValidation.getExpression();
+	}
+
+	protected boolean isDDMFormFieldValueEmpty(
+		DDMFormFieldValue ddmFormFieldValue) {
+
+		Value value = ddmFormFieldValue.getValue();
+
+		if (Validator.isNull(value.getString(_locale))) {
+			return true;
+		}
+
+		return false;
 	}
 
 	protected void setExpressionFactory(ExpressionFactory expressionFactory) {

@@ -52,7 +52,7 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, locale);
 	</c:if>
 
 	<liferay-ui:search-container
-		searchContainer="<%= new TemplateSearch(renderRequest, portletURL) %>"
+		searchContainer="<%= new TemplateSearch(renderRequest, portletURL, WorkflowConstants.STATUS_APPROVED) %>"
 	>
 		<c:if test="<%= showToolbar %>">
 
@@ -117,7 +117,7 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, locale);
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
 
-		<liferay-ui:search-iterator />
+		<liferay-ui:search-iterator markupView="lexicon" />
 	</liferay-ui:search-container>
 </aui:form>
 

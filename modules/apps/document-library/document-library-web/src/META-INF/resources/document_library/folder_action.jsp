@@ -116,7 +116,7 @@ String iconMenuId = null;
 %>
 
 <liferay-util:buffer var="iconMenu">
-	<liferay-ui:icon-menu cssClass="list-unstyled" direction='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? "down" : "left" %>' icon="<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" message='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>">
+	<liferay-ui:icon-menu direction='<%= (row != null) ? "left-side" : "down" %>' icon="<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" markupView='<%= row != null ? "lexicon" : null %>' message='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' scroll="<%= row != null %>" showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>">
 
 		<%
 		boolean hasViewPermission = DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.VIEW);
@@ -352,7 +352,7 @@ String iconMenuId = null;
 								<portlet:param name="mvcPath" value="/document_library_display/select_add_file_entry_type.jsp" />
 							</c:when>
 							<c:otherwise>
-								<portlet:param name="mvcRenderCommandName" value="/document_library_display/edit_file_entry" />
+								<portlet:param name="mvcRenderCommandName" value="/document_library/edit_file_entry" />
 							</c:otherwise>
 						</c:choose>
 
@@ -459,7 +459,7 @@ String iconMenuId = null;
 
 	</c:when>
 	<c:otherwise>
-		<span class="entry-action overlay">
+		<span class="<%= (row != null) ? StringPool.BLANK : "entry-action overlay" %>">
 
 			<%= iconMenu %>
 

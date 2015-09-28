@@ -10,12 +10,13 @@ buildscript {
 		}
 
 		maven {
-			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
+			url System.properties["repository.url"] ?: "http://cdn.repository.liferay.com/nexus/content/groups/public"
 		}
 	}
 
 	dependencies {
-		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "1.0.9"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "1.0.17"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.cache", version: "1.0.1"
 		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.maven.plugin.builder", version: "1.0.2"
 	}
 }

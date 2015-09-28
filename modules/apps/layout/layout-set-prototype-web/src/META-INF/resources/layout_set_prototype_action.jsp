@@ -30,19 +30,19 @@ long layoutSetPrototypeId = layoutSetPrototype.getLayoutSetPrototypeId();
 Group group = layoutSetPrototype.getGroup();
 %>
 
-<liferay-ui:icon-menu direction="down" icon="<%= StringPool.BLANK %>" message="<%= StringPool.BLANK %>" showWhenSingleIcon="<%= true %>">
+<liferay-ui:icon-menu direction="left-side" icon="<%= StringPool.BLANK %>" markupView="lexicon" message="<%= StringPool.BLANK %>" showWhenSingleIcon="<%= true %>">
 	<c:if test="<%= LayoutSetPrototypePermissionUtil.contains(permissionChecker, layoutSetPrototypeId, ActionKeys.UPDATE) %>">
 
 		<%
-		PortletURL siteAdministrationURL = group.getAdministrationURL(themeDisplay);
+		String href = (String)request.getAttribute(WebKeys.SEARCH_ENTRY_HREF);
 		%>
 
-		<c:if test="<%= siteAdministrationURL != null %>">
+		<c:if test="<%= Validator.isNotNull(href) %>">
 			<liferay-ui:icon
 				iconCssClass="icon-edit"
 				message="manage"
 				method="get"
-				url="<%= siteAdministrationURL.toString() %>"
+				url="<%= href %>"
 			/>
 		</c:if>
 

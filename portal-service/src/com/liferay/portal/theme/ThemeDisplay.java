@@ -260,10 +260,6 @@ public class ThemeDisplay
 		return _contact;
 	}
 
-	public String getControlPanelCategory() {
-		return _controlPanelCategory;
-	}
-
 	/**
 	 * Returns the portal instance's default user.
 	 *
@@ -887,8 +883,12 @@ public class ThemeDisplay
 		return _unfilteredLayouts;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public String getURLAddContent() {
-		return _urlAddContent;
+		return StringPool.BLANK;
 	}
 
 	public String getURLControlPanel() {
@@ -961,10 +961,6 @@ public class ThemeDisplay
 
 	public String getURLSignOut() {
 		return _urlSignOut;
-	}
-
-	public String getURLSiteAdministration() {
-		return _urlSiteAdministration;
 	}
 
 	@JSON(include = false)
@@ -1076,12 +1072,20 @@ public class ThemeDisplay
 		return _secure;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public boolean isShowAddContentIcon() {
-		return _showAddContentIcon;
+		return false;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public boolean isShowAddContentIconPermission() {
-		return _showAddContentIconPermission;
+		return false;
 	}
 
 	public boolean isShowControlPanelIcon() {
@@ -1264,10 +1268,6 @@ public class ThemeDisplay
 
 	public void setContact(Contact contact) {
 		_contact = contact;
-	}
-
-	public void setControlPanelCategory(String controlPanelCategory) {
-		_controlPanelCategory = controlPanelCategory;
 	}
 
 	public void setDevice(Device device) {
@@ -1592,14 +1592,19 @@ public class ThemeDisplay
 		_sessionId = sessionId;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public void setShowAddContentIcon(boolean showAddContentIcon) {
-		_showAddContentIcon = showAddContentIcon;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public void setShowAddContentIconPermission(
 		boolean showAddContentIconPermission) {
-
-		_showAddContentIconPermission = showAddContentIconPermission;
 	}
 
 	public void setShowControlPanelIcon(boolean showControlPanelIcon) {
@@ -1737,8 +1742,11 @@ public class ThemeDisplay
 		_unfilteredLayouts = unfilteredLayouts;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public void setURLAddContent(String urlAddContent) {
-		_urlAddContent = urlAddContent;
 	}
 
 	public void setURLControlPanel(String urlControlPanel) {
@@ -1789,10 +1797,6 @@ public class ThemeDisplay
 		_urlSignOut = urlSignOut;
 	}
 
-	public void setURLSiteAdministration(String urlSiteAdministration) {
-		_urlSiteAdministration = urlSiteAdministration;
-	}
-
 	/**
 	 * @deprecated As of 7.0.0, with no direct replacement
 	 */
@@ -1834,7 +1838,6 @@ public class ThemeDisplay
 	private int _companyLogoHeight;
 	private int _companyLogoWidth;
 	private Contact _contact;
-	private String _controlPanelCategory = StringPool.BLANK;
 	private User _defaultUser;
 	private Device _device;
 	private long _doAsGroupId = 0;
@@ -1897,8 +1900,6 @@ public class ThemeDisplay
 	private String _serverName;
 	private int _serverPort;
 	private String _sessionId = StringPool.BLANK;
-	private boolean _showAddContentIcon;
-	private boolean _showAddContentIconPermission;
 	private boolean _showControlPanelIcon;
 	private boolean _showHomeIcon;
 	private boolean _showLayoutTemplatesIcon;
@@ -1930,7 +1931,6 @@ public class ThemeDisplay
 	private String _tilesTitle = StringPool.BLANK;
 	private TimeZone _timeZone;
 	private List<Layout> _unfilteredLayouts;
-	private String _urlAddContent = StringPool.BLANK;
 	private String _urlControlPanel = StringPool.BLANK;
 	private String _urlCurrent = StringPool.BLANK;
 	private String _urlHome = StringPool.BLANK;
@@ -1941,7 +1941,6 @@ public class ThemeDisplay
 	private transient PortletURL _urlPublishToLive = null;
 	private String _urlSignIn = StringPool.BLANK;
 	private String _urlSignOut = StringPool.BLANK;
-	private String _urlSiteAdministration = StringPool.BLANK;
 	private transient PortletURL _urlUpdateManager = null;
 	private User _user;
 	private boolean _widget;

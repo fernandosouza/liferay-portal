@@ -23,13 +23,17 @@ import com.liferay.dynamic.data.mapping.registry.annotations.DDMFormField;
 @DDMForm(localization = "content/Language")
 public interface DDMFormFieldTypeSettings {
 
-	@DDMFormField(visibilityExpression = "false")
+	@DDMFormField(required = true, visibilityExpression = "false")
 	public String dataType();
 
-	@DDMFormField(label = "%name", validationExpression = "!name.equals(\"\")")
+	@DDMFormField(
+		label = "%name",
+		properties = {"setting.category=basic", "setting.weight=3"},
+		required = true
+	)
 	public String name();
 
-	@DDMFormField(visibilityExpression = "false")
+	@DDMFormField(required = true, visibilityExpression = "false")
 	public String type();
 
 }

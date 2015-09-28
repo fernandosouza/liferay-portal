@@ -19,7 +19,6 @@ import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
 import com.liferay.dynamic.data.lists.model.DDLRecord;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersion;
 import com.liferay.dynamic.data.lists.service.DDLRecordLocalServiceUtil;
-import com.liferay.dynamic.data.lists.service.DDLRecordVersionLocalServiceUtil;
 import com.liferay.dynamic.data.lists.service.permission.DDLRecordPermission;
 import com.liferay.dynamic.data.lists.service.permission.DDLRecordSetPermission;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -66,19 +65,19 @@ public class DDLRecordAssetRendererFactory
 	public AssetRenderer<DDLRecord> getAssetRenderer(long classPK, int type)
 		throws PortalException {
 
-		DDLRecord record = null;
+		DDLRecord record = DDLRecordLocalServiceUtil.getRecord(classPK);
+
 		DDLRecordVersion recordVersion = null;
 
 		if (type == TYPE_LATEST) {
-			recordVersion = DDLRecordVersionLocalServiceUtil.getRecordVersion(
-				classPK);
-
-			record = recordVersion.getRecord();
+			recordVersion = record.getLatestRecordVersion();
+		}
+		else if (type == TYPE_LATEST_APPROVED) {
+			recordVersion = record.getRecordVersion();
 		}
 		else {
-			record = DDLRecordLocalServiceUtil.getRecord(classPK);
-
-			recordVersion = record.getRecordVersion();
+			throw new IllegalArgumentException(
+				"Unknown asset renderer type " + type);
 		}
 
 		DDLRecordAssetRenderer ddlRecordAssetRenderer =

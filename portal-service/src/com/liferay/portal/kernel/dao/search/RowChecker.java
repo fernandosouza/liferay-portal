@@ -176,7 +176,7 @@ public class RowChecker {
 			return StringPool.BLANK;
 		}
 
-		StringBuilder sb = new StringBuilder(12);
+		StringBuilder sb = new StringBuilder(10);
 
 		sb.append("<input name=\"");
 		sb.append(name);
@@ -184,12 +184,10 @@ public class RowChecker {
 		sb.append(LanguageUtil.get(getLocale(request), "select-all"));
 		sb.append("\" type=\"checkbox\" ");
 		sb.append(HtmlUtil.buildData(_data));
-		sb.append("onClick=\"Liferay.Util.checkAll(");
-		sb.append("AUI().one(this).ancestor('");
-		sb.append(".table'), ");
+		sb.append("onClick=\"Liferay.Util.checkAll(AUI().one(this).ancestor(");
+		sb.append("'.table'), ");
 		sb.append(checkBoxRowIds);
-		sb.append(", this, 'tr:not(.lfr-template)'");
-		sb.append(");\">");
+		sb.append(", this, 'tr:not(.lfr-template)');\">");
 
 		return sb.toString();
 	}
@@ -226,12 +224,35 @@ public class RowChecker {
 		return value;
 	}
 
+	protected String getOnClick(
+		String checkBoxRowIds, String checkBoxAllRowIds,
+		String checkBoxPostOnClick) {
+
+		StringBundler sb = new StringBundler(9);
+
+		sb.append("onClick=\"Liferay.Util.rowCheckerCheckAllBox(AUI().");
+		sb.append("one(this).ancestor('.table'), AUI().one(this).");
+		sb.append("ancestor('tr:not(.lfr-template)'), ");
+		sb.append(checkBoxRowIds);
+		sb.append(", ");
+		sb.append(checkBoxAllRowIds);
+		sb.append(", 'info');");
+
+		if (Validator.isNotNull(checkBoxPostOnClick)) {
+			sb.append(checkBoxPostOnClick);
+		}
+
+		sb.append("\"");
+
+		return sb.toString();
+	}
+
 	protected String getRowCheckBox(
 		HttpServletRequest request, boolean checked, boolean disabled,
 		String name, String value, String checkBoxRowIds,
 		String checkBoxAllRowIds, String checkBoxPostOnClick) {
 
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(14);
 
 		sb.append("<input ");
 
@@ -254,21 +275,9 @@ public class RowChecker {
 		sb.append("\" ");
 
 		if (Validator.isNotNull(_allRowIds)) {
-			sb.append("onClick=\"Liferay.Util.checkAllBox(");
-			sb.append("AUI().one(this).ancestor('");
-			sb.append(".table'), ");
-			sb.append(checkBoxRowIds);
-			sb.append(", ");
-			sb.append(checkBoxAllRowIds);
-			sb.append(");");
-			sb.append("AUI().one(this).ancestor('tr:not(.lfr-template)').");
-			sb.append("toggleClass('info');");
-
-			if (Validator.isNotNull(checkBoxPostOnClick)) {
-				sb.append(checkBoxPostOnClick);
-			}
-
-			sb.append("\"");
+			sb.append(
+				getOnClick(
+					checkBoxRowIds, checkBoxAllRowIds, checkBoxPostOnClick));
 		}
 
 		sb.append(">");

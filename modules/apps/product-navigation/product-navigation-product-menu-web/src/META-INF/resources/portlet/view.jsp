@@ -55,7 +55,7 @@ if (Validator.isNotNull(themeDisplay.getPpid())) {
 	%>
 
 		<li class="<%= "col-xs-" + (12 / childPanelCategories.size()) %> <%= rootPanelCategoryKey.equals(childPanelCategory.getKey()) ? "active" : StringPool.BLANK %>">
-			<a aria-expanded="true" data-toggle="tab" href="#<portlet:namespace /><%= childPanelCategory.getKey() %>">
+			<a aria-expanded="true" data-toggle="tab" href="#<portlet:namespace /><%= AUIUtil.normalizeId(childPanelCategory.getKey()) %>">
 				<div class="product-menu-tab-icon">
 					<span class="<%= childPanelCategory.getIconCssClass() %> icon-monospaced"></span>
 				</div>
@@ -79,7 +79,7 @@ if (Validator.isNotNull(themeDisplay.getPpid())) {
 		for (PanelCategory childPanelCategory : childPanelCategories) {
 		%>
 
-			<div class="fade in tab-pane <%= rootPanelCategoryKey.equals(childPanelCategory.getKey()) ? "active" : StringPool.BLANK %>" id="<portlet:namespace /><%= childPanelCategory.getKey() %>">
+			<div class="fade in tab-pane <%= rootPanelCategoryKey.equals(childPanelCategory.getKey()) ? "active" : StringPool.BLANK %>" id="<portlet:namespace /><%= AUIUtil.normalizeId(childPanelCategory.getKey()) %>">
 				<liferay-application-list:panel-content panelCategory="<%= childPanelCategory %>" />
 			</div>
 
@@ -106,7 +106,7 @@ if (Validator.isNotNull(themeDisplay.getPpid())) {
 			<ul class="user-subheading">
 
 				<%
-				List<Group> mySiteGroups = user.getMySiteGroups(new String[] {User.class.getName()}, false, QueryUtil.ALL_POS);
+				List<Group> mySiteGroups = user.getMySiteGroups(new String[] {User.class.getName()}, QueryUtil.ALL_POS);
 
 				for (Group mySiteGroup : mySiteGroups) {
 				%>

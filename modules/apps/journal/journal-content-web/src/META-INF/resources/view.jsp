@@ -86,7 +86,7 @@ AssetRendererFactory<JournalArticle> assetRendererFactory = AssetRendererFactory
 						</div>
 
 						<div class="journal-content-article">
-							<%= RuntimePageUtil.processXML(request, response, articleDisplay.getContent()) %>
+							<%= articleDisplay.getContent() %>
 						</div>
 
 						<c:if test="<%= articleDisplay.isPaginate() %>">
@@ -209,7 +209,7 @@ AssetRendererFactory<JournalArticle> assetRendererFactory = AssetRendererFactory
 
 					addArticleURL.setWindowState(LiferayWindowState.POP_UP);
 
-					List<DDMStructure> ddmStructures = DDMStructureServiceUtil.getStructures(PortalUtil.getCurrentAndAncestorSiteGroupIds(scopeGroupId), PortalUtil.getClassNameId(JournalArticle.class));
+					List<DDMStructure> ddmStructures = DDMStructureServiceUtil.getStructures(company.getCompanyId(), PortalUtil.getCurrentAndAncestorSiteGroupIds(scopeGroupId), PortalUtil.getClassNameId(JournalArticle.class), WorkflowConstants.STATUS_APPROVED);
 
 					for (DDMStructure ddmStructure : ddmStructures) {
 						addArticleURL.setParameter("ddmStructureId", String.valueOf(ddmStructure.getStructureId()));

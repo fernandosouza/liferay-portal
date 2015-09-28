@@ -478,7 +478,7 @@
 		<execute function="Click" locator1="APConfigurationArchivedsetup#ARCHIVED_SETUPS_TABLE_DROPDOWN" />
 		<execute function="AssertClickNoError" locator1="MenuItem#DELETE" value1="Delete" />
 		<execute function="Confirm" value1="Are you sure you want to delete this? It will be deleted immediately." />
-		<execute function="AssertTextEquals" locator1="PGAssetpublisherConfigurationArchivedsetup#SUCCESS_MESSAGE" value1="You have successfully updated the setup." />
+		<execute function="AssertTextEquals" locator1="PGAssetpublisherConfigurationArchivedsetup#SUCCESS_MESSAGE" value1="Your request completed successfully." />
 		<execute function="AssertTextEquals" locator1="Message#INFO" value1="There are no archived setups." />
 	</command>
 
@@ -528,7 +528,7 @@
 		<var name="key_archiveName" value="${archiveName}" />
 
 		<execute function="AssertTextEquals" locator1="APConfigurationArchivedsetup#ARCHIVED_SETUPS_TABLE_NAME" value1="${archiveName}" />
-		<execute function="AssertTextEquals" locator1="PGAssetpublisherConfigurationArchivedsetup#SUCCESS_MESSAGE" value1="You have successfully updated the setup." />
+		<execute function="AssertTextEquals" locator1="PGAssetpublisherConfigurationArchivedsetup#SUCCESS_MESSAGE" value1="Your request completed successfully." />
 	</command>
 
 	<command name="viewAssetDetailsPG">
@@ -714,19 +714,7 @@
 		<execute function="AssertElementPresent" locator1="Link#READ_MORE" />
 		<execute function="AssertElementPresent" locator1="Icon#PRINT" />
 		<execute function="AssertElementPresent" locator1="Icon#FLAG" />
-
-		<if>
-			<equals arg1="${pageStaging}" arg2="true" />
-			<then>
-				<execute function="AssertElementNotPresent" locator1="Icon#EDIT" />
-			</then>
-			<else>
-				<execute function="AssertElementPresent" locator1="Icon#EDIT" />
-			</else>
-		</if>
-
-		<execute function="AssertElementPresent" locator1="Icon#TWITTER" />
-		<execute function="AssertElementPresent" locator1="Icon#GOOGLE_PLUS" />
+		<execute function="AssertElementPresent" locator1="Icon#EDIT" />
 		<execute function="AssertElementPresent" locator1="Ratings#YOUR_RATING_LABEL" />
 		<execute function="AssertElementPresent" locator1="Ratings#AVERAGE_LABEL" />
 
@@ -737,10 +725,15 @@
 				<execute function="AssertElementNotPresent" locator1="Comments#SUBSCRIBE_TO_COMMENTS_LINK" />
 			</then>
 			<else>
-				<execute function="AssertElementPresent" locator1="Comments#BE_THE_FIRST_LINK" />
 				<execute function="AssertElementPresent" locator1="Comments#SUBSCRIBE_TO_COMMENTS_LINK" />
 			</else>
 		</if>
+
+		<execute function="AssertClick" locator1="Button#SHARE" value1="Share" />
+
+		<execute function="AssertElementPresent" locator1="Icon#TWITTER" />
+		<execute function="AssertElementPresent" locator1="Icon#FACEBOOK" />
+		<execute function="AssertElementPresent" locator1="Icon#GOOGLE_PLUS" />
 	</command>
 
 	<command name="viewDefaultWithAllDisplaySettingsCheckboxesPG">

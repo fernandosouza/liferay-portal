@@ -15,21 +15,24 @@
 package com.liferay.dynamic.data.mapping.registry;
 
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.registry.annotations.DDMForm;
 import com.liferay.dynamic.data.mapping.registry.annotations.DDMFormField;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.language.UTF8Control;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.lang.reflect.Method;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -149,20 +152,21 @@ public class DDMFormFactoryHelper {
 		return "text";
 	}
 
-	public String getDDMFormFieldValidationExpression() {
+	public DDMFormFieldValidation getDDMFormFieldValidation() {
+		DDMFormFieldValidation ddmFormFieldValidation =
+			new DDMFormFieldValidation();
+
 		if (Validator.isNotNull(_ddmFormField.validationExpression())) {
-			return _ddmFormField.validationExpression();
+			ddmFormFieldValidation.setExpression(
+				_ddmFormField.validationExpression());
 		}
 
-		return StringPool.TRUE;
-	}
-
-	public String getDDMFormFieldValidationMessage() {
-		if (Validator.isNotNull(_ddmFormField.validationMessage())) {
-			return _ddmFormField.validationMessage();
+		if (Validator.isNotNull(_ddmFormField.validationErrorMessage())) {
+			ddmFormFieldValidation.setErrorMessage(
+				_ddmFormField.validationErrorMessage());
 		}
 
-		return StringPool.BLANK;
+		return ddmFormFieldValidation;
 	}
 
 	public String getDDMFormFieldVisibilityExpression() {
@@ -173,6 +177,19 @@ public class DDMFormFactoryHelper {
 		return StringPool.TRUE;
 	}
 
+	public Map<String, String> getProperties() {
+		Map<String, String> propertiesMap = new HashMap<>();
+
+		for (String property : _ddmFormField.properties()) {
+			String key = StringUtil.extractFirst(property, StringPool.EQUAL);
+			String value = StringUtil.extractLast(property, StringPool.EQUAL);
+
+			propertiesMap.put(key, value);
+		}
+
+		return propertiesMap;
+	}
+
 	public boolean isDDMFormFieldLocalizable(Method method) {
 		Class<?> returnType = _method.getReturnType();
 
@@ -181,6 +198,10 @@ public class DDMFormFactoryHelper {
 		}
 
 		return false;
+	}
+
+	public boolean isDDMFormFieldRequired() {
+		return _ddmFormField.required();
 	}
 
 	protected String getKey(String value) {
@@ -195,14 +216,13 @@ public class DDMFormFactoryHelper {
 
 	protected ResourceBundle getResourceBundle(Locale locale) {
 		try {
-			return ResourceBundle.getBundle(
-				getResourceBundleBaseName(_clazz), locale,
-				_clazz.getClassLoader(), UTF8Control.INSTANCE);
+			return ResourceBundleUtil.getBundle(
+				getResourceBundleBaseName(_clazz), locale, _clazz);
 		}
 		catch (Exception e) {
-			return ResourceBundle.getBundle(
+			return ResourceBundleUtil.getBundle(
 				getResourceBundleBaseName(_clazz), locale,
-				PortalClassLoaderUtil.getClassLoader(), UTF8Control.INSTANCE);
+				PortalClassLoaderUtil.getClassLoader());
 		}
 	}
 

@@ -11,7 +11,7 @@ buildscript {
 		}
 
 		maven {
-			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
+			url System.properties["repository.url"] ?: "http://cdn.repository.liferay.com/nexus/content/groups/public"
 		}
 	}
 
@@ -43,6 +43,18 @@ afterEvaluate {
 		project.version = project.version + "-SNAPSHOT"
 	}
 
+	Iterable<Task> publishNodeModuleTasks = tasks.matching {
+		it.class.name.startsWith "com.liferay.gradle.plugins.node.tasks.PublishNodeModuleTask"
+	}
+
+	publishNodeModuleTasks.each {
+		it.dependsOn jar
+
+		if (!project.version.endsWith("-SNAPSHOT")) {
+			uploadArchives.dependsOn it
+		}
+	}
+
 	javadoc {
 		classpath = sourceSets.main.output + sourceSets.main.compileClasspath
 	}
@@ -52,11 +64,6 @@ buildCSS {
 	dependsOn ":frontend:frontend-common-css:buildCssCommon"
 	portalCommonDirName = relativePath(new File(rootDir, "frontend/frontend-common-css/tmp/META-INF/resources"))
 	sassCompilerClassName = project.properties["sass.compiler.class.name"]
-}
-
-buildLang {
-	translateClientId = project.properties["microsoft.translator.client.id"]
-	translateClientSecret = project.properties["microsoft.translator.client.secret"]
 }
 
 buildService {
@@ -159,18 +166,6 @@ dependencies {
 	xmlFormatter group: "com.liferay", name: "com.liferay.xml.formatter", version: "default"
 }
 
-downloadNode {
-	doLast {
-		File npmrcFile = new File(nodeDir, "etc/npmrc")
-
-		npmrcFile << """
-fetch-retries = 10
-fetch-retry-maxtimeout = 120000
-fetch-retry-mintimeout = 60000
-"""
-	}
-}
-
 eclipse {
 	classpath {
 		file {
@@ -220,10 +215,10 @@ jsTranspiler {
 	lfrAmdLoaderVersion = project.properties["nodejs.lfr.amd.loader.version"]
 }
 
-if (System.getenv("JENKINS_HOME")) {
-	node {
-		nodeUrl = "https://nodejs.org/dist/v${nodeVersion}/node-v${nodeVersion}-linux-x64.tar.gz"
-	}
+node {
+	npmArgs "--fetch-retries", "10"
+	npmArgs "--fetch-retry-maxtimeout", "120000"
+	npmArgs "--fetch-retry-mintimeout", "60000"
 }
 
 repositories {
@@ -232,7 +227,7 @@ repositories {
 	}
 
 	maven {
-		url "http://cdn.repository.liferay.com/nexus/content/groups/public"
+		url System.properties["repository.url"] ?: "http://cdn.repository.liferay.com/nexus/content/groups/public"
 	}
 }
 
@@ -296,5 +291,23 @@ if (gradle.hasProperty("testClassGroupIndex")) {
 
 		jvmArgs "-Dtest.class.group.index=" + gradle.testClassGroupIndex
 		jvmArgs "-Dtest.class.groups=" + gradle.testClassGroups
+	}
+}
+
+if (System.getenv("JENKINS_HOME")) {
+	node {
+		nodeUrl = "https://nodejs.org/dist/v${nodeVersion}/node-v${nodeVersion}-linux-x64.tar.gz"
+	}
+
+	pluginManager.withPlugin("com.liferay.cache") {
+		cache {
+			forcedCache = true
+		}
+	}
+
+	startTestableTomcat {
+		ext {
+			deleteLiferayHome = false
+		}
 	}
 }

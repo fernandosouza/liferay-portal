@@ -37,11 +37,7 @@ public class PortletKeys {
 
 	public static final String CHAT = "1_WAR_chatportlet";
 
-	public static final String CONTROL_PANEL_HOME = "190";
-
 	public static final String DIRECTORY = "11";
-
-	public static final String DOCKBAR = "145";
 
 	public static final String DOCUMENT_LIBRARY =
 		"com_liferay_document_library_web_portlet_DLPortlet";
@@ -82,7 +78,9 @@ public class PortletKeys {
 	public static final String MOBILE_DEVICE_RULES =
 		"com_liferay_mobile_device_rules_web_portlet_MDRPortlet";
 
-	public static final String MONITORING = "131";
+	public static final String MONITORING_INVOKER =
+		"com_liferay_monitoring_web_portlet_" +
+			"MonitoringInvokerPortletFactoryImpl";
 
 	public static final String MY_ACCOUNT =
 		"com_liferay_my_account_web_portlet_MyAccountPortlet";
@@ -105,9 +103,6 @@ public class PortletKeys {
 		"com_liferay_plugins_admin_web_portlet_PluginsAdminPortlet";
 
 	public static final String PORTAL = "90";
-
-	public static final String PORTAL_SETTINGS =
-		"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet";
 
 	public static final String PORTLET_DISPLAY_TEMPLATE =
 		"com_liferay_dynamic_data_mapping_web_portlet_" +

@@ -1,4 +1,6 @@
 <definition>
+	<var name="assetType" value="Bookmarks Folder" />
+
 	<command name="addCP">
 		<execute function="AssertClick" locator1="NavListItem#ADD_FOLDER" value1="Add Folder" />
 
@@ -33,8 +35,7 @@
 
 		<execute function="AssertClick" locator1="CPBookmarksAddsubfolder#SAVE_BUTTON" value1="Save" />
 
-		<execute function="AssertTextEquals" locator1="CPBookmarksAddsubfolder#NAME_FIELD_REQUIRED" value1="Name" />
-		<execute function="AssertTextEquals" locator1="CPBookmarksAddsubfolder#NAME_FIELD_REQUIRED" value1="Required" />
+		<execute function="AssertTextEquals" locator1="CPBookmarksAddsubfolder#NAME_FIELD_LABEL" value1="Name Required" />
 		<execute function="AssertTextEquals" locator1="CPBookmarksAddsubfolder#NAME_FIELD_REQUIRED" value1="This field is required." />
 	</command>
 
@@ -95,13 +96,14 @@
 	</command>
 
 	<command name="deletePG">
+		<var name="key_assetType" value="${assetType}" />
 		<var name="key_folderName" value="${folderName}" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderName}" />
 		<execute function="AssertElementPresent" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_ACTIONS_DROPDOWN" />
 		<execute function="Click" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_ACTIONS_DROPDOWN" />
 		<execute function="AssertClick" locator1="MenuItem#MOVE_TO_THE_RECYCLE_BIN" value1="Move to the Recycle Bin" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#SUCCESS_RECYCLE_BIN" value1="moved to the Recycle Bin. Undo" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Message#RECYCLE_BIN_SUCCESS" value1="The ${assetType} ${folderName} was moved to the Recycle Bin. Undo" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Recycle Bin" />
@@ -129,7 +131,7 @@
 		<var name="key_folderName" value="${folderName}" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderName}" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderDescription}" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_DESCRIPTION" value1="${folderDescription}" />
 		<execute function="Click" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_ACTIONS_DROPDOWN" />
 		<execute function="AssertClick" locator1="MenuItem#EDIT" value1="Edit" />
 
@@ -142,7 +144,7 @@
 		<var name="key_folderName" value="${folderNameEdit}" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderNameEdit}" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderDescriptionEdit}" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_DESCRIPTION" value1="${folderDescriptionEdit}" />
 	</command>
 
 	<command name="editSubfolderCP">
@@ -225,8 +227,10 @@
 	</command>
 
 	<command name="moveSubfolderToRecycleBinPG">
+		<var name="key_assetType" value="${assetType}" />
+
 		<execute function="AssertClick" locator1="NavListItem#MOVE_TO_THE_RECYCLE_BIN" value1="Move to the Recycle Bin" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#SUCCESS_RECYCLE_BIN" value1="The Bookmarks Folder ${subfolderName} was moved to the Recycle Bin." />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Message#RECYCLE_BIN_SUCCESS" value1="The ${assetType} ${subfolderName} was moved to the Recycle Bin." />
 	</command>
 
 	<command name="moveToRecycleBinCP">
@@ -234,13 +238,14 @@
 			<var name="portletName" value="Bookmarks" />
 		</execute>
 
+		<var name="key_assetType" value="${assetType}" />
 		<var name="key_folderName" value="${folderName}" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderName}" />
 		<execute function="AssertElementPresent" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_ACTIONS_DROPDOWN" />
 		<execute function="Click" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_ACTIONS_DROPDOWN" />
 		<execute function="AssertClick" locator1="MenuItem#MOVE_TO_THE_RECYCLE_BIN" value1="Move to the Recycle Bin" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#RECYCLE_BIN_SUCCESS" value1="moved to the Recycle Bin. Undo" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Message#RECYCLE_BIN_SUCCESS" value1="The ${assetType} ${folderName} was moved to the Recycle Bin. Undo" />
 	</command>
 
 	<command name="subscribePG">
@@ -285,6 +290,6 @@
 		<var name="key_folderName" value="${folderName}" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderName}" />
-		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_NAME" value1="${folderDescription}" />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Bookmarks#FOLDERS_TABLE_FOLDER_DESCRIPTION" value1="${folderDescription}" />
 	</command>
 </definition>

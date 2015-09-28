@@ -438,7 +438,7 @@
 		</execute>
 
 		<execute macro="DMDocumentComment#addPG">
-			<var name="commentBody" value="The is comment #2" />
+			<var name="commentBody" value="This is comment #2" />
 			<var name="dmDocumentTitle" value="Zero Document File" />
 		</execute>
 
@@ -464,7 +464,7 @@
 		</execute>
 
 		<execute macro="DMDocumentComment#viewPG">
-			<var name="commentBody" value="The is comment #2" />
+			<var name="commentBody" value="This is comment #2" />
 			<var name="dmDocumentTitle" value="Zero Document File" />
 		</execute>
 	</command>
@@ -667,7 +667,7 @@
 			<execute macro="DMDocument#addPG">
 				<var name="dmDocumentDescription" value="DM Document Description" />
 				<var name="dmDocumentFile" value="Document_${entryCount}.doc" />
-				<var name="dmDocumentTitle" value="${dmDocumentFile}" />
+				<var name="dmDocumentTitle" value="Document_${entryCount}.doc" />
 			</execute>
 		</for>
 
@@ -1118,7 +1118,8 @@
 		<execute function="AssertTextEquals" locator1="AssetCategorization#CATEGORY" value1="${categoryName}" />
 
 		<for list="${tagNameList}" param="tagName">
-			<var name="key_categoryTag" value="${tagName}" />
+			<var name="key_tagName" value="${tagName}" />
+
 			<execute function="AssertTextEquals" locator1="AssetCategorization#TAG" value1="${tagName}" />
 		</for>
 

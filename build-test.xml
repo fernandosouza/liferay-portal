@@ -3,6 +3,16 @@
 <project name="portal-test" basedir="." default="test" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="build.xml" />
 
+	<if>
+		<and>
+			<isset property="test.base.dir.name" />
+			<available file="${test.base.dir.name}/test.properties" />
+		</and>
+		<then>
+			<property file="${test.base.dir.name}/test.properties" />
+		</then>
+	</if>
+
 	<property file="${project.dir}/test.generated.properties" />
 	<property file="${project.dir}/test.${user.name}.properties" />
 	<property file="${project.dir}/test.${env.COMPUTERNAME}.properties" />
@@ -30,15 +40,6 @@
 		<sequential>
 			<if>
 				<not>
-					<isset property="app.server.type" />
-				</not>
-				<then>
-					<property name="app.server.type" value="tomcat" />
-				</then>
-			</if>
-
-			<if>
-				<not>
 					<or>
 						<equals arg1="${app.server.type}" arg2="glassfish" />
 						<equals arg1="${app.server.type}" arg2="jboss" />
@@ -59,32 +60,16 @@
 
 			<if>
 				<not>
-					<isset property="browser.type" />
-				</not>
-				<then>
-					<property name="browser.type" value="firefox" />
-				</then>
-			</if>
-
-			<if>
-				<not>
 					<or>
+						<equals arg1="${browser.type}" arg2="chrome" />
+						<equals arg1="${browser.type}" arg2="edge" />
 						<equals arg1="${browser.type}" arg2="firefox" />
-						<equals arg1="${browser.type}" arg2="googlechrome" />
-						<equals arg1="${browser.type}" arg2="ie" />
+						<equals arg1="${browser.type}" arg2="internetexplorer" />
+						<equals arg1="${browser.type}" arg2="safari" />
 					</or>
 				</not>
 				<then>
-					<fail>Please set "browser.type" to one of the following:${line.separator}firefox, googlechrome, ie.</fail>
-				</then>
-			</if>
-
-			<if>
-				<not>
-					<isset property="database.type" />
-				</not>
-				<then>
-					<property name="database.type" value="mysql" />
+					<fail>Please set "browser.type" to one of the following:${line.separator}chrome, edge, firefox, internetexplorer, safari.</fail>
 				</then>
 			</if>
 
@@ -92,7 +77,7 @@
 				<not>
 					<or>
 						<equals arg1="${database.type}" arg2="db2" />
-						<equals arg1="${database.type}" arg2="hsql" />
+						<equals arg1="${database.type}" arg2="hypersonic" />
 						<equals arg1="${database.type}" arg2="mysql" />
 						<equals arg1="${database.type}" arg2="oracle" />
 						<equals arg1="${database.type}" arg2="postgresql" />
@@ -101,7 +86,7 @@
 					</or>
 				</not>
 				<then>
-					<fail>Please set "database.type" to one of the following:${line.separator}db2, hsql, mysql, oracle, postgresql, sql.server, sybase.</fail>
+					<fail>Please set "database.type" to one of the following:${line.separator}db2, hypersonic, mysql, oracle, postgresql, sql.server, sybase.</fail>
 				</then>
 			</if>
 		</sequential>
@@ -556,7 +541,7 @@ counter.jdbc.prefix=jdbc.counter.]]></echo>
 
 	<macrodef name="get-test-url">
 		<sequential>
-			<get-testcase-property property.name="mobile.device.enabled" />
+			<get-testcase-property property.name="mobile.device.type" />
 
 			<get-testcase-property property.name="testcase.url" />
 
@@ -566,7 +551,7 @@ counter.jdbc.prefix=jdbc.counter.]]></echo>
 					<var name="test.url" value="${test.url}" />
 				</then>
 				<elseif>
-					<equals arg1="${mobile.device.enabled}" arg2="true" />
+					<isset property="mobile.device.type" />
 					<then>
 						<get-ip-address />
 
@@ -1205,7 +1190,12 @@ counter.jdbc.prefix=jdbc.counter.]]></echo>
 					<unzip src="tools/selenium/${selenium.ie.driver.zip}" dest="tools/selenium" />
 				</then>
 				<else>
-					<fail message="Operating system is not supported." />
+					<if>
+						<equals arg1="${selenium.remote.driver.enabled}" arg2="false" />
+						<then>
+							<fail message="Operating system is not supported." />
+						</then>
+					</if>
 				</else>
 			</if>
 		</sequential>
@@ -1887,9 +1877,21 @@ module.framework.base.dir=${project.dir}/osgi]]></echo>
 				</then>
 				<elseif>
 					<or>
-						<contains string="@{liferay.portal.bundle}" substring="6.2.10" />
 						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.2" />
 						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.3" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.1" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.2" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.3" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.4" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.5" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.6" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.7" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.8" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.9" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.10" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.11" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.12" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.13" />
 					</or>
 					<then>
 						<echo file="app.server.${user.name}.properties" append="true">
@@ -2113,7 +2115,7 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 				hw.keyboard=yes
 			</echo>
 
-			<exec executable="/bin/bash" os="${os.unix}" spawn="true">
+			<exec executable="/bin/bash" os="${os.apple},${os.unix}" spawn="true">
 				<arg value="-c" />
 				<arg value="${mobile.android.home}/tools/emulator -avd deviceName -no-boot-anim" />
 			</exec>
@@ -2228,7 +2230,7 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 					</if>
 
 					<antcall target="delete-liferay-home">
-						<param name="keep.hsqldb" value="true" />
+						<param name="keep.hypersonicdb" value="true" />
 					</antcall>
 
 					<if>
@@ -2260,23 +2262,43 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 	<macrodef name="start-appium">
 		<sequential>
-			<fail message="Please set the property ${mobile.android.home}." unless="mobile.android.home" />
+			<if>
+				<equals arg1="${mobile.device.type}" arg2="android" />
+				<then>
+					<fail message="Please set the property ${mobile.android.home}." unless="mobile.android.home" />
 
-			<parallel>
-				<daemons>
-					<exec executable="/bin/bash" os="${os.unix}">
-						<env key="PATH" value="${env.PATH}:${mobile.android.home}/tools:${mobile.android.home}/platform-tools" />
-						<arg value="-c" />
-						<arg value="${appium.unix.cmd}" />
-					</exec>
+					<parallel>
+						<daemons>
+							<exec executable="/bin/bash" os="${os.apple},${os.unix}">
+								<env key="ANDROID_HOME" value="${mobile.android.home}" />
+								<env key="PATH" value="${env.PATH}:${mobile.android.home}/tools:${mobile.android.home}/platform-tools" />
+								<arg value="-c" />
+								<arg value="${appium.unix.cmd}" />
+							</exec>
 
-					<exec dir="${appium.win32.dir}" executable="cmd.exe" os="${os.windows}">
-						<env key="Path" value="${env.Path}:${mobile.android.home}/tools:${mobile.android.home}/platform-tools" />
-						<arg value="/c" />
-						<arg value="${appium.win32.cmd}" />
-					</exec>
-				</daemons>
-			</parallel>
+							<exec dir="${appium.win32.dir}" executable="cmd.exe" os="${os.windows}">
+								<env key="ANDROID_HOME" value="${mobile.android.home}" />
+								<env key="Path" value="${env.Path}:${mobile.android.home}/tools:${mobile.android.home}/platform-tools" />
+								<arg value="/c" />
+								<arg value="${appium.win32.cmd}" />
+							</exec>
+						</daemons>
+					</parallel>
+				</then>
+				<elseif>
+					<equals arg1="${mobile.device.type}" arg2="ios" />
+					<then>
+						<parallel>
+							<daemons>
+								<exec executable="/bin/bash" os="${os.apple}">
+									<arg value="-c" />
+									<arg value="${appium.unix.cmd}" />
+								</exec>
+							</daemons>
+						</parallel>
+					</then>
+				</elseif>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -2417,7 +2439,7 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 	<macrodef name="stop-appium">
 		<sequential>
-			<exec executable="/bin/bash" os="${os.unix}" >
+			<exec executable="/bin/bash" os="${os.apple},${os.unix}" >
 				<arg value="-c" />
 				<arg value="killall node" />
 			</exec>
@@ -2565,7 +2587,7 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 		<if>
 			<not>
-				<equals arg1="${database.type}" arg2="hsql" />
+				<equals arg1="${database.type}" arg2="hypersonic" />
 			</not>
 			<then>
 				<get-testcase-property property.name="databases.size" />
@@ -2637,6 +2659,16 @@ create database lportal${database.index} character set utf8;</echo>
 							<replacevalue></replacevalue>
 						</replace>
 					</then>
+					<elseif>
+						<equals arg1="${database.type}" arg2="oracle" />
+						<then>
+							<replace file="create.sql">
+								<replacetoken>grant connect,resource to &amp;1;</replacetoken>
+								<replacevalue>grant connect,resource to &amp;1;
+	grant unlimited tablespace to &amp;1;</replacevalue>
+							</replace>
+						</then>
+					</elseif>
 					<elseif>
 						<equals arg1="${database.type}" arg2="sybase" />
 						<then>
@@ -3044,6 +3076,38 @@ go]]></replacevalue>
 		<delete failonerror="false" file="${project.dir}/console-shut-down" />
 	</target>
 
+	<target name="clean-up-mobile-device">
+		<if>
+			<equals arg1="${mobile.device.type}" arg2="android" />
+			<then>
+				<stop-android-device />
+			</then>
+		</if>
+	</target>
+
+	<target name="clean-up-selenium-driver">
+		<if>
+			<equals arg1="${browser.type}" arg2="chrome" />
+			<then>
+				<stop-chrome-driver />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${browser.type}" arg2="internetexplorer" />
+			<then>
+				<stop-ie-driver />
+			</then>
+		</if>
+
+		<if>
+			<isset property="mobile.device.type" />
+			<then>
+				<stop-appium />
+			</then>
+		</if>
+	</target>
+
 	<target name="clean-up-sikuli-temp-files">
 		<delete dir="lib/development/libs" />
 	</target>
@@ -3169,6 +3233,25 @@ go]]></replacevalue>
 			</elseif>
 			<elseif>
 				<and>
+					<equals arg1="${database.type}" arg2="oracle" />
+					<equals arg1="${database.version}" arg2="12" />
+				</and>
+				<then>
+					<delete includeemptydirs="true" failonerror="false">
+						<fileset
+							dir="${app.server.lib.global.dir}"
+							includes="${jdbc.oracle.driver}"
+						/>
+					</delete>
+
+					<mirrors-get
+						dest="${todir}"
+						src="${test.jdbc.drivers.url}/oracle/12.1.0.2/${jdbc.oracle.driver}"
+					/>
+				</then>
+			</elseif>
+			<elseif>
+				<and>
 					<equals arg1="${database.type}" arg2="postgresql" />
 					<not>
 						<available file="${app.server.lib.global.dir}/${jdbc.postgresql.driver}" />
@@ -3244,8 +3327,8 @@ go]]></replacevalue>
 
 				<delete failonerror="false" includeemptydirs="true">
 					<fileset dir="${test.app.server.liferay.home}/data">
-						<exclude name="hsql/lportal.properties" if:true="${keep.hsqldb}" />
-						<exclude name="hsql/lportal.script" if:true="${keep.hsqldb}" />
+						<exclude name="hypersonic/lportal.properties" if:true="${keep.hypersonicdb}" />
+						<exclude name="hypersonic/lportal.script" if:true="${keep.hypersonicdb}" />
 					</fileset>
 				</delete>
 				<delete dir="${test.app.server.liferay.home}/logs" />
@@ -4035,15 +4118,54 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		</copy>
 	</target>
 
+	<target name="prepare-log4j-ext-xml">
+		<if>
+			<equals arg1="${database.type}" arg2="hypersonic" />
+			<then>
+				<echo file="${app.server.classes.portal.dir}/META-INF/portal-log4j-ext.xml"><![CDATA[<?xml version="1.0"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<category name="com.liferay.portal.spring.hibernate.DialectDetector">
+		<priority value="ERROR" />
+	</category>
+</log4j:configuration>]]></echo>
+			</then>
+		</if>
+	</target>
+
+	<target name="prepare-mobile-device">
+		<if>
+			<equals arg1="${mobile.device.type}" arg2="android" />
+			<then>
+				<start-android-device />
+			</then>
+		</if>
+	</target>
+
 	<target name="prepare-portal-ext-properties">
 		<prepare-fix-pack-bundle />
+
+		<delete file="portal-impl/src/portal-ext.properties" />
+
+		<if>
+			<and>
+				<isset property="test.base.dir.name" />
+				<available file="${test.base.dir.name}/portal.properties" />
+			</and>
+			<then>
+				<copy file="${test.base.dir.name}/portal.properties" tofile="portal-impl/src/portal-ext.properties" />
+			</then>
+		</if>
 
 		<get-database-property property.name="database.driver" />
 		<get-database-property property.name="database.password" />
 		<get-database-property property.name="database.url" />
 		<get-database-property property.name="database.username" />
 
-		<echo file="portal-impl/src/portal-ext.properties">liferay.home=${liferay.home}
+		<echo file="portal-impl/src/portal-ext.properties" append="true">
+
+liferay.home=${liferay.home}
 
 plugin.notifications.enabled=false
 
@@ -4159,10 +4281,10 @@ javascript.fast.load=false</echo>
 			</then>
 		</if>
 
-		<get-testcase-property property.name="mobile.device.enabled" />
+		<get-testcase-property property.name="mobile.device.type" />
 
 		<if>
-			<equals arg1="${mobile.device.enabled}" arg2="true" />
+			<isset property="mobile.device.type" />
 			<then>
 				<get-ip-address />
 
@@ -4416,7 +4538,7 @@ hot.deploy.dependency.management.enabled=false</echo>
 			<elseif>
 				<equals arg1="${app.server.type}" arg2="glassfish" />
 				<then>
-					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.glassfish.portal.war.dir}" />
+					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.glassfish.portal.war.name}" />
 				</then>
 			</elseif>
 			<elseif>
@@ -4499,15 +4621,25 @@ module.framework.properties.osgi.console=11312</echo>
 
 		<echo append="true" file="${test.ext.properties.file}">
 			component.names=${component.names}
-			ignore.errors.file.name=${project.dir}/portal-web/test-ignorable-error-lines.xml
+			ignore.errors.file.name=${project.dir.unix}/portal-web/test-ignorable-error-lines.xml
+			output.dir.name=${liferay.home}/poshi
 			product.names=${product.names}
-			project.dir=${project.dir}
+			project.dir=${project.dir.unix}
 			test.case.available.property.names=${test.case.available.property.names}
 			test.console.log.file.name=${liferay.home}/logs/liferay.${current.date}.xml
-			test.console.shut.down.file.name=${project.dir}/console-shut-down
+			test.console.shut.down.file.name=${project.dir.unix}/console-shut-down
 			test.dependencies.dir.name=dependencies
-			test.poshi.warnings.file.name=${project.dir}/poshi-warnings.xml
+			test.poshi.warnings.file.name=${project.dir.unix}/poshi-warnings.xml
 		</echo>
+
+		<if>
+			<isset property="test.base.dir.name" />
+			<then>
+				<echo append="true" file="${test.ext.properties.file}">
+					test.base.dir.name=${test.base.dir.name}
+				</echo>
+			</then>
+		</if>
 
 		<if>
 			<and>
@@ -4534,6 +4666,15 @@ module.framework.properties.osgi.console=11312</echo>
 				</echo>
 			</then>
 		</if>
+
+		<if>
+			<isset property="test.include.dir.names" />
+			<then>
+				<echo append="true" file="${test.ext.properties.file}">
+					test.include.dir.names=${test.include.dir.names}
+				</echo>
+			</then>
+		</if>
 	</target>
 
 	<target name="prepare-selenium">
@@ -4549,7 +4690,9 @@ module.framework.properties.osgi.console=11312</echo>
 		<antcall target="prepare-selenium-app-server-properties" />
 		<antcall target="prepare-selenium-browser-properties" />
 		<antcall target="prepare-selenium-database-properties" />
+		<antcall target="prepare-selenium-driver" />
 		<antcall target="prepare-selenium-email-properties" />
+		<antcall target="prepare-selenium-mobile-properties" />
 		<antcall target="prepare-selenium-required-properties" />
 		<antcall target="prepare-selenium-testcase-properties" />
 
@@ -4576,15 +4719,6 @@ module.framework.properties.osgi.console=11312</echo>
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
 					liferay.portal.bundle=${liferay.portal.bundle}
-				</echo>
-			</then>
-		</if>
-
-		<if>
-			<isset property="mobile.android.home" />
-			<then>
-				<echo append="true" file="${test.ext.properties.file}">
-					mobile.android.home=${mobile.android.home}
 				</echo>
 			</then>
 		</if>
@@ -4716,64 +4850,19 @@ module.framework.properties.osgi.console=11312</echo>
 		</if>
 	</target>
 
-	<target name="prepare-selenium-browser-driver">
-		<if>
-			<equals arg1="${browser.type}" arg2="googlechrome" />
-			<then>
-				<prepare-chrome-driver />
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="${browser.type}" arg2="ie" />
-			<then>
-				<prepare-ie-driver />
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="${browser.type}" arg2="safari" />
-			<then>
-				<prepare-safari-driver />
-			</then>
-		</if>
-	</target>
-
 	<target name="prepare-selenium-browser-properties">
-		<if>
-			<equals arg1="${browser.type}" arg2="edge" />
-			<then>
-				<echo append="true" file="${test.ext.properties.file}">
-					browser.type=*edge
-				</echo>
-			</then>
-			<elseif>
-				<equals arg1="${browser.type}" arg2="firefox" />
-				<then>
-					<echo append="true" file="${test.ext.properties.file}">
-						browser.type=*chrome
-					</echo>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="${browser.type}" arg2="googlechrome" />
-				<then>
-					<echo append="true" file="${test.ext.properties.file}">
-						browser.type=*googlechrome
-						selenium.chrome.driver.executable=${selenium.chrome.driver.executable}
-					</echo>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="${browser.type}" arg2="ie" />
-				<then>
-					<echo append="true" file="${test.ext.properties.file}">
-						browser.type=*iehta
-						selenium.ie.driver.executable=${selenium.ie.driver.executable}
-					</echo>
-				</then>
-			</elseif>
-		</if>
+		<echo append="true" file="${test.ext.properties.file}">
+			browser.type=${browser.type}
+			selenium.chrome.driver.executable=${selenium.chrome.driver.executable}
+			selenium.chrome.driver.version=${selenium.chrome.driver.version}
+			selenium.desired.capabilities.platform=${selenium.desired.capabilities.platform}
+			selenium.desired.capabilities.version=${selenium.desired.capabilities.version}
+			selenium.executable.dir.name=${selenium.executable.dir.name}
+			selenium.ie.driver.executable=${selenium.ie.driver.executable}
+			selenium.ie.driver.version=${selenium.ie.driver.version}
+			selenium.remote.driver.enabled=${selenium.remote.driver.enabled}
+			selenium.remote.driver.hub=${selenium.remote.driver.hub}
+		</echo>
 	</target>
 
 	<target name="prepare-selenium-database-properties">
@@ -4814,37 +4903,37 @@ module.framework.properties.osgi.console=11312</echo>
 		</if>
 
 		<if>
-			<isset property="database.hsql.driver" />
+			<isset property="database.hypersonic.driver" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
-					database.hsql.driver=${database.hsql.driver}
+					database.hypersonic.driver=${database.hypersonic.driver}
 				</echo>
 			</then>
 		</if>
 
 		<if>
-			<isset property="database.hsql.password" />
+			<isset property="database.hypersonic.password" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
-					database.hsql.password=${database.hsql.password}
+					database.hypersonic.password=${database.hypersonic.password}
 				</echo>
 			</then>
 		</if>
 
 		<if>
-			<isset property="database.hsql.url" />
+			<isset property="database.hypersonic.url" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
-					database.hsql.url=${database.hsql.url}
+					database.hypersonic.url=${database.hypersonic.url}
 				</echo>
 			</then>
 		</if>
 
 		<if>
-			<isset property="database.hsql.username" />
+			<isset property="database.hypersonic.username" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
-					database.hsql.username=${database.hsql.username}
+					database.hypersonic.username=${database.hypersonic.username}
 				</echo>
 			</then>
 		</if>
@@ -4999,6 +5088,36 @@ module.framework.properties.osgi.console=11312</echo>
 				<echo append="true" file="${test.ext.properties.file}">
 					database.type=${database.type}
 				</echo>
+			</then>
+		</if>
+	</target>
+
+	<target name="prepare-selenium-driver">
+		<if>
+			<equals arg1="${browser.type}" arg2="chrome" />
+			<then>
+				<prepare-chrome-driver />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${browser.type}" arg2="internetexplorer" />
+			<then>
+				<prepare-ie-driver />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${browser.type}" arg2="safari" />
+			<then>
+				<prepare-safari-driver />
+			</then>
+		</if>
+
+		<if>
+			<isset property="mobile.device.type" />
+			<then>
+				<start-appium />
 			</then>
 		</if>
 	</target>
@@ -5266,6 +5385,18 @@ module.framework.properties.osgi.console=11312</echo>
 		</if>
 	</target>
 
+	<target name="prepare-selenium-mobile-properties">
+		<if>
+			<isset property="mobile.device.type" />
+			<then>
+				<echo append="true" file="${test.ext.properties.file}">
+					mobile.android.home=${mobile.android.home}
+					mobile.device.type=${mobile.device.type}
+				</echo>
+			</then>
+		</if>
+	</target>
+
 	<target name="prepare-selenium-required-properties">
 		<get-test-url />
 
@@ -5300,13 +5431,13 @@ module.framework.properties.osgi.console=11312</echo>
 			</then>
 		</if>
 
-		<get-testcase-property property.name="mobile.device.enabled" />
+		<get-testcase-property property.name="mobile.device.type" />
 
 		<if>
-			<equals arg1="${mobile.device.enabled}" arg2="true" />
+			<isset property="mobile.device.type" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
-					mobile.device.enabled=${mobile.device.enabled}
+					mobile.device.type=${mobile.device.type}
 				</echo>
 			</then>
 		</if>
@@ -5663,12 +5794,12 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 						</exec>
 					</then>
 					<elseif>
-						<equals arg1="${database.type}" arg2="hsql" />
+						<equals arg1="${database.type}" arg2="hypersonic" />
 						<then>
 							<delete dir="${liferay.home}/data" includeemptydirs="true" />
 
-							<copy file="sql/${database.name}.properties" tofile="${liferay.home}/data/hsql/${database.name}.properties" />
-							<copy file="sql/${database.name}.script" tofile="${liferay.home}/data/hsql/${database.name}.script" />
+							<copy file="sql/${database.name}.properties" tofile="${liferay.home}/data/hypersonic/${database.name}.properties" />
+							<copy file="sql/${database.name}.script" tofile="${liferay.home}/data/hypersonic/${database.name}.script" />
 						</then>
 					</elseif>
 					<elseif>
@@ -5715,11 +5846,10 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 							<get-database-property property.name="database.password" />
 							<get-database-property property.name="database.username" />
 
-							<exec executable="${oracle.sqlplus.executable}" failonerror="true">
-								<arg value="${oracle.admin.user}/${oracle.admin.password}" />
-								<arg value="@create.sql" />
-								<arg value="${database.username}" />
-								<arg value="${database.password}" />
+							<exec executable="su" failonerror="true">
+								<arg value="-c" />
+								<arg value="${oracle.sqlplus.executable} ${oracle.admin.user}/${oracle.admin.password} as sysdba @create.sql ${database.username} ${database.password}" />
+								<arg value="oracle" />
 							</exec>
 						</then>
 					</elseif>
@@ -5841,7 +5971,17 @@ if (ppstate.equals("normal")) {
 	<target name="record-test-case-method-names">
 		<delete failonerror="false" file="${test.ext.properties.file}" />
 
-		<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+		<if>
+			<isset property="test.base.dir.name" />
+			<then>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties">
+					<param name="test.base.dir.name" value="${test.base.dir.name}" />
+				</antcall>
+			</then>
+			<else>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+			</else>
+		</if>
 
 		<gradle-execute failonerror="false" task="writePoshiProperties">
 			<arg value="--build-file=portal-web/build-test.gradle" />
@@ -5861,7 +6001,17 @@ if (ppstate.equals("normal")) {
 
 		<delete failonerror="false" file="${test.ext.properties.file}" />
 
-		<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+		<if>
+			<isset property="test.base.dir.name" />
+			<then>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties">
+					<param name="test.base.dir.name" value="${test.base.dir.name}" />
+				</antcall>
+			</then>
+			<else>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+			</else>
+		</if>
 
 		<gradle-execute failonerror="false" task="writePoshiProperties">
 			<arg value="--build-file=portal-web/build-test.gradle" />
@@ -6081,8 +6231,18 @@ if (ppstate.equals("normal")) {
 		</execute>
 	</target>
 
-	<target name="run-poshi-evaluate-console" depends="prepare-selenium">
-		<antcall target="prepare-poshi-runner-properties" inheritall="false" />
+	<target name="run-poshi-evaluate-console">
+		<if>
+			<isset property="test.base.dir.name" />
+			<then>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties">
+					<param name="test.base.dir.name" value="${test.base.dir.name}" />
+				</antcall>
+			</then>
+			<else>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+			</else>
+		</if>
 
 		<gradle-execute failonerror="false" task="evaluatePoshiConsole">
 			<arg value="--build-file=portal-web/build-test.gradle" />
@@ -6091,7 +6251,7 @@ if (ppstate.equals("normal")) {
 		</gradle-execute>
 	</target>
 
-	<target name="run-poshi-runner" depends="prepare-selenium">
+	<target name="run-poshi-runner">
 		<property name="test.console.log.file.name" value="${liferay.home}/logs/liferay.${current.date}.xml" />
 
 		<gradle-execute failonerror="false" task="runPoshi">
@@ -6104,7 +6264,17 @@ if (ppstate.equals("normal")) {
 	<target name="run-poshi-validation">
 		<delete failonerror="false" file="${test.ext.properties.file}" />
 
-		<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+		<if>
+			<isset property="test.base.dir.name" />
+			<then>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties">
+					<param name="test.base.dir.name" value="${test.base.dir.name}" />
+				</antcall>
+			</then>
+			<else>
+				<antcall inheritAll="false" target="prepare-poshi-runner-properties" />
+			</else>
+		</if>
 
 		<gradle-execute failonerror="false" task="validatePoshi">
 			<arg value="--build-file=portal-web/build-test.gradle" />
@@ -6127,12 +6297,14 @@ if (ppstate.equals("normal")) {
 		<antcall target="stop-selenium" />
 	</target>
 
-	<target name="run-selenium-test">
+	<target name="run-selenium-test" depends="prepare-selenium">
+		<antcall target="prepare-mobile-device" />
+
 		<if>
 			<and>
 				<equals arg1="${test.class}" arg2="PortalWebTestSuite" />
 				<not>
-					<equals arg1="${database.type}" arg2="hsql" />
+					<equals arg1="${database.type}" arg2="hypersonic" />
 				</not>
 			</and>
 			<then>
@@ -6146,10 +6318,8 @@ if (ppstate.equals("normal")) {
 			</then>
 		</if>
 
-		<ant dir="portal-impl" target="compile-test" inheritAll="false" />
-
 		<if>
-			<equals arg1="${database.type}" arg2="hsql" />
+			<equals arg1="${database.type}" arg2="hypersonic" />
 			<then>
 				<antcall target="rebuild-database" inheritAll="false">
 					<param name="database.type" value="mysql" />
@@ -6173,6 +6343,8 @@ jdbc.default.password=${database.mysql.password}</echo>
 				<antcall target="run-poshi-runner" />
 			</then>
 			<else>
+				<ant dir="portal-impl" target="compile-test" inheritAll="false" />
+
 				<if>
 					<contains string="${test.class}" substring="#" />
 					<then>
@@ -6271,6 +6443,16 @@ jdbc.default.password=${database.mysql.password}</echo>
 					</then>
 				</if>
 
+				<if>
+					<available file="${liferay.home}/logs/liferay.${current.date}.log" />
+					<then>
+						<copy
+							file="${liferay.home}/logs/liferay.${current.date}.log"
+							tofile="${jenkins.shared.results.dir}/${job.name}/builds/${env.BUILD_NUMBER}/liferay.log"
+						/>
+					</then>
+				</if>
+
 				<antcall target="run-poshi-evaluate-console" />
 
 				<antcall target="build-test-results-xml" />
@@ -6312,17 +6494,6 @@ jdbc.default.password=${database.mysql.password}</echo>
 			<equals arg1="${database.jndi.enabled}" arg2="true" />
 			<then>
 				<prepare-database-jndi />
-			</then>
-		</if>
-
-		<get-testcase-property property.name="mobile.device.enabled" />
-
-		<if>
-			<equals arg1="${mobile.device.enabled}" arg2="true" />
-			<then>
-				<start-android-device />
-
-				<start-appium />
 			</then>
 		</if>
 
@@ -6468,11 +6639,7 @@ jdbc.default.password=${database.mysql.password}</echo>
 			</then>
 		</if>
 
-		<antcall target="prepare-selenium" />
-
 		<remake-dir dir="${selenium.output.dir}" />
-
-		<antcall target="prepare-selenium-browser-driver" />
 
 		<antcall target="copy-sikuli-temp-files" />
 
@@ -6580,34 +6747,13 @@ jdbc.default.password=${database.mysql.password}</echo>
 			</then>
 		</if>
 
-		<get-testcase-property property.name="mobile.device.enabled" />
+		<antcall target="clean-up-mobile-device" />
 
-		<if>
-			<equals arg1="${mobile.device.enabled}" arg2="true" />
-			<then>
-				<stop-android-device />
-
-				<stop-appium />
-			</then>
-		</if>
+		<antcall target="clean-up-selenium-driver" />
 
 		<antcall target="clean-up-sikuli-temp-files" />
 
 		<antcall target="clean-up-web-xml" />
-
-		<if>
-			<equals arg1="${browser.type}" arg2="googlechrome" />
-			<then>
-				<stop-chrome-driver />
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="${browser.type}" arg2="ie" />
-			<then>
-				<stop-ie-driver />
-			</then>
-		</if>
 	</target>
 
 	<target name="set-portal-impl-portal-ext-properties">

@@ -271,28 +271,6 @@
 							'liferay-portlet-base'
 						]
 					},
-					'liferay-dockbar': {
-						path: 'dockbar.js',
-						requires: [
-							'aui-node',
-							'event-touch'
-						]
-					},
-					'liferay-dockbar-keyboard-interaction': {
-						path: 'dockbar_keyboard_interaction.js',
-						requires: [
-							'node-focusmanager',
-							'plugin'
-						]
-					},
-					'liferay-dockbar-underlay': {
-						path: 'dockbar_underlay.js',
-						requires: [
-							'aui-button',
-							'aui-io-plugin-deprecated',
-							'aui-overlay-manager-deprecated'
-						]
-					},
 					'liferay-dynamic-select': {
 						path: 'dynamic_select.js',
 						requires: [
@@ -503,7 +481,8 @@
 					'liferay-layouts-tree-check-content-display-page': {
 						path: 'layouts_tree_check_content_display_page.js',
 						requires: [
-							'aui-base'
+							'aui-component',
+							'plugin'
 						]
 					},
 					'liferay-layouts-tree-node-task': {
@@ -547,6 +526,12 @@
 						path: 'logo_selector.js',
 						requires: [
 							'aui-base'
+						]
+					},
+					'liferay-management-bar': {
+						path: 'management_bar.js',
+						requires: [
+							'liferay-portlet-base'
 						]
 					},
 					'liferay-map-base': {
@@ -914,9 +899,6 @@
 				base: PATH_JAVASCRIPT + '/misc/',
 				combine: COMBINE,
 				modules: {
-					'soyutils': {
-						path: '/soyutils.js'
-					},
 					'swfobject': {
 						path: '/swfobject.js'
 					},
@@ -945,15 +927,6 @@
 		root: PATH_JAVASCRIPT + '/aui/',
 		useBrowserConsole: false
 	};
-
-	Loader.addModule(
-		{
-			dependencies: [],
-			exports: 'soy',
-			name: 'soyutils',
-			path: '/o/frontend-js-web/misc/soyutils.js'
-		}
-	);
 
 	CORE_MODULES.push('liferay-browser-selectors');
 })();

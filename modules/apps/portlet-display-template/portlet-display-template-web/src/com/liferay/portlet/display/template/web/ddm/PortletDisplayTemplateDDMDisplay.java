@@ -19,7 +19,6 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.util.BaseDDMDisplay;
 import com.liferay.dynamic.data.mapping.util.DDMDisplay;
-import com.liferay.dynamic.data.mapping.util.DDMPermissionHandler;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -48,11 +47,6 @@ import org.osgi.service.component.annotations.Reference;
 	service = DDMDisplay.class
 )
 public class PortletDisplayTemplateDDMDisplay extends BaseDDMDisplay {
-
-	@Override
-	public DDMPermissionHandler getDDMPermissionHandler() {
-		return _ddmPermissionHandler;
-	}
 
 	@Override
 	public String getEditTemplateBackURL(
@@ -154,6 +148,11 @@ public class PortletDisplayTemplateDDMDisplay extends BaseDDMDisplay {
 	}
 
 	@Override
+	public boolean isShowBackURLInTitleBar() {
+		return true;
+	}
+
+	@Override
 	protected String getDefaultEditTemplateTitle(Locale locale) {
 		return LanguageUtil.get(locale, "new-application-display-template");
 	}
@@ -174,8 +173,5 @@ public class PortletDisplayTemplateDDMDisplay extends BaseDDMDisplay {
 
 	private static final Set<String> _viewTemplateExcludedColumnNames =
 		SetUtil.fromArray(new String[] {"language", "mode", "structure"});
-
-	private final DDMPermissionHandler _ddmPermissionHandler =
-		new PortletDisplayTemplateDDMPermissionHandler();
 
 }

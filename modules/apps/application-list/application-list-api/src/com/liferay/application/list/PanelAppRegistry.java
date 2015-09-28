@@ -42,15 +42,28 @@ import org.osgi.service.component.annotations.Deactivate;
 @Component(immediate = true, service = PanelAppRegistry.class)
 public class PanelAppRegistry {
 
-	public List<PanelApp> getPanelApps(PanelCategory parentPanelCategory) {
-		List<PanelApp> panelApps = _serviceTrackerMap.getService(
-			parentPanelCategory.getKey());
+	public PanelApp getFirstPanelApp(
+		PanelCategory parentPanelCategory, PermissionChecker permissionChecker,
+		Group group) {
 
-		if (panelApps == null) {
-			return Collections.emptyList();
+		List<PanelApp> panelApps = getPanelApps(parentPanelCategory);
+
+		for (PanelApp panelApp : panelApps) {
+			try {
+				if (panelApp.hasAccessPermission(permissionChecker, group)) {
+					return panelApp;
+				}
+			}
+			catch (PortalException e) {
+				_log.error(e);
+			}
 		}
 
-		return panelApps;
+		return null;
+	}
+
+	public List<PanelApp> getPanelApps(PanelCategory parentPanelCategory) {
+		return getPanelApps(parentPanelCategory.getKey());
 	}
 
 	public List<PanelApp> getPanelApps(
@@ -81,6 +94,17 @@ public class PanelAppRegistry {
 				}
 
 			});
+	}
+
+	public List<PanelApp> getPanelApps(String parentPanelCategoryKey) {
+		List<PanelApp> panelApps = _serviceTrackerMap.getService(
+			parentPanelCategoryKey);
+
+		if (panelApps == null) {
+			return Collections.emptyList();
+		}
+
+		return panelApps;
 	}
 
 	@Activate

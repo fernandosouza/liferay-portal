@@ -17,11 +17,17 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String viewOrganizationsRedirect = ParamUtil.getString(request, "viewOrganizationsRedirect", themeDisplay.getURLControlPanel());
+String viewOrganizationsRedirect = ParamUtil.getString(request, "viewOrganizationsRedirect");
+
 String redirect = ParamUtil.getString(request, "redirect", viewOrganizationsRedirect);
 
+if (Validator.isNull(redirect)) {
+	PortletURL portletURL = renderResponse.createRenderURL();
+
+	redirect = portletURL.toString();
+}
+
 String backURL = ParamUtil.getString(request, "backURL", redirect);
-boolean showBackURL = ParamUtil.getBoolean(request, "showBackURL", true);
 
 long groupId = ParamUtil.getLong(request, "groupId", portletName.equals(SiteAdminPortletKeys.SITE_SETTINGS) ? themeDisplay.getSiteGroupId() : 0);
 
@@ -77,14 +83,27 @@ if (layoutSetPrototypeId > 0) {
 	layoutSetPrototype = LayoutSetPrototypeServiceUtil.getLayoutSetPrototype(layoutSetPrototypeId);
 }
 
-boolean showPrototypes = ParamUtil.getBoolean(request, "showPrototypes", true);
-%>
+if (!portletName.equals(SiteAdminPortletKeys.SITE_SETTINGS)) {
+	portletDisplay.setShowBackIcon(true);
+	portletDisplay.setURLBack(backURL.toString());
 
-<liferay-ui:success key='<%= SiteAdminPortletKeys.SITE_SETTINGS + "requestProcessed" %>' message="site-was-added" />
+	String title = StringPool.BLANK;
 
-<c:if test="<%= !portletName.equals(SiteAdminPortletKeys.SITE_SETTINGS) %>">
+	if (group != null) {
+		title = group.getDescriptiveName(locale);
+	}
+	else if (layoutSetPrototype != null) {
+		title = layoutSetPrototype.getName(locale);
+	}
+	else if (parentGroupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
+		title = LanguageUtil.get(request, "new-child-site");
+	}
+	else {
+		title = LanguageUtil.get(request, "new-site");
+	}
 
-	<%
+	renderResponse.setTitle(HtmlUtil.escape(title));
+
 	if (group != null) {
 		PortalUtil.addPortletBreadcrumbEntry(request, group.getDescriptiveName(locale), null);
 		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, "edit"), currentURL);
@@ -94,43 +113,16 @@ boolean showPrototypes = ParamUtil.getBoolean(request, "showPrototypes", true);
 
 		PortalUtil.addPortletBreadcrumbEntry(request, parentGroup.getDescriptiveName(locale), null);
 	}
-	%>
+}
+%>
 
-	<div id="breadcrumb">
-		<liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showGuestGroup="<%= false %>" showLayout="<%= false %>" showPortletBreadcrumb="<%= true %>" />
-	</div>
-
-	<%
-	boolean localizeTitle = true;
-	String title = "new-site";
-
-	if (group != null) {
-		localizeTitle = false;
-		title = group.getDescriptiveName(locale);
-	}
-	else if (layoutSetPrototype != null) {
-		localizeTitle = false;
-		title = layoutSetPrototype.getName(locale);
-	}
-	else if (parentGroupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
-		title = "new-child-site";
-	}
-	%>
-
-	<liferay-ui:header
-		backURL="<%= backURL %>"
-		escapeXml="<%= false %>"
-		localizeTitle="<%= localizeTitle %>"
-		showBackURL="<%= showBackURL %>"
-		title="<%= HtmlUtil.escape(title) %>"
-	/>
-</c:if>
+<liferay-ui:success key='<%= SiteAdminPortletKeys.SITE_SETTINGS + "requestProcessed" %>' message="site-was-added" />
 
 <portlet:actionURL name="editGroup" var="editGroupURL">
 	<portlet:param name="mvcPath" value="/edit_site.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= editGroupURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveGroup();" %>'>
+<aui:form action="<%= editGroupURL %>" cssClass="container-fluid-1280" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveGroup();" %>'>
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
@@ -145,7 +137,6 @@ boolean showPrototypes = ParamUtil.getBoolean(request, "showPrototypes", true);
 	request.setAttribute("site.stagingGroupId", Long.valueOf(stagingGroupId));
 	request.setAttribute("site.liveGroupTypeSettings", liveGroupTypeSettings);
 	request.setAttribute("site.layoutSetPrototype", layoutSetPrototype);
-	request.setAttribute("site.showPrototypes", String.valueOf(showPrototypes));
 	%>
 
 	<liferay-ui:form-navigator

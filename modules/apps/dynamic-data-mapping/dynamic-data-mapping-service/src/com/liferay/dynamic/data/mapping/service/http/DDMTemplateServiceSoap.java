@@ -80,13 +80,12 @@ public class DDMTemplateServiceSoap {
 	template's resource model
 	* @param nameMap the template's locales and localized names
 	* @param descriptionMap the template's locales and localized descriptions
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param serviceContext the service context to be applied. Must have the
 	<code>ddmResource</code> attribute to check permissions. Can set
@@ -195,8 +194,8 @@ public class DDMTemplateServiceSoap {
 	* @param resourceClassNameId the primary key of the class name for
 	template's resource model
 	* @param newClassPK the primary key of the new template's related entity
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param serviceContext the service context to be applied. Must have the
 	<code>ddmResource</code> attribute to check permissions. Can set
 	the UUID, creation date, modification date, guest permissions,
@@ -357,45 +356,13 @@ public class DDMTemplateServiceSoap {
 		}
 	}
 
-	/**
-	* Returns all the templates matching the group and class name ID.
-	*
-	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
-	related model
-	* @return the matching templates
-	*/
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
-		long groupId, long classNameId) throws RemoteException {
+		long companyId, long groupId, long classNameId,
+		long resourceClassNameId, int status) throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(groupId, classNameId);
-
-			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	/**
-	* Returns all the templates matching the group, class name ID, and class
-	* PK.
-	*
-	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
-	related model
-	* @param classPK the primary key of the template's related entity
-	* @return the matching templates
-	*/
-	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
-		long groupId, long classNameId, long classPK) throws RemoteException {
-		try {
-			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
-					classPK);
+				DDMTemplateServiceUtil.getTemplates(companyId, groupId,
+					classNameId, resourceClassNameId, status);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -407,41 +374,14 @@ public class DDMTemplateServiceSoap {
 	}
 
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
-		long groupId, long classNameId, long classPK,
-		boolean includeAncestorTemplates) throws RemoteException {
-		try {
-			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
-					classPK, includeAncestorTemplates);
-
-			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	/**
-	* Returns all the templates matching the class name ID, class PK, type, and
-	* mode.
-	*
-	* @param groupId the primary key of the group
-	* @param classNameId the primary key of the class name for template's
-	related model
-	* @param classPK the primary key of the template's related entity
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @return the matching templates
-	*/
-	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
-		long groupId, long classNameId, long classPK, java.lang.String type)
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, boolean includeAncestorTemplates, int status)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
-					classPK, type);
+				DDMTemplateServiceUtil.getTemplates(companyId, groupId,
+					classNameId, classPK, resourceClassNameId,
+					includeAncestorTemplates, status);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -453,12 +393,12 @@ public class DDMTemplateServiceSoap {
 	}
 
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
-		long groupId, long classNameId, long classPK, java.lang.String type,
-		java.lang.String mode) throws RemoteException {
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, int status) throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
-					classPK, type, mode);
+				DDMTemplateServiceUtil.getTemplates(companyId, groupId,
+					classNameId, classPK, resourceClassNameId, status);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -470,17 +410,75 @@ public class DDMTemplateServiceSoap {
 	}
 
 	/**
-	* Returns all the templates matching the group and class PK.
+	* Returns all the templates matching the group, class name ID, class PK,
+	* resource class name ID, and type.
 	*
+	* @param companyId the primary key of the template's company
+	* @param groupId the primary key of the group
+	* @param classNameId the primary key of the class name for the template's
+	related model
+	* @param classPK the primary key of the template's related entity
+	* @param resourceClassNameId the primary key of the class name for the
+	template's resource model
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @return the matching templates
+	*/
+	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, java.lang.String type, int status)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
+				DDMTemplateServiceUtil.getTemplates(companyId, groupId,
+					classNameId, classPK, resourceClassNameId, type, status);
+
+			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplates(
+		long companyId, long groupId, long classNameId, long classPK,
+		long resourceClassNameId, java.lang.String type, java.lang.String mode,
+		int status) throws RemoteException {
+		try {
+			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
+				DDMTemplateServiceUtil.getTemplates(companyId, groupId,
+					classNameId, classPK, resourceClassNameId, type, mode,
+					status);
+
+			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	/**
+	* Returns all the templates matching the group, class PK, and resource
+	* class name ID.
+	*
+	* @param companyId the primary key of the template's company
 	* @param groupId the primary key of the group
 	* @param classPK the primary key of the template's related entity
+	* @param resourceClassNameId the primary key of the class name for the
+	template's resource model
 	* @return the matching templates
 	*/
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplatesByClassPK(
-		long groupId, long classPK) throws RemoteException {
+		long companyId, long groupId, long classPK, long resourceClassNameId,
+		int status) throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplatesByClassPK(groupId, classPK);
+				DDMTemplateServiceUtil.getTemplatesByClassPK(companyId,
+					groupId, classPK, resourceClassNameId, status);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -500,8 +498,7 @@ public class DDMTemplateServiceSoap {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -517,13 +514,14 @@ public class DDMTemplateServiceSoap {
 	* @return the range of matching templates ordered by the comparator
 	*/
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] getTemplatesByStructureClassNameId(
-		long groupId, long structureClassNameId, int start, int end,
+		long groupId, long structureClassNameId, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
 				DDMTemplateServiceUtil.getTemplatesByStructureClassNameId(groupId,
-					structureClassNameId, start, end, orderByComparator);
+					structureClassNameId, status, start, end, orderByComparator);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -546,10 +544,10 @@ public class DDMTemplateServiceSoap {
 	generic templates
 	*/
 	public static int getTemplatesByStructureClassNameIdCount(long groupId,
-		long structureClassNameId) throws RemoteException {
+		long structureClassNameId, int status) throws RemoteException {
 		try {
 			int returnValue = DDMTemplateServiceUtil.getTemplatesByStructureClassNameIdCount(groupId,
-					structureClassNameId);
+					structureClassNameId, status);
 
 			return returnValue;
 		}
@@ -585,8 +583,7 @@ public class DDMTemplateServiceSoap {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -600,11 +597,11 @@ public class DDMTemplateServiceSoap {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode (optionally <code>null</code>) For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
+	* @param mode the template's mode (optionally <code>null</code>). For more
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param start the lower bound of the range of templates to return
 	* @param end the upper bound of the range of templates to return (not
 	inclusive)
@@ -615,14 +612,15 @@ public class DDMTemplateServiceSoap {
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] search(
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, java.lang.String keywords,
-		java.lang.String type, java.lang.String mode, int start, int end,
+		java.lang.String type, java.lang.String mode, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
 				DDMTemplateServiceUtil.search(companyId, groupId, classNameId,
-					classPK, resourceClassNameId, keywords, type, mode, start,
-					end, orderByComparator);
+					classPK, resourceClassNameId, keywords, type, mode, status,
+					start, end, orderByComparator);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -643,8 +641,7 @@ public class DDMTemplateServiceSoap {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -659,14 +656,14 @@ public class DDMTemplateServiceSoap {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @param start the lower bound of the range of templates to return
@@ -680,15 +677,16 @@ public class DDMTemplateServiceSoap {
 		long companyId, long groupId, long classNameId, long classPK,
 		long resourceClassNameId, java.lang.String name,
 		java.lang.String description, java.lang.String type,
-		java.lang.String mode, java.lang.String language, boolean andOperator,
-		int start, int end,
+		java.lang.String mode, java.lang.String language, int status,
+		boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
 				DDMTemplateServiceUtil.search(companyId, groupId, classNameId,
 					classPK, resourceClassNameId, name, description, type,
-					mode, language, andOperator, start, end, orderByComparator);
+					mode, language, status, andOperator, start, end,
+					orderByComparator);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -709,8 +707,7 @@ public class DDMTemplateServiceSoap {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -724,11 +721,11 @@ public class DDMTemplateServiceSoap {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param start the lower bound of the range of templates to return
 	* @param end the upper bound of the range of templates to return (not
 	inclusive)
@@ -739,14 +736,15 @@ public class DDMTemplateServiceSoap {
 	public static com.liferay.dynamic.data.mapping.model.DDMTemplateSoap[] search(
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, java.lang.String keywords,
-		java.lang.String type, java.lang.String mode, int start, int end,
+		java.lang.String type, java.lang.String mode, int status, int start,
+		int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
 				DDMTemplateServiceUtil.search(companyId, groupIds,
 					classNameIds, classPKs, resourceClassNameId, keywords,
-					type, mode, start, end, orderByComparator);
+					type, mode, status, start, end, orderByComparator);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -767,8 +765,7 @@ public class DDMTemplateServiceSoap {
 	* start</code> instances. <code>start</code> and <code>end</code> are not
 	* primary keys, they are indexes in the result set. Thus, <code>0</code>
 	* refers to the first result in the set. Setting both <code>start</code>
-	* and <code>end</code> to {@link
-	* com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	* and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
 	* result set.
 	* </p>
 	*
@@ -783,14 +780,14 @@ public class DDMTemplateServiceSoap {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @param start the lower bound of the range of templates to return
@@ -804,16 +801,16 @@ public class DDMTemplateServiceSoap {
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		long resourceClassNameId, java.lang.String name,
 		java.lang.String description, java.lang.String type,
-		java.lang.String mode, java.lang.String language, boolean andOperator,
-		int start, int end,
+		java.lang.String mode, java.lang.String language, int status,
+		boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.dynamic.data.mapping.model.DDMTemplate> orderByComparator)
 		throws RemoteException {
 		try {
 			java.util.List<com.liferay.dynamic.data.mapping.model.DDMTemplate> returnValue =
 				DDMTemplateServiceUtil.search(companyId, groupIds,
 					classNameIds, classPKs, resourceClassNameId, name,
-					description, type, mode, language, andOperator, start, end,
-					orderByComparator);
+					description, type, mode, language, status, andOperator,
+					start, end, orderByComparator);
 
 			return com.liferay.dynamic.data.mapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}
@@ -839,21 +836,21 @@ public class DDMTemplateServiceSoap {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @return the number of matching templates
 	*/
 	public static int searchCount(long companyId, long groupId,
 		long classNameId, long classPK, long resourceClassNameId,
-		java.lang.String keywords, java.lang.String type, java.lang.String mode)
-		throws RemoteException {
+		java.lang.String keywords, java.lang.String type,
+		java.lang.String mode, int status) throws RemoteException {
 		try {
 			int returnValue = DDMTemplateServiceUtil.searchCount(companyId,
 					groupId, classNameId, classPK, resourceClassNameId,
-					keywords, type, mode);
+					keywords, type, mode, status);
 
 			return returnValue;
 		}
@@ -879,14 +876,14 @@ public class DDMTemplateServiceSoap {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @return the number of matching templates
@@ -895,12 +892,12 @@ public class DDMTemplateServiceSoap {
 		long classNameId, long classPK, long resourceClassNameId,
 		java.lang.String name, java.lang.String description,
 		java.lang.String type, java.lang.String mode,
-		java.lang.String language, boolean andOperator)
+		java.lang.String language, int status, boolean andOperator)
 		throws RemoteException {
 		try {
 			int returnValue = DDMTemplateServiceUtil.searchCount(companyId,
 					groupId, classNameId, classPK, resourceClassNameId, name,
-					description, type, mode, language, andOperator);
+					description, type, mode, language, status, andOperator);
 
 			return returnValue;
 		}
@@ -926,21 +923,21 @@ public class DDMTemplateServiceSoap {
 	* @param keywords the keywords (space separated), which may occur in the
 	template's name or description (optionally <code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @return the number of matching templates
 	*/
 	public static int searchCount(long companyId, long[] groupIds,
 		long[] classNameIds, long[] classPKs, long resourceClassNameId,
-		java.lang.String keywords, java.lang.String type, java.lang.String mode)
-		throws RemoteException {
+		java.lang.String keywords, java.lang.String type,
+		java.lang.String mode, int status) throws RemoteException {
 		try {
 			int returnValue = DDMTemplateServiceUtil.searchCount(companyId,
 					groupIds, classNameIds, classPKs, resourceClassNameId,
-					keywords, type, mode);
+					keywords, type, mode, status);
 
 			return returnValue;
 		}
@@ -966,14 +963,14 @@ public class DDMTemplateServiceSoap {
 	* @param description the description keywords (optionally
 	<code>null</code>)
 	* @param type the template's type (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param mode the template's mode (optionally <code>null</code>). For more
-	information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	information, see DDMTemplateConstants in the
+	dynamic-data-mapping-api module.
 	* @param language the template's script language (optionally
-	<code>null</code>). For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	<code>null</code>). For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param andOperator whether every field must match its keywords, or just
 	one field.
 	* @return the number of matching templates
@@ -982,12 +979,12 @@ public class DDMTemplateServiceSoap {
 		long[] classNameIds, long[] classPKs, long resourceClassNameId,
 		java.lang.String name, java.lang.String description,
 		java.lang.String type, java.lang.String mode,
-		java.lang.String language, boolean andOperator)
+		java.lang.String language, int status, boolean andOperator)
 		throws RemoteException {
 		try {
 			int returnValue = DDMTemplateServiceUtil.searchCount(companyId,
 					groupIds, classNameIds, classPKs, resourceClassNameId,
-					name, description, type, mode, language, andOperator);
+					name, description, type, mode, language, status, andOperator);
 
 			return returnValue;
 		}
@@ -1006,13 +1003,12 @@ public class DDMTemplateServiceSoap {
 	* @param nameMap the template's new locales and localized names
 	* @param descriptionMap the template's new locales and localized
 	description
-	* @param type the template's type. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	* @param type the template's type. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
+	* @param mode the template's mode. For more information, see
+	DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.dynamic.data.mapping.model.DDMTemplateConstants}.
+	see DDMTemplateConstants in the dynamic-data-mapping-api module.
 	* @param script the template's script
 	* @param cacheable whether the template is cacheable
 	* @param serviceContext the service context to be applied. Can set the
