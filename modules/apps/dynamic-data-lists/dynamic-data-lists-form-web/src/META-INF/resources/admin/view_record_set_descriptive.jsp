@@ -26,6 +26,12 @@ DDMStructure ddmStructure = ddlRecordSet.getDDMStructure();
 DDMStructureVersion ddmStructureVersion = ddmStructure.getStructureVersion();
 
 String rowURL = (String)request.getAttribute("rowURL");
+
+String publishedURL = StringPool.BLANK;
+
+if (ddlRecordSet.getPublishedURL() != null) {
+	publishedURL = ddlRecordSet.getPublishedURL();
+}
 %>
 
 <liferay-ui:app-view-entry
@@ -33,7 +39,7 @@ String rowURL = (String)request.getAttribute("rowURL");
 	actionJspServletContext="<%= application %>"
 	author="<%= ddlRecordSet.getUserName() %>"
 	createDate="<%= ddlRecordSet.getCreateDate() %>"
-	description="<%= HtmlUtil.escape(ddlRecordSet.getDescription(locale)) %>"
+	description="<%= HtmlUtil.escape(ddlRecordSet.getDescription(locale) + publishedURL) %>"
 	displayStyle="descriptive"
 	groupId="<%= ddlRecordSet.getGroupId() %>"
 	latestApprovedVersion="<%= ddmStructureVersion.getVersion() %>"
