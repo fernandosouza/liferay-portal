@@ -50,8 +50,6 @@ AUI.add(
 									label = label[instance.get('locale')];
 								}
 
-								console.log(item);
-
 								return {
 									label: label,
 									status: instance._getOptionStatus(item),
@@ -92,8 +90,6 @@ AUI.add(
 								function(options) {
 									instance._loading = false;
 									instance._loaded = true;
-
-									console.log(options);
 
 									instance.set('options', options);
 
