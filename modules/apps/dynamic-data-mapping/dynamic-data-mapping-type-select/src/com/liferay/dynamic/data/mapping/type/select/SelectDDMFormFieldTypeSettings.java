@@ -37,7 +37,7 @@ public interface SelectDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		dataType = "string", label = "%use-datasource",
-		optionLabels = {"%manually", "%datasource"},
+		optionLabels = {"%manually", "%from-datasource"},
 		optionValues = {"manually", "datasource"},
 		predefinedValue = "manually",
 		properties = {"setting.category=basic", "setting.weight=1"},
