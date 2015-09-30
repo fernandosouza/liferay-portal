@@ -16,6 +16,7 @@ package com.liferay.portal.expression.internal;
 
 import com.liferay.portal.expression.Expression;
 import com.liferay.portal.expression.ExpressionEvaluationException;
+import com.liferay.portal.expression.ExpressionEvaluationExtension;
 import com.liferay.portal.expression.VariableDependencies;
 
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class ExpressionImpl<T> implements Expression<T> {
 				ExpressionEvaluationExtension.class);
 			expressionEvaluator.setParameters(
 				getVariableNames(), getVariableClasses());
+			expressionEvaluator.setParentClassLoader(
+				ExpressionImpl.class.getClassLoader());
 
 			expressionEvaluator.cook(_expressionString);
 

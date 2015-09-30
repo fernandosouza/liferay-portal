@@ -82,9 +82,15 @@ AUI.add(
 
 						var strings = instance.get('strings');
 
-						var selectedValidation = instance.get('selectedValidation');
+						var errorMessage = instance.get('errorMessageValue');
+
+						if (Lang.isObject(errorMessage)) {
+							errorMessage = errorMessage[instance.get('locale')];
+						}
 
 						var parameterMessage = '';
+
+						var selectedValidation = instance.get('selectedValidation');
 
 						if (selectedValidation) {
 							parameterMessage = selectedValidation.parameterMessage;
@@ -99,7 +105,7 @@ AUI.add(
 								enableValidationMessage: strings.enableValidation,
 								enableValidationValue: !!(value && value.expression),
 								errorMessagePlaceholder: strings.errorMessageGoesHere,
-								errorMessageValue: instance.get('errorMessageValue'),
+								errorMessageValue: errorMessage,
 								parameterMessagePlaceholder: parameterMessage,
 								parameterValue: instance.get('parameterValue'),
 								typesOptions: instance._getTypesOptions(),

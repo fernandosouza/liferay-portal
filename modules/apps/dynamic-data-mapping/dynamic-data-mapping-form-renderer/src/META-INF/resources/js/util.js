@@ -60,14 +60,14 @@ AUI.add(
 					label: Liferay.Language.get('url'),
 					name: 'url',
 					parameterMessage: '',
-					regex: /^isURL\("(\w+)"\)$/,
+					regex: /^isURL\((\w+)\)$/,
 					template: 'isURL({name})'
 				},
 				{
 					label: Liferay.Language.get('email'),
 					name: 'email',
 					parameterMessage: '',
-					regex: /^isEmailAddress\("(\w+)"\)$/,
+					regex: /^isEmailAddress\((\w+)\)$/,
 					template: 'isEmailAddress({name})'
 				}
 			]

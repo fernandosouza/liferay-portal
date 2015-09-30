@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.expression.internal;
+package com.liferay.portal.expression;
 
 import com.liferay.portal.kernel.util.MathUtil;
 import com.liferay.portal.kernel.util.Validator;
