@@ -1,10 +1,6 @@
 @import "bourbon";
 
 .portlet-forms {
-	.aspect-ratio img {
-		top: 0;
-	}
-
 	.ddl-form-name {
 		font-size: 32px;
 		line-height: 32px;
@@ -46,6 +42,12 @@
 .portal-popup, .portlet-forms-admin {
 	.alert {
 		margin: 0;
+	}
+
+	.aspect-ratio-bg-center {
+		background-position: 0 0;
+		background-repeat: no-repeat;
+		background-size: contain;
 	}
 
 	.searchcontainer-content .list-unstyled {
