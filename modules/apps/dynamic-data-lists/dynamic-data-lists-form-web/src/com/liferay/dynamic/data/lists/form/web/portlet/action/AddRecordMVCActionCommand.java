@@ -18,6 +18,7 @@ import com.liferay.dynamic.data.lists.form.web.constants.DDLFormPortletKeys;
 import com.liferay.dynamic.data.lists.model.DDLRecord;
 import com.liferay.dynamic.data.lists.model.DDLRecordConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
+import com.liferay.dynamic.data.lists.service.DDLRecordLocalService;
 import com.liferay.dynamic.data.lists.service.DDLRecordService;
 import com.liferay.dynamic.data.lists.service.DDLRecordSetService;
 import com.liferay.dynamic.data.mapping.form.values.factory.DDMFormValuesFactory;
@@ -66,9 +67,10 @@ public class AddRecordMVCActionCommand extends BaseMVCActionCommand {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDLRecord.class.getName(), actionRequest);
 
-		_ddlRecordService.addRecord(
-			groupId, recordSetId, DDLRecordConstants.DISPLAY_INDEX_DEFAULT,
-			ddmFormValues, serviceContext);
+		_ddlRecordLocalService.addRecord(
+			serviceContext.getGuestOrUserId(), groupId, recordSetId,
+			DDLRecordConstants.DISPLAY_INDEX_DEFAULT, ddmFormValues,
+			serviceContext);
 	}
 
 	protected DDMForm getDDMForm(long recordSetId) throws PortalException {
@@ -80,8 +82,10 @@ public class AddRecordMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	@Reference
-	protected void setDDLRecordService(DDLRecordService ddlRecordService) {
-		_ddlRecordService = ddlRecordService;
+	protected void setDDLRecordService(
+		DDLRecordLocalService ddlRecordLocalService) {
+
+		_ddlRecordLocalService = ddlRecordLocalService;
 	}
 
 	@Reference
@@ -98,7 +102,7 @@ public class AddRecordMVCActionCommand extends BaseMVCActionCommand {
 		_ddmFormValuesFactory = ddmFormValuesFactory;
 	}
 
-	private DDLRecordService _ddlRecordService;
+	private DDLRecordLocalService _ddlRecordLocalService;
 	private DDLRecordSetService _ddlRecordSetService;
 	private DDMFormValuesFactory _ddmFormValuesFactory;
 
