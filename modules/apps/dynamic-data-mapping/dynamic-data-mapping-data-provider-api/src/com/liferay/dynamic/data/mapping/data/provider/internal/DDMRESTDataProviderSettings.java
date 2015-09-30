@@ -34,19 +34,19 @@ public class DDMRESTDataProviderSettings implements DDMDataProviderSettings {
 	@DDMForm
 	public interface RESTSettings {
 
-		@DDMFormField
-		public String key();
-
-		@DDMFormField
-		public String password();
-
-		@DDMFormField
+		@DDMFormField(label="Service URL")
 		public String url();
 
-		@DDMFormField
+		@DDMFormField(label = "Auth Login")
 		public String username();
 
-		@DDMFormField
+		@DDMFormField(label="Auth Password")
+		public String password();
+
+		@DDMFormField(
+			label = "Value",
+			tip = "Which key do you want to display in the array of objects the JSON service returns?"
+		)
 		public String value();
 
 	}

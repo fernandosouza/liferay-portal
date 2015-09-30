@@ -62,10 +62,9 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-			String key = jsonObject.getString(restSettings.key());
 			String value = jsonObject.getString(restSettings.value());
 
-			results.add(new KeyValuePair(key, value));
+			results.add(new KeyValuePair(value, value));
 		}
 
 		return results;
