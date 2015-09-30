@@ -21,6 +21,11 @@ AUI.add(
 						valueFn: '_valueContainer'
 					},
 
+					dataType: {
+						getter: '_getDataType',
+						value: 'string'
+					},
+
 					fieldNamespace: {
 						value: ''
 					},
@@ -415,6 +420,20 @@ AUI.add(
 						}
 
 						return container;
+					},
+
+					_getDataType: function(dataType) {
+						var instance = this;
+
+						var validation = instance.get('validation');
+
+						if (validation) {
+							dataType = Util.getDataTypeFromValidation(dataType, validation);
+						}
+
+						console.log(dataType);
+
+						return dataType;
 					},
 
 					_getDefaultValue: function() {
