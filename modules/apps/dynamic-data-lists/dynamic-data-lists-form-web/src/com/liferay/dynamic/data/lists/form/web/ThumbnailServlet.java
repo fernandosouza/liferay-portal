@@ -1,6 +1,9 @@
 package com.liferay.dynamic.data.lists.form.web;
 
 import com.liferay.dynamic.data.lists.form.web.configuration.DDLFormWebConfigurationUtil;
+import com.liferay.dynamic.data.lists.model.DDLRecordSet;
+import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -33,8 +36,24 @@ public class ThumbnailServlet extends HttpServlet {
 
 		long recordSetId = ParamUtil.getLong(req, "recordSetId");
 
-		String thumbPath = DDLFormWebConfigurationUtil.get(
-			"thumb.path") + recordSetId + ".png";
+		DDLRecordSet recordSet = null;
+
+		try {
+			recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
+		}
+		catch (PortalException e) {
+			e.printStackTrace();
+		}
+
+		if (recordSet == null) {
+			return;
+		}
+
+		String thumbName = String.valueOf(
+			recordSetId) + "_" + recordSet.getModifiedDate().getTime();
+
+		String thumbPath =
+			DDLFormWebConfigurationUtil.get("thumb.path") + thumbName + ".png";
 
 		byte[] bytes = FileUtil.getBytes(new File(thumbPath));
 
