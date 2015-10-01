@@ -431,8 +431,6 @@ AUI.add(
 							dataType = Util.getDataTypeFromValidation(dataType, validation);
 						}
 
-						console.log(dataType);
-
 						return dataType;
 					},
 

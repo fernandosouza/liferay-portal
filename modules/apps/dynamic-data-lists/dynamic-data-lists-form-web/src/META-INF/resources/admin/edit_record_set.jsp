@@ -36,6 +36,13 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 	<portlet:param name="mvcPath" value="/admin/edit_record_set.jsp" />
 </portlet:actionURL>
 
+<c:if test="<%= (recordSet != null) && Validator.isNotNull(recordSet.getPublishedURL()) %>">
+	<div class="alert alert-info">
+		Form published at: <a href="<%= recordSet.getPublishedURL() %>" target="_PARENT"><%= recordSet.getPublishedURL() %></a>
+		<span class="icon-external-link"></span>
+	</div>
+</c:if>
+
 <div class="portlet-forms" id="<portlet:namespace />formContainer">
 	<aui:form action="<%= (recordSet == null) ? addRecordSetURL : updateRecordSetURL %>" cssClass="ddl-form-builder-form" method="post" name="editForm">
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
@@ -76,7 +83,7 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 
 		<div class="container-fluid-1280">
 			<aui:button-row cssClass="ddl-form-builder-buttons">
-				<aui:button cssClass="btn-lg" onClick='<%= renderResponse.getNamespace() + "save(false);" %>' primary="<%= true %>" value='<%= LanguageUtil.get(request, "save") %>' />
+				<aui:button cssClass="btn-lg" id="submit" onClick='<%= renderResponse.getNamespace() + "save(false);" %>' primary="<%= true %>" value='<%= LanguageUtil.get(request, "save") %>' />
 
 				<aui:button cssClass="btn-lg" onClick='<%= renderResponse.getNamespace() + "save(true);" %>' value='<%= LanguageUtil.get(request, "saveAndPublish") %>' />
 
@@ -84,7 +91,6 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 			</aui:button-row>
 		</div>
 		<aui:script>
-			var formPortlet;
 			var initHandler = Liferay.after(
 				'form:registered',
 				function(event) {
@@ -104,7 +110,7 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 							function() {
 								Liferay.DDM.Renderer.FieldTypes.register(fieldTypes);
 
-								formPortlet = new Liferay.DDL.Portlet(
+								new Liferay.DDL.Portlet(
 									{
 										definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
 										layout: <%= ddlFormAdminDisplayContext.getSerializedDDMFormLayout() %>,
@@ -129,23 +135,18 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 			};
 
 			Liferay.on('destroyPortlet', clearPortletHandlers);
-
 		</aui:script>
 	</aui:form>
 </div>
 <aui:script>
-function <portlet:namespace />save(publish) {
+	function <portlet:namespace />save(publish) {
+		if (publish) {
+			<portlet:namespace />editForm.<portlet:namespace />publish.value = 'true';
+		}
+		else {
+			<portlet:namespace />editForm.<portlet:namespace />publish.value = 'false';
+		}
 
-	if (publish) {
-		<portlet:namespace />editForm.<portlet:namespace />publish.value = 'true';
+		<portlet:namespace />editForm.submit();
 	}
-	else {
-		<portlet:namespace />editForm.<portlet:namespace />publish.value = 'false';
-	}
-
-	formPortlet._onSubmitEditForm();
-
-	<portlet:namespace />editForm.submit();
-
-}
 </aui:script>
