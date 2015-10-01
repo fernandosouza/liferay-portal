@@ -80,6 +80,7 @@
 		<column name="minDisplayRows" type="int" />
 		<column name="scope" type="int" />
 		<column name="lastPublishDate" type="Date" />
+		<column name="publishedURL" type="String" />
 
 		<!-- Finder methods -->
 

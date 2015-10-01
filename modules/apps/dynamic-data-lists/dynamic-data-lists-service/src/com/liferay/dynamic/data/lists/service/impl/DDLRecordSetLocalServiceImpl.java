@@ -310,6 +310,18 @@ public class DDLRecordSetLocalServiceImpl
 			serviceContext, recordSet);
 	}
 
+	@Override
+	public DDLRecordSet updateRecordSet(long recordSetId, String publishedURL)
+		throws PortalException {
+
+		DDLRecordSet recordSet = ddlRecordSetPersistence.findByPrimaryKey(
+			recordSetId);
+
+		recordSet.setPublishedURL(publishedURL);
+
+		return ddlRecordSetPersistence.update(recordSet);
+	}
+
 	protected DDLRecordSet doUpdateRecordSet(
 			long ddmStructureId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, int minDisplayRows,

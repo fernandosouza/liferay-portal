@@ -152,4 +152,12 @@ public class DDLRecordSetServiceImpl extends DDLRecordSetServiceBaseImpl {
 			minDisplayRows, serviceContext);
 	}
 
+	@Override
+	public DDLRecordSet updateRecordSet(long recordSetId, String publishedURL)
+		throws PortalException {
+
+		return ddlRecordSetLocalService.updateRecordSet(
+			recordSetId, publishedURL);
+	}
+
 }
