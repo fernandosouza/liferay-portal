@@ -1,5 +1,36 @@
 @import "bourbon";
 
+.datasource-container {
+	padding: 20px;
+	border: 1px solid #d1d6d9;
+	border-radius: 6px;
+
+	.datasource-select {
+		font-weight: bold;
+	}
+
+	.datasource-container-setup {
+		color: #728694;
+		font-family: "Helvetica Neue";
+		font-weight: 400;
+		line-height: 24px;
+		font-size: 16px;
+	}
+
+	.lfr-ddm-form-container {
+		padding-left: 0 !important;
+	}
+
+	.form-group .control-label {
+		margin-top: 15px;
+	}
+
+	.form-group .input-group-container {
+		float: right !important;
+		width: 75%;
+	}
+}
+
 .portlet-forms {
 	.ddl-form-name {
 		font-size: 32px;
