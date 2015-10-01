@@ -134,8 +134,8 @@ AUI.add(
 										Lang.sub(
 											TPL_OPTION,
 											{
-												label: name,
-												value: name
+												label: A.Escape.html(name),
+												value: A.Escape.html(name)
 											}
 										)
 									);
@@ -213,6 +213,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddm-form-renderer-field']
+		requires: ['aui-escape', 'liferay-ddm-form-renderer-field']
 	}
 );

@@ -13,6 +13,7 @@
 							},
 							path: 'datasource_field.js',
 							requires: [
+								'aui-escape',
 								'liferay-ddm-form-renderer-field'
 							]
 						},
