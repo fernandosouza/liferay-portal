@@ -34,14 +34,14 @@ public class DDMRESTDataProviderSettings implements DDMDataProviderSettings {
 	@DDMForm
 	public interface RESTSettings {
 
-		@DDMFormField(label="Service URL")
+		@DDMFormField(label ="Auth Password")
+		public String password();
+
+		@DDMFormField(label ="Service URL")
 		public String url();
 
 		@DDMFormField(label = "Auth Login")
 		public String username();
-
-		@DDMFormField(label="Auth Password")
-		public String password();
 
 		@DDMFormField(
 			label = "Value",
