@@ -49,6 +49,7 @@ public class DDLRecordSetSoap implements Serializable {
 		soapModel.setMinDisplayRows(model.getMinDisplayRows());
 		soapModel.setScope(model.getScope());
 		soapModel.setLastPublishDate(model.getLastPublishDate());
+		soapModel.setPublishedURL(model.getPublishedURL());
 
 		return soapModel;
 	}
@@ -221,6 +222,14 @@ public class DDLRecordSetSoap implements Serializable {
 		_lastPublishDate = lastPublishDate;
 	}
 
+	public String getPublishedURL() {
+		return _publishedURL;
+	}
+
+	public void setPublishedURL(String publishedURL) {
+		_publishedURL = publishedURL;
+	}
+
 	private String _uuid;
 	private long _recordSetId;
 	private long _groupId;
@@ -236,4 +245,5 @@ public class DDLRecordSetSoap implements Serializable {
 	private int _minDisplayRows;
 	private int _scope;
 	private Date _lastPublishDate;
+	private String _publishedURL;
 }

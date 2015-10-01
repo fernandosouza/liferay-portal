@@ -70,6 +70,7 @@ public class DDLRecordSetWrapper implements DDLRecordSet,
 		attributes.put("minDisplayRows", getMinDisplayRows());
 		attributes.put("scope", getScope());
 		attributes.put("lastPublishDate", getLastPublishDate());
+		attributes.put("publishedURL", getPublishedURL());
 
 		return attributes;
 	}
@@ -164,6 +165,12 @@ public class DDLRecordSetWrapper implements DDLRecordSet,
 
 		if (lastPublishDate != null) {
 			setLastPublishDate(lastPublishDate);
+		}
+
+		String publishedURL = (String)attributes.get("publishedURL");
+
+		if (publishedURL != null) {
+			setPublishedURL(publishedURL);
 		}
 	}
 
@@ -444,6 +451,16 @@ public class DDLRecordSetWrapper implements DDLRecordSet,
 	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _ddlRecordSet.getPrimaryKeyObj();
+	}
+
+	/**
+	* Returns the published u r l of this d d l record set.
+	*
+	* @return the published u r l of this d d l record set
+	*/
+	@Override
+	public java.lang.String getPublishedURL() {
+		return _ddlRecordSet.getPublishedURL();
 	}
 
 	/**
@@ -795,6 +812,16 @@ public class DDLRecordSetWrapper implements DDLRecordSet,
 	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_ddlRecordSet.setPrimaryKeyObj(primaryKeyObj);
+	}
+
+	/**
+	* Sets the published u r l of this d d l record set.
+	*
+	* @param publishedURL the published u r l of this d d l record set
+	*/
+	@Override
+	public void setPublishedURL(java.lang.String publishedURL) {
+		_ddlRecordSet.setPublishedURL(publishedURL);
 	}
 
 	/**

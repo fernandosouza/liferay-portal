@@ -42,6 +42,7 @@
 		<property name="minDisplayRows" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="scope" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="lastPublishDate" type="org.hibernate.type.TimestampType" />
+		<property name="publishedURL" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionImpl" table="DDLRecordVersion">
 		<id name="recordVersionId" type="long">

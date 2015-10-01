@@ -152,6 +152,13 @@ public class DDLRecordSetServiceWrapper implements DDLRecordSetService,
 			serviceContext);
 	}
 
+	@Override
+	public com.liferay.dynamic.data.lists.model.DDLRecordSet updateRecordSet(
+		long recordSetId, java.lang.String publisedURL)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _ddlRecordSetService.updateRecordSet(recordSetId, publisedURL);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

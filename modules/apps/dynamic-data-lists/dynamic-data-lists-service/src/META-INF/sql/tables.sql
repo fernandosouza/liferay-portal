@@ -31,7 +31,8 @@ create table DDLRecordSet (
 	description STRING null,
 	minDisplayRows INTEGER,
 	scope INTEGER,
-	lastPublishDate DATE null
+	lastPublishDate DATE null,
+	publishedURL VARCHAR(75) null
 );
 
 create table DDLRecordVersion (

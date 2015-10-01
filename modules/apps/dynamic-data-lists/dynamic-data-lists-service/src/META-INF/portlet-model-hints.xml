@@ -41,6 +41,7 @@
 		<field name="minDisplayRows" type="int" />
 		<field name="scope" type="int" />
 		<field name="lastPublishDate" type="Date" />
+		<field name="publishedURL" type="String" />
 	</model>
 	<model name="com.liferay.dynamic.data.lists.model.DDLRecordVersion">
 		<field name="recordVersionId" type="long" />

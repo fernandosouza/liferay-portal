@@ -484,6 +484,21 @@ public interface DDLRecordSetModel extends BaseModel<DDLRecordSet>,
 	@Override
 	public void setLastPublishDate(Date lastPublishDate);
 
+	/**
+	 * Returns the published u r l of this d d l record set.
+	 *
+	 * @return the published u r l of this d d l record set
+	 */
+	@AutoEscape
+	public String getPublishedURL();
+
+	/**
+	 * Sets the published u r l of this d d l record set.
+	 *
+	 * @param publishedURL the published u r l of this d d l record set
+	 */
+	public void setPublishedURL(String publishedURL);
+
 	@Override
 	public boolean isNew();
 

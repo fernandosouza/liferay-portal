@@ -150,6 +150,8 @@ public class DDLRecordSetPersistenceTest {
 
 		newDDLRecordSet.setLastPublishDate(RandomTestUtil.nextDate());
 
+		newDDLRecordSet.setPublishedURL(RandomTestUtil.randomString());
+
 		_ddlRecordSets.add(_persistence.update(newDDLRecordSet));
 
 		DDLRecordSet existingDDLRecordSet = _persistence.findByPrimaryKey(newDDLRecordSet.getPrimaryKey());
@@ -187,6 +189,8 @@ public class DDLRecordSetPersistenceTest {
 		Assert.assertEquals(Time.getShortTimestamp(
 				existingDDLRecordSet.getLastPublishDate()),
 			Time.getShortTimestamp(newDDLRecordSet.getLastPublishDate()));
+		Assert.assertEquals(existingDDLRecordSet.getPublishedURL(),
+			newDDLRecordSet.getPublishedURL());
 	}
 
 	@Test
@@ -271,7 +275,7 @@ public class DDLRecordSetPersistenceTest {
 			"userId", true, "userName", true, "createDate", true,
 			"modifiedDate", true, "DDMStructureId", true, "recordSetKey", true,
 			"name", true, "description", true, "minDisplayRows", true, "scope",
-			true, "lastPublishDate", true);
+			true, "lastPublishDate", true, "publishedURL", true);
 	}
 
 	@Test
@@ -524,6 +528,8 @@ public class DDLRecordSetPersistenceTest {
 		ddlRecordSet.setScope(RandomTestUtil.nextInt());
 
 		ddlRecordSet.setLastPublishDate(RandomTestUtil.nextDate());
+
+		ddlRecordSet.setPublishedURL(RandomTestUtil.randomString());
 
 		_ddlRecordSets.add(_persistence.update(ddlRecordSet));
 

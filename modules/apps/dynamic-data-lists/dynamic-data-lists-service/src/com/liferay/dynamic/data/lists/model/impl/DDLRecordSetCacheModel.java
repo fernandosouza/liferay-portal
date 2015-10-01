@@ -66,7 +66,7 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -98,6 +98,8 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 		sb.append(scope);
 		sb.append(", lastPublishDate=");
 		sb.append(lastPublishDate);
+		sb.append(", publishedURL=");
+		sb.append(publishedURL);
 		sb.append("}");
 
 		return sb.toString();
@@ -173,6 +175,13 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 			ddlRecordSetImpl.setLastPublishDate(new Date(lastPublishDate));
 		}
 
+		if (publishedURL == null) {
+			ddlRecordSetImpl.setPublishedURL(StringPool.BLANK);
+		}
+		else {
+			ddlRecordSetImpl.setPublishedURL(publishedURL);
+		}
+
 		ddlRecordSetImpl.resetOriginalValues();
 
 		return ddlRecordSetImpl;
@@ -195,6 +204,7 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 		minDisplayRows = objectInput.readInt();
 		scope = objectInput.readInt();
 		lastPublishDate = objectInput.readLong();
+		publishedURL = objectInput.readUTF();
 	}
 
 	@Override
@@ -247,6 +257,13 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 		objectOutput.writeInt(minDisplayRows);
 		objectOutput.writeInt(scope);
 		objectOutput.writeLong(lastPublishDate);
+
+		if (publishedURL == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(publishedURL);
+		}
 	}
 
 	public String uuid;
@@ -264,4 +281,5 @@ public class DDLRecordSetCacheModel implements CacheModel<DDLRecordSet>,
 	public int minDisplayRows;
 	public int scope;
 	public long lastPublishDate;
+	public String publishedURL;
 }
