@@ -1,6 +1,20 @@
 @import "bourbon";
 
+.ddl-form-builder-app {
+	&.container-fluid-1280 {
+		.row {
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+	}
+}
+
 .lfr-ddm-form-container {
+
+	.lfr-ddm-form-page-title + .row {
+		margin-top: 40px;
+	}
+
 	.form-control-feedback {
 		margin-left: -20px;
 	}
@@ -42,6 +56,7 @@
 
 	.lfr-ddm-form-page {
 		display: none;
+		padding-top: 25px;
 
 		&.active {
 			display: block;
@@ -49,7 +64,7 @@
 	}
 
 	.lfr-ddm-form-page-description {
-		margin-bottom: 73px;
+		margin-bottom: 40px;
 	}
 
 	.row {
