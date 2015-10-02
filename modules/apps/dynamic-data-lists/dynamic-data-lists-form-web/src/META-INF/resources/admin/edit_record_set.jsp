@@ -85,8 +85,6 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 			<aui:button-row cssClass="ddl-form-builder-buttons">
 				<aui:button cssClass="btn-lg" id="saveButton" primary="<%= true %>" type="submit" value='<%= LanguageUtil.get(request, "save") %>' />
 
-				<aui:button cssClass="btn-lg" id="publishButton" type="submit" value='<%= LanguageUtil.get(request, "saveAndPublish") %>' />
-
 				<aui:button cssClass="btn-lg" href="<%= redirect %>" name="cancelButton" type="cancel" />
 			</aui:button-row>
 		</div>

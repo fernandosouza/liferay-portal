@@ -61,7 +61,6 @@ AUI.add(
 						editForm.set('onSubmit', A.bind('_onSubmitEditForm', instance));
 
 						instance._eventHandlers = [
-							instance.one('#publishButton').on('click', A.bind('_onClickPublish', instance)),
 							instance.one('#saveButton').on('click', A.bind('_onClickSave', instance)),
 							Liferay.on('destroyPortlet', A.bind('_onDestroyPortlet', instance))
 						];
@@ -75,18 +74,6 @@ AUI.add(
 						(new A.EventHandle(instance._eventHandlers)).detach();
 					},
 
-					_onClickPublish: function(event) {
-						var instance = this;
-
-						var publishButton = event.target;
-
-						publishButton.html(Liferay.Language.get('publishing'));
-
-						publishButton.append(TPL_BUTTON_SPINNER);
-
-						instance.one('#publish').val('true');
-					},
-
 					_onClickSave: function(event) {
 						var instance = this;
 
@@ -96,7 +83,7 @@ AUI.add(
 
 						saveButton.append(TPL_BUTTON_SPINNER);
 
-						instance.one('#publish').val('false');
+						instance.one('#publish').val('true');
 					},
 
 					_onDestroyPortlet: function(event) {
