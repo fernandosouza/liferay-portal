@@ -12,6 +12,9 @@ AUI.add(
 					definition: {
 					},
 
+					editForm: {
+					},
+
 					formBuilder: {
 						valueFn: '_valueFormBuilder'
 					},
@@ -53,7 +56,13 @@ AUI.add(
 					bindUI: function() {
 						var instance = this;
 
+						var editForm = instance.get('editForm');
+
+						editForm.set('onSubmit', A.bind('_onSubmitEditForm', instance));
+
 						instance._eventHandlers = [
+							instance.one('#publishButton').on('click', A.bind('_onClickPublish', instance)),
+							instance.one('#saveButton').on('click', A.bind('_onClickSave', instance)),
 							Liferay.on('destroyPortlet', A.bind('_onDestroyPortlet', instance))
 						];
 					},
@@ -64,6 +73,30 @@ AUI.add(
 						instance.get('formBuilder').destroy();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
+					},
+
+					_onClickPublish: function(event) {
+						var instance = this;
+
+						var publishButton = event.target;
+
+						publishButton.html(Liferay.Language.get('publishing'));
+
+						publishButton.append(TPL_BUTTON_SPINNER);
+
+						instance.one('#publish').val('true');
+					},
+
+					_onClickSave: function(event) {
+						var instance = this;
+
+						var saveButton = event.target;
+
+						saveButton.html(Liferay.Language.get('saving'));
+
+						saveButton.append(TPL_BUTTON_SPINNER);
+
+						instance.one('#publish').val('false');
 					},
 
 					_onDestroyPortlet: function(event) {
@@ -98,12 +131,6 @@ AUI.add(
 						var name = window[instance.ns('nameEditor')].getHTML();
 
 						instance.one('#name').val(name);
-
-						var submitButton = instance.one('#submit');
-
-						submitButton.html(Liferay.Language.get('saving'));
-
-						submitButton.append(TPL_BUTTON_SPINNER);
 					},
 
 					_valueFormBuilder: function() {

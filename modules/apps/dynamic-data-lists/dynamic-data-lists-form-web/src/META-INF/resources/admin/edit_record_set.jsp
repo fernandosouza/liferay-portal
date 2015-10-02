@@ -83,9 +83,9 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 
 		<div class="container-fluid-1280">
 			<aui:button-row cssClass="ddl-form-builder-buttons">
-				<aui:button cssClass="btn-lg" id="submit" onClick='<%= renderResponse.getNamespace() + "save(false);" %>' primary="<%= true %>" value='<%= LanguageUtil.get(request, "save") %>' />
+				<aui:button cssClass="btn-lg" id="saveButton" primary="<%= true %>" type="submit" value='<%= LanguageUtil.get(request, "save") %>' />
 
-				<aui:button cssClass="btn-lg" onClick='<%= renderResponse.getNamespace() + "save(true);" %>' value='<%= LanguageUtil.get(request, "saveAndPublish") %>' />
+				<aui:button cssClass="btn-lg" id="publishButton" type="submit" value='<%= LanguageUtil.get(request, "saveAndPublish") %>' />
 
 				<aui:button cssClass="btn-lg" href="<%= redirect %>" name="cancelButton" type="cancel" />
 			</aui:button-row>
@@ -113,6 +113,7 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 								new Liferay.DDL.Portlet(
 									{
 										definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
+										editForm: event.form,
 										layout: <%= ddlFormAdminDisplayContext.getSerializedDDMFormLayout() %>,
 										namespace: '<portlet:namespace />'
 									}
@@ -138,15 +139,3 @@ String description = BeanParamUtil.getString(recordSet, request, "description");
 		</aui:script>
 	</aui:form>
 </div>
-<aui:script>
-	function <portlet:namespace />save(publish) {
-		if (publish) {
-			<portlet:namespace />editForm.<portlet:namespace />publish.value = 'true';
-		}
-		else {
-			<portlet:namespace />editForm.<portlet:namespace />publish.value = 'false';
-		}
-
-		<portlet:namespace />editForm.submit();
-	}
-</aui:script>
