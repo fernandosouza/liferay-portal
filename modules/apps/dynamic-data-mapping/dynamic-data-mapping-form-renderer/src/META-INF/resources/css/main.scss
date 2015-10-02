@@ -1,6 +1,10 @@
 @import "bourbon";
 
 .lfr-ddm-form-container {
+	.form-control-feedback {
+		margin-left: -20px;
+	}
+
 	.icon-angle-left {
 		font-size: inherit;
 	}
@@ -54,6 +58,11 @@
 
 	.lfr-ddm-form-pagination-controls {
 		padding-top: 20px;
+	}
+
+	.validation-message {
+		position: absolute;
+		margin-top: -45px;
 	}
 }
 
