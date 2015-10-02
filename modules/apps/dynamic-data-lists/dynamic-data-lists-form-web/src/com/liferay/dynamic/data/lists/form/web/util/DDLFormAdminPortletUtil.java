@@ -21,8 +21,11 @@ import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
 import com.liferay.dynamic.data.lists.util.comparator.DDLRecordIdComparator;
 import com.liferay.dynamic.data.lists.util.comparator.DDLRecordModifiedDateComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.util.PortalUtil;
 
 import java.io.File;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Leonardo Barros
@@ -50,7 +53,9 @@ public class DDLFormAdminPortletUtil {
 		return orderByComparator;
 	}
 
-	public static void saveThumbnail(long recordSetId) throws Exception {
+	public static void saveThumbnail(
+		HttpServletRequest request, long recordSetId) throws Exception {
+
 		DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(
 			recordSetId);
 
@@ -66,8 +71,10 @@ public class DDLFormAdminPortletUtil {
 			return;
 		}
 
+		String portalURL = PortalUtil.getPortalURL(request);
+
 		String url =
-			"http://localhost:8080/o/ddm-form-renderer-servlet?recordSetId=" + recordSetId;
+			portalURL + "/o/ddm-form-renderer-servlet?recordSetId=" + recordSetId;
 
 		ProcessBuilder processBuilder = new ProcessBuilder(
 			DDLFormWebConfigurationUtil.get("wkhtmltoimage.path"), "-f", "png",

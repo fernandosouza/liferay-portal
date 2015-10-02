@@ -101,7 +101,7 @@ recordSetSearch.setOrderByType(orderByType);
 							<%
 							User userDisplay = UserLocalServiceUtil.fetchUserById(recordSet.getUserId());
 
-							DDLFormAdminPortletUtil.saveThumbnail(recordSet.getRecordSetId());
+							DDLFormAdminPortletUtil.saveThumbnail(request, recordSet.getRecordSetId());
 							%>
 
 							<liferay-frontend:card
