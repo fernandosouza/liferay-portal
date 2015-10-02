@@ -81,12 +81,7 @@ AUI.add(
 				var instance = this;
 
 				if (instance.hasValidation()) {
-					var container = instance.get('container');
-
 					var hasErrors = instance.hasErrors();
-
-					container.toggleClass('has-error', hasErrors);
-					container.toggleClass('has-success', !hasErrors);
 
 					if (hasErrors) {
 						instance.showErrorFeedback();
@@ -111,6 +106,8 @@ AUI.add(
 				container.all('.validation-message').remove();
 
 				var errorMessage = instance.get('errorMessage');
+
+				container.toggleClass('has-error', !!errorMessage);
 
 				var inputNode = instance.getInputNode();
 

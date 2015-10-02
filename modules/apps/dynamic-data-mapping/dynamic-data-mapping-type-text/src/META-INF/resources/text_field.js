@@ -62,11 +62,9 @@ AUI.add(
 
 						var container = instance.get('container');
 
-						var inputGroup = container.one('.input-group-default');
+						var inputGroup = container.one('.input-group-container');
 
-						if (inputGroup) {
-							inputGroup.insert(container.one('.validation-message'), 'after');
-						}
+						inputGroup.insert(container.one('.validation-message'), 'after');
 					},
 
 					_showFeedback: function() {
