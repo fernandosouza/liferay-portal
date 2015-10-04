@@ -45,6 +45,9 @@ DDLRecordSet recordSet = ddlFormDisplayContext.getRecordSet();
 						<aui:input name="workflowAction" type="hidden" value="<%= WorkflowConstants.ACTION_PUBLISH %>" />
 
 						<div class="ddl-form-basic-info">
+							<div class="devcon-bg devcon-bg-left"></div>
+							<div class="devcon-bg devcon-bg-right"></div>
+							
 							<div class="container-fluid-1280">
 								<h1 class="ddl-form-name"><%= recordSet.getName(locale) %></h1>
 

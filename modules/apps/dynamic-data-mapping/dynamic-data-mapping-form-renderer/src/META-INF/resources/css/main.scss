@@ -83,7 +83,35 @@
 
 .portal-popup {
 	$side-spacing: 34px;
+
+	.devcon-bg {
+		width: 13%;
+		height: 100%;
+		background: url(https://www.liferay.com/documents/47511614/49230168/Squares-Heading.png/0453b861-d454-4dcd-b11d-fac7458e242c);
+		background-size: cover;
+		position: absolute;
+	}
+
+	.devcon-bg-left {
+		top: 0;
+		left: 0;
+	}
+
+	.devcon-bg-right {
+		top: 0;
+		right: 0;
+	}
+
+	.alert {
+		margin: 0;
+	}
+
+	background-color: #fff;
 	padding: 0;
+
+	.ddl-form-basic-info {
+		position: relative;
+	}
 
 	&.open {
 		padding: 0;
@@ -98,6 +126,26 @@
 	.lfr-ddm-form-page {
 		padding-bottom: $side-spacing;
 	}
+
+	.ddl-form-basic-info {
+		.ddl-form-name,
+		.ddl-form-description {
+			color: #1277a7;
+			text-align: center;
+		}
+
+		.ddl-form-name {
+			font-size: 44px;
+		}
+
+		.ddl-form-description {
+			font-size: 19px;
+		}
+	}
+
+	.lfr-ddm-form-wizard {
+		background: #fff;
+	}
 }
 
 .multi-step-progress-bar {
@@ -109,3 +157,13 @@
 		}
 	}
 }
+
+// @media only screen 
+// and (min-device-width : 320px) 
+// and (max-device-width : 480px) {
+// 	.portal-popup {
+// 		.devcon-bg {
+// 			display: none;
+// 		}
+// 	}
+// }
