@@ -1,6 +1,8 @@
 @import "bourbon";
 
 .ddl-form-builder-app {
+	position: relative;
+	
 	&.container-fluid-1280 {
 		.row {
 			margin-left: 20px;
@@ -10,7 +12,6 @@
 }
 
 .lfr-ddm-form-container {
-
 	.lfr-ddm-form-page-title + .row {
 		margin-top: 40px;
 	}
@@ -90,6 +91,7 @@
 		background: url(https://www.liferay.com/documents/47511614/49230168/Squares-Heading.png/0453b861-d454-4dcd-b11d-fac7458e242c);
 		background-size: cover;
 		position: absolute;
+		z-index: -1;
 	}
 
 	.devcon-bg-left {
@@ -111,6 +113,7 @@
 
 	.ddl-form-basic-info {
 		position: relative;
+		background: url(https://www.liferay.com/documents/47511614/49230168/Squares-Heading.png/0453b861-d454-4dcd-b11d-fac7458e242c);
 	}
 
 	&.open {
@@ -132,14 +135,16 @@
 		.ddl-form-description {
 			color: #1277a7;
 			text-align: center;
-		}
 
-		.ddl-form-name {
-			font-size: 44px;
+			span {
+				background: #fff;
+				padding: 2px 10px;
+			}
 		}
 
 		.ddl-form-description {
-			font-size: 19px;
+			width: 65%;
+			margin: 0 auto;
 		}
 	}
 
@@ -167,3 +172,22 @@
 // 		}
 // 	}
 // }
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+	.portal-popup .ddl-form-basic-info .ddl-form-description {
+		font-size: 12px;
+		line-height: 18px;
+		width: auto;
+	}
+
+	.devcon-bg {
+		display: none;
+	}
+
+	.portal-popup .ddl-form-basic-info {
+		background-size: contain;
+	}
+}

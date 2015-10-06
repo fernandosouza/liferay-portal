@@ -36,6 +36,7 @@ DDLRecordSet recordSet = ddlFormDisplayContext.getRecordSet();
 				<portlet:actionURL name="addRecord" var="addRecordActionURL" />
 
 				<div class="portlet-forms">
+					<meta content="initial-scale=1.0, width=device-width" name="viewport">
 					<aui:form action="<%= addRecordActionURL %>" method="post" name="fm">
 						<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 						<aui:input name="groupId" type="hidden" value="<%= themeDisplay.getScopeGroupId() %>" />
@@ -49,14 +50,22 @@ DDLRecordSet recordSet = ddlFormDisplayContext.getRecordSet();
 							<div class="devcon-bg devcon-bg-right"></div>
 							
 							<div class="container-fluid-1280">
-								<h1 class="ddl-form-name"><%= recordSet.getName(locale) %></h1>
+								<h1 class="ddl-form-name">
+									<span>
+										<%= recordSet.getName(locale) %>
+									</span>
+								</h1>
 
 								<%
 								String description = recordSet.getDescription(locale);
 								%>
 
 								<c:if test="<%= Validator.isNotNull(description) %>">
-									<h2 class="ddl-form-description"><%= description %></h2>
+									<h2 class="ddl-form-description">
+										<span>
+										<%= description %>
+										</span>
+									</h2>
 								</c:if>
 							</div>
 						</div>
