@@ -92,7 +92,15 @@ AUI.add(
 
 				var settingsModal = instance.getSettingsModal();
 
-				settingsModal._modal.get('boundingBox').addClass(CSS_FIELD_SETTINGS_MODAL);
+				var settingsModalBoundingBox = settingsModal._modal.get('boundingBox');
+
+				settingsModalBoundingBox.addClass(CSS_FIELD_SETTINGS_MODAL);
+
+				var settingsModalFooter = settingsModal._modal.getToolbar('footer')
+
+				settingsModalFooter.item(0).set('cssClass', 'btn-lg btn-primary');
+
+				settingsModalFooter.item(1).set('cssClass', 'btn-lg btn-link');
 
 				var builder = instance.get('builder');
 
