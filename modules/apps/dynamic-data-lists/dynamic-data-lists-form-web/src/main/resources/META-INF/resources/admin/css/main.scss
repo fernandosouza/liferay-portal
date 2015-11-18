@@ -145,10 +145,6 @@
 	.ddl-form-builder-app {
 		margin-top: -120px;
 
-		.form-builder-field-list-empty .form-builder-field-list-add-button {
-			position: relative;
-		}
-
 		.icon-refresh {
 			display: block;
 			font-size: 60px;
@@ -569,13 +565,25 @@
 	}
 
 	.form-builder-field-list-add-button {
-		cursor: pointer;
-		width: 100%;
+		border-color: transparent;
+
+		.form-builder-field-list-add-button-label {
+			color: #4A90E2;
+			margin-bottom: 0;
+
+			.form-builder-field-list-add-button-plus-label {
+				margin-bottom: 0;
+			}
+		}
 	}
 
-	.form-builder-field-list-add-button-label {
-		color: #4A90E2;
-		margin-bottom: 5px;
+	.form-builder-field-list-empty .form-builder-field-list-add-button {
+		padding: 20px 0;
+		position: relative;
+
+		.form-builder-field-list-add-button-plus-icon {
+			margin: 0;
+		}
 	}
 
 	.form-builder-pages {
