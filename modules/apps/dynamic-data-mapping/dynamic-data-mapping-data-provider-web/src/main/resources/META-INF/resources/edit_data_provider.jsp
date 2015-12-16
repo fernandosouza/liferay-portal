@@ -42,7 +42,7 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 	<portlet:param name="mvcPath" value="/edit_data_provider.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= (ddmDataProviderInstance == null) ? addDataProviderURL : updateDataProviderURL %>" method="post" name="frm">
+<aui:form action="<%= (ddmDataProviderInstance == null) ? addDataProviderURL : updateDataProviderURL %>" method="post" name="fm">
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="groupId" type="hidden" value="<%= String.valueOf(groupId) %>" />
 	<aui:input name="dataProviderInstanceId" type="hidden" value="<%= String.valueOf(dataProviderInstanceId) %>" />
@@ -53,6 +53,16 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 
 	<div class="container-fluid-1280">
 		<aui:fieldset>
+			<liferay-util:buffer var="requiredMark">
+				<span class="icon-asterisk text-warning">
+					<span class="hide-accessible"><liferay-ui:message key="required" /></span>
+				</span>
+			</liferay-util:buffer>
+
+			<label class="required-warning">
+				<liferay-ui:message arguments="<%= requiredMark %>" key="all-fields-marked-with-x-are-required" translateArguments="<%= false %>" />
+			</label>
+
 			<aui:input name="name" />
 
 			<aui:input name="description" />
@@ -63,11 +73,51 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 		</aui:fieldset>
 	</div>
 
-	<div class="container-fluid-1280">
-		<aui:button-row>
-			<aui:button cssClass="btn-lg" id="submit" label="save" primary="<%= true %>" type="submit" />
+	<c:if test="<%= !windowState.equals(LiferayWindowState.POP_UP) %>">
+		<div class="container-fluid-1280">
+			<aui:button-row>
+				<aui:button cssClass="btn-lg" id="submit" label="save" primary="<%= true %>" type="submit" />
 
-			<aui:button cssClass="btn-lg" href="<%= redirect %>" name="cancelButton" type="cancel" />
-		</aui:button-row>
-	</div>
+				<aui:button cssClass="btn-lg" href="<%= redirect %>" name="cancelButton" type="cancel" />
+			</aui:button-row>
+		</div>
+	</c:if>
+
+	<aui:button cssClass="hide" type="submit" />
 </aui:form>
+
+<portlet:renderURL var="viewDataProviderURL">
+	<portlet:param name="mvcPath" value="/view.jsp" />
+</portlet:renderURL>
+
+<c:if test="<%= windowState.equals(LiferayWindowState.POP_UP) %>">
+	<aui:script>
+		var dialog = Liferay.Util.getWindow();
+
+		if (dialog) {
+			dialog.addToolbar(
+				[
+					{
+						cssClass: 'btn-lg btn-primary',
+						label: '<liferay-ui:message key="save" />',
+						on: {
+							click: function() {
+								document.<portlet:namespace />fm.submit();
+							}
+						}
+					},
+					{
+						cssClass: 'btn-lg btn-link',
+						label: '<liferay-ui:message key="cancel" />',
+						on: {
+							click: function() {
+								location.href = '<%= viewDataProviderURL.toString() %>'
+							}
+						}
+					}
+				],
+				'footer'
+			);
+		}
+	</aui:script>
+</c:if>
