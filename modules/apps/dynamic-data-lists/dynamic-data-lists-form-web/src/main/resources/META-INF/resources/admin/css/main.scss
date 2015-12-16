@@ -750,6 +750,9 @@ $horizontal-spacing: 35px;
 	}
 }
 
+.dynamic-data-mapping-data-providers-modal {
+	max-width: 720px;
+}
 @include md {
 	.lfr-ddl-field-settings-modal.form-builder-field-settings {
 		height: 676px;
