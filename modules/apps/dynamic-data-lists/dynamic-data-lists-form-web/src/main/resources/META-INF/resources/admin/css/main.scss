@@ -73,6 +73,10 @@ $horizontal-spacing: 35px;
 		}
 	}
 
+	.icon-asterisk {
+		margin-left: 4px;
+	}
+
 	.icon-spinner {
 		@include animation(spin 1000ms infinite linear);
 	}
@@ -225,6 +229,10 @@ $horizontal-spacing: 35px;
 
 	&:focus {
 		outline: none;
+	}
+
+	.form-inline .checkbox label {
+		padding-left: 0;
 	}
 
 	.modal-body {
