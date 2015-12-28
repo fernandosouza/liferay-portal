@@ -19,17 +19,22 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.PredicateFilter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionManagerUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.workflow.definition.web.display.context.util.WorkflowDefinitionRequestHelper;
 import com.liferay.workflow.definition.web.search.WorkflowDefinitionSearchTerms;
 import com.liferay.workflow.definition.web.util.WorkflowDefinitionPortletUtil;
+import com.liferay.workflow.definition.web.util.filter.WorkflowDefinitionNameAndTitlePredicateFilter;
+import com.liferay.workflow.definition.web.util.filter.WorkflowDefinitionNameOrTitlePredicateFilter;
+import com.liferay.workflow.definition.web.util.filter.WorkflowDefinitionNamePredicateFilter;
+import com.liferay.workflow.definition.web.util.filter.WorkflowDefinitionTitlePredicateFilter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.RenderRequest;
@@ -73,14 +78,8 @@ public class WorkflowDefinitionDisplayContext {
 		WorkflowDefinitionSearchTerms searchTerms =
 			(WorkflowDefinitionSearchTerms)searchContainer.getSearchTerms();
 
-		if (searchTerms.isAdvancedSearch()) {
-			filter(workflowDefinitions, searchTerms);
-		}
-		else {
-			filter(
-				workflowDefinitions,
-				StringUtil.toLowerCase(searchTerms.getKeywords()));
-		}
+		workflowDefinitions = filterWorkflowDefinitions(
+			workflowDefinitions, searchTerms);
 
 		searchContainer.setTotal(workflowDefinitions.size());
 
@@ -99,69 +98,55 @@ public class WorkflowDefinitionDisplayContext {
 		return String.valueOf(workflowDefinition.getVersion());
 	}
 
-	protected void filter(
-		List<WorkflowDefinition> workflowDefinitions, String keyword) {
+	protected PredicateFilter<WorkflowDefinition>
+		createWorkflowDefinitionPredicateFilter(
+			String name, String title, boolean andOperator) {
 
-		Iterator<WorkflowDefinition> iterator = workflowDefinitions.iterator();
-
-		while (iterator.hasNext()) {
-			WorkflowDefinition entry = iterator.next();
-
-			String name = StringUtil.toLowerCase(entry.getName());
-			String title = StringUtil.toLowerCase(entry.getTitle());
-
-			if (!name.contains(keyword) && !title.contains(keyword)) {
-				iterator.remove();
+		if (Validator.isNotNull(name) && Validator.isNotNull(title)) {
+			if (andOperator) {
+				return new WorkflowDefinitionNameAndTitlePredicateFilter(
+					name, title);
 			}
+			else {
+				return new WorkflowDefinitionNameOrTitlePredicateFilter(
+					name, title);
+			}
+		}
+		else if (Validator.isNotNull(name)) {
+			return new WorkflowDefinitionNamePredicateFilter(name);
+		}
+		else {
+			return new WorkflowDefinitionTitlePredicateFilter(title);
 		}
 	}
 
-	protected void filter(
+	protected List<WorkflowDefinition> filterWorkflowDefinitions(
+		List<WorkflowDefinition> workflowDefinitions, String name, String title,
+		boolean andOperator) {
+
+		if (Validator.isNull(name) && Validator.isNull(title)) {
+			return workflowDefinitions;
+		}
+
+		PredicateFilter<WorkflowDefinition> predicateFilter =
+			createWorkflowDefinitionPredicateFilter(name, title, andOperator);
+
+		return ListUtil.filter(workflowDefinitions, predicateFilter);
+	}
+
+	protected List<WorkflowDefinition> filterWorkflowDefinitions(
 		List<WorkflowDefinition> workflowDefinitions,
 		WorkflowDefinitionSearchTerms searchTerms) {
 
-		if (Validator.isNull(searchTerms.getName()) &&
-			Validator.isNull(searchTerms.getTitle())) {
-
-			return;
+		if (searchTerms.isAdvancedSearch()) {
+			return filterWorkflowDefinitions(
+				workflowDefinitions, searchTerms.getName(),
+				searchTerms.getTitle(), searchTerms.isAndOperator());
 		}
-
-		Iterator<WorkflowDefinition> iterator = workflowDefinitions.iterator();
-
-		while (iterator.hasNext()) {
-			WorkflowDefinition entry = iterator.next();
-
-			String name = StringUtil.toLowerCase(entry.getName());
-			String title = StringUtil.toLowerCase(entry.getTitle());
-
-			if (Validator.isNotNull(searchTerms.getName()) &&
-				Validator.isNotNull(searchTerms.getTitle())) {
-
-				if (searchTerms.isAndOperator()) {
-					if (!name.contains(searchTerms.getName()) ||
-						!title.contains(searchTerms.getTitle())) {
-
-						iterator.remove();
-					}
-				}
-				else {
-					if (!name.contains(searchTerms.getName()) &&
-						!title.contains(searchTerms.getTitle())) {
-
-						iterator.remove();
-					}
-				}
-			}
-			else if(Validator.isNotNull(searchTerms.getName())) {
-				if (!name.contains(searchTerms.getName())) {
-					iterator.remove();
-				}
-			}
-			else if(Validator.isNotNull(searchTerms.getTitle())) {
-				if (!title.contains(searchTerms.getTitle())) {
-					iterator.remove();
-				}
-			}
+		else {
+			return filterWorkflowDefinitions(
+				workflowDefinitions, searchTerms.getKeywords(),
+				searchTerms.getKeywords(), searchTerms.isAndOperator());
 		}
 	}
 
@@ -169,16 +154,13 @@ public class WorkflowDefinitionDisplayContext {
 		HttpServletRequest request =
 			_workflowDefinitionRequestHelper.getRequest();
 
-		ThemeDisplay themeDisplay =
-			_workflowDefinitionRequestHelper.getThemeDisplay();
-
 		String orderByCol = ParamUtil.getString(request, "orderByCol", "name");
-
 		String orderByType = ParamUtil.getString(request, "orderByType", "asc");
 
 		return WorkflowDefinitionPortletUtil.
 			getWorkflowDefitionOrderByComparator(
-				themeDisplay.getLanguageId(), orderByCol, orderByType);
+				orderByCol, orderByType,
+				_workflowDefinitionRequestHelper.getLocale());
 	}
 
 	private final WorkflowDefinitionRequestHelper
