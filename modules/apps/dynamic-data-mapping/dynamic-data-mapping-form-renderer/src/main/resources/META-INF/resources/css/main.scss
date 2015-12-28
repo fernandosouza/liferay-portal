@@ -35,6 +35,10 @@
 			}
 		}
 
+		.icon-asterisk {
+			margin-left: 4px;
+		}
+
 		.icon-spinner {
 			@include animation(spin 1000ms infinite linear);
 		}
@@ -79,11 +83,6 @@
 
 	.lfr-ddm-form-pagination-controls {
 		padding-top: 20px;
-	}
-
-	.help-block {
-		font-size: 14px;
-		margin-top: -45px;
 	}
 }
 
