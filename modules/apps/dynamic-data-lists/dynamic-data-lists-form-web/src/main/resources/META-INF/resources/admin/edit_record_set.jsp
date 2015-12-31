@@ -218,13 +218,9 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			Liferay.on('destroyPortlet', clearPortletHandlers);
 
 			var copyToClipboard = function(textElement) {
-
 				textElement.select();
 
-				var copyDone = document.execCommand('copy');
-
-				return copyDone;
-
+				return document.execCommand('copy');
 			}
 
 			var copyURLBtn = document.querySelector('.button-to-copy');
@@ -234,7 +230,6 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			   if(!copyToClipboard(textElement)) {
 			   		copyURLBtn.setAttribute("title", '<liferay-ui:message key="unable-to-copy-to-clipboard" />');
 			   }
-
 			});
 
 		</aui:script>
