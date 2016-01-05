@@ -151,10 +151,10 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 				<label><liferay-ui:message key="copy-this-url-to-share-the-form" /></label>
 
 				<div class="input-group">
-					<input class="form-control" type="text" readOnly value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
+					<input class="form-control text-to-copy" type="text" readOnly value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
 
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><liferay-ui:message key="copy-url" /></button>
+						<button class="btn btn-default button-to-copy" type="button"><liferay-ui:message key="copy-url" /></button>
 					</span>
 				</div>
 			</div>
@@ -216,6 +216,22 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			};
 
 			Liferay.on('destroyPortlet', clearPortletHandlers);
+
+			var copyToClipboard = function(textElement) {
+				textElement.select();
+
+				return document.execCommand('copy');
+			}
+
+			var copyURLBtn = document.querySelector('.button-to-copy');
+			var textElement = document.querySelector('.text-to-copy');
+
+			copyURLBtn.addEventListener('click', function(event) {
+			   if(!copyToClipboard(textElement)) {
+			   		copyURLBtn.setAttribute("title", '<liferay-ui:message key="unable-to-copy-to-clipboard" />');
+			   }
+			});
+
 		</aui:script>
 	</aui:form>
 
