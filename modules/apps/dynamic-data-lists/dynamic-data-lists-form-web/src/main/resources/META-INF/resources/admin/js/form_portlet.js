@@ -118,13 +118,14 @@ AUI.add(
 									resizable: false,
 									width: 720
 								},
-								id: instance.ns('publishModal'),
+								id: instance.ns('publishModalContainer'),
 								title: Liferay.Language.get('publish')
 							},
 							function(dialogWindow) {
 								var bodyNode = dialogWindow.bodyNode;
+								var publishNodeID = instance.ns('publishModal');
 
-								var publishNode = instance.one('#publishModal');
+								var publishNode = instance.one('#' + publishNodeID);
 
 								if (publishNode) {
 									publishNode.show();
