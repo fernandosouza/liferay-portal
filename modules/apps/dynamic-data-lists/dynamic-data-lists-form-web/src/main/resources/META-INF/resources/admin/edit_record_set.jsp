@@ -129,12 +129,6 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 		</div>
 
 		<div class="container-fluid-1280 ddl-publish-modal hide" id="<portlet:namespace />publishModal">
-			<div class="alert alert-info">
-				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
-					<liferay-ui:message key="preview-on-new-window" />
-				</a>
-			</div>
-
 			<div class="form-group">
 				<label class="control-label ddl-publish-checkbox" for="<portlet:namespace />publishCheckbox">
 					<span class="pull-left">
@@ -143,6 +137,12 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 
 					<aui:input label="" name="publishCheckbox" type="toggle-switch" value="<%= ddlFormAdminDisplayContext.isFormPublished() %>" />
 				</label>
+			</div>
+
+			<div class="alert alert-info">
+				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
+					<liferay-ui:message key="preview-on-new-window" />
+				</a>
 			</div>
 
 			<div class="form-group">
