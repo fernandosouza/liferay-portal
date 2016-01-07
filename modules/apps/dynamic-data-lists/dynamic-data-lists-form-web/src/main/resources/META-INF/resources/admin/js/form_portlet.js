@@ -112,8 +112,8 @@ AUI.add(
 
 						var publishCheckbox = instance.one('#publishCheckbox');
 
-						var publishModalID = instance.ns('publishModalContainer'); 
-						
+						var publishModalID = instance.ns('publishModalContainer');
+
 						var publishModalNode = instance.one('#' + publishModalID);
 
 						publishCheckbox.setData('previousValue', publishCheckbox.attr('checked'));
@@ -359,7 +359,7 @@ AUI.add(
 						popover.set('visible', true);
 
 						popover.render();
-						
+
 						popover.hide();
 
 						popover.show();
