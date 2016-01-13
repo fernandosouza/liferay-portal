@@ -546,6 +546,16 @@ $horizontal-spacing: 35px;
 	}
 }
 
+.portal-popup {
+	.portlet-layout {
+		margin: 0 0 75px;
+	}
+
+	.portlet-column {
+		padding: 0;
+	}
+}
+
 .portlet-forms {
 	.aspect-ratio img {
 		top: 0;
@@ -742,8 +752,8 @@ $horizontal-spacing: 35px;
 	}
 
 	.form-builder-page-header {
-		position: relative;
 		padding-right: 34px;
+		position: relative;
 	}
 
 	.form-builder-pages-header {
