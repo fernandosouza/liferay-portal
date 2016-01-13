@@ -19,6 +19,14 @@ AUI.add(
 
 		var CSS_PAGE_HEADER = A.getClassName('form', 'builder', 'page', 'header');
 
+		var CSS_PAGE_HEADER_DESCRIPTION = A.getClassName('form', 'builder', 'page', 'header', 'description');
+
+		var CSS_PAGE_HEADER_DESCRIPTION_HIDE_BORDER = A.getClassName('form', 'builder', 'page', 'header', 'description', 'hide', 'border');
+
+		var CSS_PAGE_HEADER_TITLE = A.getClassName('form', 'builder', 'page', 'header', 'title');
+
+		var CSS_PAGE_HEADER_TITLE_HIDE_BORDER = A.getClassName('form', 'builder', 'page', 'header', 'title', 'hide', 'border');
+
 		var FormBuilderPagesManager = A.Component.create(
 			{
 				ATTRS: {
@@ -47,10 +55,19 @@ AUI.add(
 							'<span class="icon-ellipsis-vertical icon-monospaced"></span>' +
 						'</a>',
 
+					TPL_PAGE_HEADER: '<div class="' + CSS_PAGE_HEADER + ' form-inline">' +
+						'<textarea rows="1" placeholder="{untitledPage}" tabindex="1" class="' + CSS_PAGE_HEADER_TITLE + ' ' +
+						CSS_PAGE_HEADER_TITLE_HIDE_BORDER + ' form-control"></textarea>' +
+						'<textarea rows="1" placeholder="{aditionalInfo}" tabindex="2" class="' + CSS_PAGE_HEADER_DESCRIPTION + ' ' +
+						CSS_PAGE_HEADER_DESCRIPTION_HIDE_BORDER + ' form-control"></textarea>' +
+					'</div>',
+
 					initializer: function() {
 						var instance = this;
 
 						instance.after('titlesChange', A.bind('_afterTitlesChange', instance));
+
+						instance._bindTextAreaContentChange();
 					},
 
 					_addWizardPage: function() {
@@ -61,6 +78,16 @@ AUI.add(
 						var wizard = instance._getWizard();
 
 						wizard.set('selected', activePageNumber - 1);
+					},
+
+					_afterPageHeaderFieldsInteracts: function(e) {
+						var instance = this;
+
+						if (e.keyCode === 13) {
+							e.preventDefault();
+						}
+
+						instance._syncPageHeaderFieldSize(e.target);
 					},
 
 					_afterPagesQuantityChange: function(event) {
@@ -87,6 +114,12 @@ AUI.add(
 						instance._syncWizardItems();
 					},
 
+					_afterWindowResize: function() {
+						var instance = this;
+
+						instance._syncPageHeaderFieldsSize();
+					},
+
 					_afterWizardSelectionChange: function() {
 						var instance = this;
 
@@ -99,6 +132,25 @@ AUI.add(
 
 							instance.set('activePageNumber', selectedWizard + 1);
 						}
+
+						instance._syncPageHeaderFieldsSize();
+					},
+
+					_bindTextAreaContentChange: function() {
+						var instance = this;
+
+						var pageHeaderFieldsNodeList = instance.get('pageHeader').all('textarea');
+
+						pageHeaderFieldsNodeList.on('change', A.bind('_afterPageHeaderFieldsInteracts', instance));
+						pageHeaderFieldsNodeList.on('cut', A.bind('_afterPageHeaderFieldsInteracts', instance));
+						pageHeaderFieldsNodeList.on('paste', A.bind('_afterPageHeaderFieldsInteracts', instance));
+						pageHeaderFieldsNodeList.on('drop', A.bind('_afterPageHeaderFieldsInteracts', instance));
+						pageHeaderFieldsNodeList.on('keydown', A.bind('_afterPageHeaderFieldsInteracts', instance));
+
+						A.on('windowresize', A.bind('_afterWindowResize', instance));
+
+						instance._syncPageHeaderFieldSize(pageHeaderFieldsNodeList.item(0));
+						instance._syncPageHeaderFieldSize(pageHeaderFieldsNodeList.item(1));
 					},
 
 					_createPopover: function() {
@@ -347,6 +399,11 @@ AUI.add(
 						wizard.render();
 					},
 
+					_resizePageHeaderField: function(node) {
+						node.setStyle('height', 'auto');
+						node.setStyle('height', node.get('scrollHeight'));
+					},
+
 					_syncControlTriggersUI: function() {
 						var instance = this;
 
@@ -358,6 +415,21 @@ AUI.add(
 
 						boundingBox.all('.' + CSS_FORM_BUILDER_CONTROLS_TRIGGER).toggle(pagesQuantity > 1);
 						pageHeader.one('.' + CSS_FORM_BUILDER_CONTROLS_TRIGGER).toggle(pagesQuantity <= 1);
+					},
+
+					_syncPageHeaderFieldSize: function(node) {
+						var instance = this;
+
+						setTimeout(A.bind('_resizePageHeaderField', instance, node), 0);
+					},
+
+					_syncPageHeaderFieldsSize: function(node) {
+						var instance = this;
+
+						var pageHeaderFieldsNodeList = instance.get('pageHeader').all('textarea');
+
+						instance._syncPageHeaderFieldSize(pageHeaderFieldsNodeList.item(0));
+						instance._syncPageHeaderFieldSize(pageHeaderFieldsNodeList.item(1));
 					},
 
 					_syncWizardItems: function() {
