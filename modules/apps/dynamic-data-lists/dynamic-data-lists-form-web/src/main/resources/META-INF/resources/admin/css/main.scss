@@ -133,6 +133,13 @@ $horizontal-spacing: 35px;
 			.key-value-output {
 				color: #869CAD;
 			}
+
+			.key-value-output {
+				display: inline-block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				width: 100%;
+			}
 		}
 
 		.liferay-ddm-form-field-checkbox,
