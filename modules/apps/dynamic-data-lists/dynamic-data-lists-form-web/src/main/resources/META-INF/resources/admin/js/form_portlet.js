@@ -118,7 +118,7 @@ AUI.add(
 									resizable: false,
 									width: 720
 								},
-								id: instance.ns('publishModal'),
+								id: instance.ns('publishModalContainer'),
 								title: Liferay.Language.get('publish')
 							},
 							function(dialogWindow) {

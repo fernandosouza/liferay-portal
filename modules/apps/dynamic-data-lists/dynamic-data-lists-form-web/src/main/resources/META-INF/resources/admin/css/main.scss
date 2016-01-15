@@ -337,6 +337,16 @@ $horizontal-spacing: 35px;
 		}
 	}
 
+	@include keyframes(fade) {
+		0% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
 	.form-builder-field-settings-save .icon-spinner {
 		display: inline-block;
 		margin: -2px 0 0 4px;
@@ -354,8 +364,11 @@ $horizontal-spacing: 35px;
 	}
 
 	.help-block {
-		font-size: 14px;
 		position: absolute;
+		word-break: break-word;
+		z-index: 1;
+
+		@include animation(fade 100ms linear);
 	}
 
 	.icon-asterisk {
@@ -589,7 +602,6 @@ $horizontal-spacing: 35px;
 	}
 
 	.help-block {
-		font-size: 14px;
 		margin-top: -45px;
 	}
 
