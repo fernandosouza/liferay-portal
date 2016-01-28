@@ -152,10 +152,6 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 
 				<div class="input-group">
 					<input class="form-control" type="text" readOnly value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
-
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><liferay-ui:message key="copy-url" /></button>
-					</span>
 				</div>
 			</div>
 		</div>
