@@ -129,12 +129,6 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 		</div>
 
 		<div class="container-fluid-1280 ddl-publish-modal hide" id="<portlet:namespace />publishModal">
-			<div class="alert alert-info">
-				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
-					<liferay-ui:message key="click-here-to-preview-the-form-in-a-new-window" />
-				</a>
-			</div>
-
 			<div class="form-group">
 				<label class="control-label ddl-publish-checkbox" for="<portlet:namespace />publishCheckbox">
 					<span class="pull-left">
@@ -147,15 +141,17 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 				</label>
 			</div>
 
+			<div class="alert alert-info">
+				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
+					<liferay-ui:message key="click-here-to-preview-the-form-in-a-new-window" />
+				</a>
+			</div>
+
 			<div class="form-group">
 				<label><liferay-ui:message key="copy-this-url-to-share-the-form" /></label>
 
 				<div class="input-group">
 					<input class="form-control" type="text" readOnly value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
-
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><liferay-ui:message key="copy-url" /></button>
-					</span>
 				</div>
 			</div>
 		</div>
