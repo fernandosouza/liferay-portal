@@ -626,6 +626,18 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 			if (!content.contains(copyright)) {
 				processErrorMessage(fileName, "(c): " + fileName);
 			}
+			else if (!content.startsWith(copyright) &&
+					 !content.startsWith("<%--\n" + copyright)) {
+
+				processErrorMessage(
+					fileName, "File must start with copyright: " + fileName);
+			}
+		}
+		else if (!content.startsWith(copyright) &&
+				 !content.startsWith("<%--\n" + copyright)) {
+
+			processErrorMessage(
+				fileName, "File must start with copyright: " + fileName);
 		}
 
 		if (fileName.endsWith(".jsp") || fileName.endsWith(".jspf")) {
@@ -807,10 +819,6 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 	}
 
 	protected final void format(String fileName) throws Exception {
-		if (!fileName.endsWith("ExportImportLifecycleEventTest.java")) {
-			//return;
-		}
-
 		if (!_isMatchPath(fileName)) {
 			return;
 		}
@@ -1453,6 +1461,33 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		String beforePos = content.substring(0, pos);
 
 		return StringUtil.count(beforePos, StringPool.NEW_LINE) + 1;
+	}
+
+	protected int getLineLength(String line) {
+		int lineLength = 0;
+
+		int tabLength = 4;
+
+		for (char c : line.toCharArray()) {
+			if (c == CharPool.TAB) {
+				for (int i = 0; i < tabLength; i++) {
+					lineLength++;
+				}
+
+				tabLength = 4;
+			}
+			else {
+				lineLength++;
+
+				tabLength--;
+
+				if (tabLength <= 0) {
+					tabLength = 4;
+				}
+			}
+		}
+
+		return lineLength;
 	}
 
 	protected String getMainReleaseVersion() {
