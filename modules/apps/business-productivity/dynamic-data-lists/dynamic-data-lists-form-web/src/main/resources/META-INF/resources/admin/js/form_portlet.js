@@ -193,7 +193,6 @@ AUI.add(
 									cssClass: 'publish-modal-container',
 									height: 400,
 									resizable: false,
-									width: 720,
 									'toolbars.footer': [
 										{
 											cssClass: 'btn-lg btn-primary',
@@ -209,7 +208,8 @@ AUI.add(
 												click: A.bind('_onCancelPublishModal', instance)
 											}
 										}
-									]
+									],
+									width: 720
 								},
 								id: instance.ns('publishModalContainer'),
 								title: Liferay.Language.get('publish')
@@ -339,7 +339,7 @@ AUI.add(
 					_onConfirmPublishModal: function() {
 						var instance = this;
 
-						instance._setFormAsPublish();
+						instance._setFormAsPublished();
 
 						Liferay.Util.getWindow(instance.ns('publishModalContainer')).hide();
 					},
@@ -360,7 +360,7 @@ AUI.add(
 						instance.submitForm();
 					},
 
-					_setFormAsPublish: function() {
+					_setFormAsPublished: function() {
 						var instance = this;
 
 						var publishCheckbox = instance.one('#publishCheckbox');
