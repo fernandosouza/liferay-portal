@@ -20,7 +20,7 @@
 			</if>
 		</for>
 
-		<execute function="AssertClick" locator1="Button#SAVE" value1="Save" />
+		<execute macro="Button#clickSave" />
 		<execute function="AssertTextEquals#assertPartialText" locator1="Permissions#SUCCESS_MESSAGE" value1="Your request completed successfully." />
 	</command>
 
@@ -243,7 +243,11 @@
 
 		<execute function="AssertClick" locator1="MessageBoards#THREAD_LIST_THREAD" value1="${threadSubject}" />
 
-		<execute function="AssertClick" locator1="MessageBoardsThread#MESSAGE_REPLY_PERMISSIONS_1" value1="Permissions" />
+		<var name="key_threadReplyBody" value="${threadReplyBody}" />
+
+		<execute function="Click" locator1="MessageBoards#THREAD_REPLY_ACTIONS" />
+
+		<execute function="AssertClick" locator1="MenuItem#PERMISSIONS_LEXICON" value1="Permissions" />
 
 		<execute function="SelectFrame" locator1="Permissions#PERMISSIONS_IFRAME" />
 	</command>
@@ -309,7 +313,7 @@
 			<var name="site" value="${siteScopeName}" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="${portletName}" />
 		</execute>
 
@@ -354,11 +358,7 @@
 		<execute function="Click#waitForMenuToggleJSClick" locator1="Icon#ROW_VERTICAL_ELLIPSIS" />
 		<execute function="AssertClick" locator1="MenuItem#PERMISSIONS_LEXICON" value1="Permissions" />
 
-		<execute function="SelectFrame" locator1="Permissions#PERMISSIONS_IFRAME" />
-
-		<var name="key_assetTitle" value="${webContentTitle}" />
-
-		<execute function="AssertTextEquals" locator1="Permissions#ASSET_TITLE" value1="${webContentTitle}" />
+		<execute macro="IFrame#selectPermissionsFrame" />
 	</command>
 
 	<command name="viewPermissionsChecked">

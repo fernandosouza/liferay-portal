@@ -74,6 +74,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>DETAILS</td>
+	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(@class,'dropdown-toggle')]/span[contains(.,'Details')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>DOCUMENT_TYPES</td>
 	<td>//*[@data-qa-id='navigation']//a[contains(.,'Document Types')]</td>
 	<td></td>
@@ -129,8 +134,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ORGANIZATION_ROLES</td>
+	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'Organization Roles')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>PERMISSIONS</td>
 	<td>//ul[contains(@class,'nav') and contains(@class,'navbar-nav')]/li/a[contains(.,'Permissions')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>REGULAR_ROLES</td>
+	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'Regular Roles')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -161,6 +176,11 @@
 <tr>
 	<td>SHARING</td>
 	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'Sharing')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ROLES</td>
+	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'Site Roles')]</td>
 	<td></td>
 </tr>
 <tr>

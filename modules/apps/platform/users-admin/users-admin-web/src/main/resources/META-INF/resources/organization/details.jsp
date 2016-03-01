@@ -58,8 +58,6 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 <aui:model-context bean="<%= organization %>" model="<%= Organization.class %>" />
 
-<h3><liferay-ui:message key="details" /></h3>
-
 <div class="row">
 	<aui:fieldset cssClass="col-md-6">
 		<liferay-ui:error exception="<%= DuplicateOrganizationException.class %>" message="the-organization-name-is-already-taken" />
@@ -114,10 +112,6 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 			<aui:select label="region" name="regionId" />
 		</div>
-
-		<c:if test="<%= organization != null %>">
-			<aui:input name="siteId" type="resource" value="<%= String.valueOf(groupId) %>" />
-		</c:if>
 	</aui:fieldset>
 
 	<aui:fieldset cssClass="col-md-6">
@@ -222,10 +216,9 @@ if (parentOrganization != null) {
 
 <liferay-ui:icon
 	cssClass="modify-link"
-	iconCssClass="icon-search"
 	id="selectOrganizationLink"
 	label="<%= true %>"
-	linkCssClass="btn btn-default"
+	linkCssClass="btn btn-default btn-lg"
 	message="select"
 	method="get"
 	url="javascript:;"

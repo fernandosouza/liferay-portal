@@ -2,8 +2,11 @@ AUI.add(
 	'liferay-ddl-form-builder',
 	function(A) {
 		var AArray = A.Array;
+
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
+
 		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
+
 		var Lang = A.Lang;
 
 		var CSS_FORM_BUILDER_TABS = A.getClassName('form', 'builder', 'tabs');
@@ -96,6 +99,8 @@ AUI.add(
 						visitor.set('fieldHandler', instance.destroyField);
 
 						visitor.visit();
+
+						(new A.EventHandle(instance._eventHandlers)).detach();
 					},
 
 					createField: function(fieldType) {
@@ -127,6 +132,8 @@ AUI.add(
 
 						var fieldType = instance.findTypeOfField(field);
 
+						field.setPrimaryButtonLabel(Liferay.Language.get('save'));
+
 						instance.showFieldSettingsPanel(
 							field,
 							Lang.sub(
@@ -140,6 +147,25 @@ AUI.add(
 						var instance = this;
 
 						return FieldTypes.get(field.get('type'));
+					},
+
+					showFieldSettingsPanel: function(field, typeName) {
+						var instance = this;
+
+						if (!instance._fieldSettingsModal) {
+							instance._fieldSettingsModal = new Liferay.DDL.FormBuilderFieldSettingsModal(
+								{
+									portletNamespace: instance.get('portletNamespace')
+								}
+							);
+
+							instance._eventHandlers.push(
+								instance._fieldSettingsModal.after('hide', A.bind(instance._afterFieldSettingsModalHide, instance)),
+								instance._fieldSettingsModal.after('save', A.bind(instance._afterFieldSettingsModalSave, instance))
+							);
+						}
+
+						instance._fieldSettingsModal.show(field, typeName);
 					},
 
 					_afterActivePageNumberChange: function() {
@@ -179,10 +205,14 @@ AUI.add(
 
 						var fieldType = event.fieldType;
 
+						var field = instance.createField(fieldType);
+
 						instance.hideFieldsPanel();
 
+						field.setPrimaryButtonLabel(Liferay.Language.get('add'));
+
 						instance.showFieldSettingsPanel(
-							instance.createField(fieldType),
+							field,
 							Lang.sub(
 								Liferay.Language.get('add-x-field'),
 								[fieldType.get('label')]
@@ -357,6 +387,7 @@ AUI.add(
 								strings: {
 									addField: Liferay.Language.get('choose-a-field-type')
 								},
+								topFixed: true,
 								visible: false
 							}
 						);
@@ -393,6 +424,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );

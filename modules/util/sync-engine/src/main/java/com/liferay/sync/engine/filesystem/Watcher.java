@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
@@ -57,19 +58,27 @@ public abstract class Watcher implements Runnable {
 		init();
 	}
 
+	public void addDeletedFilePathName(String filePathName) {
+		_deletedFilePathNames.add(filePathName);
+	}
+
+	public void addDownloadedFilePathName(String filePathName) {
+		_downloadedFilePathNames.add(filePathName);
+	}
+
 	public void close() {
 		WatcherManager.removeWatcher(_watchEventListener.getSyncAccountId());
 	}
 
-	public List<String> getDeletedFilePathNames() {
-		return _deletedFilePathNames;
-	}
-
-	public List<String> getDownloadedFilePathNames() {
-		return _downloadedFilePathNames;
-	}
-
 	public abstract void registerFilePath(Path filePath) throws IOException;
+
+	public void removeDeletedFilePathName(String filePathName) {
+		_deletedFilePathNames.remove(filePathName);
+	}
+
+	public void removeDownloadedFilePathName(String filePathName) {
+		_downloadedFilePathNames.remove(filePathName);
+	}
 
 	public abstract void unregisterFilePath(Path filePath);
 
@@ -252,8 +261,7 @@ public abstract class Watcher implements Runnable {
 		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 			_watchEventListener.getSyncAccountId());
 
-		Path syncAccountFilePath = java.nio.file.Paths.get(
-			syncAccount.getFilePathName());
+		Path syncAccountFilePath = Paths.get(syncAccount.getFilePathName());
 
 		if (!FileUtil.exists(syncAccountFilePath)) {
 			if (_logger.isTraceEnabled()) {

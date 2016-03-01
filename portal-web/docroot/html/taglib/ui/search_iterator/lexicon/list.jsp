@@ -38,7 +38,7 @@ if (!resultRowSplitterEntries.isEmpty()) {
 %>
 
 <div class="table-responsive">
-	<table class="table table-list">
+	<table class="display-style-list table table-list">
 		<c:if test="<%= ListUtil.isNotNull(headerNames) %>">
 			<thead>
 				<tr>
@@ -96,7 +96,7 @@ if (!resultRowSplitterEntries.isEmpty()) {
 						String headerNameValue = null;
 
 						if ((rowChecker == null) || (i > 0)) {
-							headerNameValue = LanguageUtil.get(request, HtmlUtil.escape(headerName));
+							headerNameValue = LanguageUtil.get(resourceBundle, HtmlUtil.escape(headerName));
 						}
 						else {
 							headerNameValue = headerName;

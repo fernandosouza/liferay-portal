@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.liferay.portal</groupId>
-		<artifactId>portal-parent</artifactId>
+		<artifactId>com.liferay.portal.parent</artifactId>
 		<version>@version@</version>
 	</parent>
 	<groupId>com.liferay.portal</groupId>
-	<artifactId>portal-client</artifactId>
+	<artifactId>com.liferay.portal.client</artifactId>
 	<name>Liferay Portal Client</name>
 	<version>@version@</version>
 	<description>Provides access to the portal services through SOAP.</description>

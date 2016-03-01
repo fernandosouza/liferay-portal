@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.liferay.portal</groupId>
-		<artifactId>portal-parent</artifactId>
+		<artifactId>com.liferay.portal.parent</artifactId>
 		<version>@version@</version>
 	</parent>
 	<groupId>com.liferay.portal</groupId>
-	<artifactId>support-tomcat</artifactId>
+	<artifactId>com.liferay.support.tomcat</artifactId>
 	<name>Liferay Tomcat Support</name>
 	<version>@version@</version>
 	<description>Contains Tomcat support classes.</description>

@@ -5,8 +5,6 @@ AUI.add(
 
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
-		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
-
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 
 		var CSS_FIELD_CONTENT_TOOLBAR = A.getClassName('form', 'builder', 'field', 'content', 'toolbar');
@@ -33,15 +31,19 @@ AUI.add(
 				value: null
 			},
 
-			dataProviders: {
-			},
-
 			content: {
 				getter: function() {
 					var instance = this;
 
 					return instance.get('container');
 				}
+			},
+
+			dataProviders: {
+			},
+
+			footerToolbar: {
+				setter: '_setFooterToolbar'
 			},
 
 			settingsForm: {
@@ -137,13 +139,25 @@ AUI.add(
 				instance._previousSettings = JSON.stringify(instance.getSettings());
 			},
 
+			setPrimaryButtonLabel: function(label) {
+				var instance = this;
+
+				instance.set(
+					'footerToolbar',
+					[
+						{
+							label: label
+						}
+					]
+				);
+			},
+
 			validate: Lang.emptyFn,
 
 			_bindModalUI: function(settingsModal) {
 				var instance = this;
 
 				instance._modalEventHandlers = [
-					settingsModal.on('xyChange', instance._onModalXYChange),
 					settingsModal.on('visibleChange', A.bind('_onModalVisibleChange', instance))
 				];
 			},
@@ -181,10 +195,6 @@ AUI.add(
 				}
 			},
 
-			_onModalXYChange: function(event) {
-				event.newVal = FormBuilderUtil.normalizeModalXY(event.newVal);
-			},
-
 			_renderFormBuilderField: function() {
 				var instance = this;
 
@@ -218,11 +228,6 @@ AUI.add(
 
 				settingsModalBoundingBox.addClass(CSS_FIELD_SETTINGS_MODAL);
 
-				var portletNode = A.one('#p_p_id' + instance.get('portletNamespace'));
-
-				settingsModal.set('centered', portletNode);
-				settingsModal.set('zIndex', Liferay.zIndex.OVERLAY);
-
 				instance._bindModalUI(settingsModal);
 
 				instance._previousSettings = JSON.stringify(instance.getSettings());
@@ -232,6 +237,39 @@ AUI.add(
 				var closeButton = settingsModal.toolbars.header.item(0);
 
 				closeButton.set('labelHTML', Liferay.Util.getLexiconIconTpl('times'));
+			},
+
+			_setFooterToolbar: function(toolbarItem) {
+				var instance = this;
+
+				var toolbar = [
+					{
+						cssClass: ['btn-lg btn-primary', CSS_FIELD_SETTINGS_SAVE].join(' '),
+						label: Liferay.Language.get('save'),
+						on: {
+							click: A.bind('_onClickModalSave', instance)
+						}
+					},
+					{
+						cssClass: 'btn-lg btn-link',
+						label: Liferay.Language.get('cancel'),
+						on: {
+							click: A.bind('_onClickModalClose', instance)
+						}
+					}
+				];
+
+				if (toolbarItem) {
+					toolbar.forEach(
+						function(item, index) {
+							if (toolbarItem[index]) {
+								toolbar[index] = A.merge(item, toolbarItem[index]);
+							}
+						}
+					);
+				}
+
+				return toolbar;
 			},
 
 			_showConfirmationToolbar: function() {
@@ -272,30 +310,12 @@ AUI.add(
 				footerNode.prepend(instance._confirmationMessage);
 			},
 
-			_showDefaultToolbar: function() {
+			_showDefaultToolbar: function(label) {
 				var instance = this;
 
 				var settingsModal = instance.getSettingsModal()._modal;
 
-				settingsModal.addToolbar(
-					[
-						{
-							cssClass: ['btn-lg btn-primary', CSS_FIELD_SETTINGS_SAVE].join(' '),
-							label: Liferay.Language.get('save'),
-							on: {
-								click: A.bind('_onClickModalSave', instance)
-							}
-						},
-						{
-							cssClass: 'btn-lg btn-link',
-							label: Liferay.Language.get('cancel'),
-							on: {
-								click: A.bind('_onClickModalClose', instance)
-							}
-						}
-					],
-					'footer'
-				);
+				settingsModal.addToolbar(instance.get('footerToolbar'), 'footer');
 			},
 
 			_updateSettingsFormValues: function() {

@@ -14,9 +14,8 @@
 
 package com.liferay.portal.upgrade.v7_0_0;
 
-import com.liferay.portal.dao.orm.common.SQLTransformer;
-import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -70,44 +69,28 @@ public class UpgradePortalPreferences extends UpgradeProcess {
 	}
 
 	protected void upgradeStagingPortalPreferences() throws Exception {
-		PreparedStatement ps1 = null;
-		ResultSet rs = null;
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps1 = connection.prepareStatement(
+				"select portalPreferencesId, preferences from " +
+					"PortalPreferences");
+			ResultSet rs = ps1.executeQuery();
+			PreparedStatement ps2 = AutoBatchPreparedStatementUtil.autoBatch(
+				connection.prepareStatement(
+					"update PortalPreferences set preferences = ? " +
+						"where portalPreferencesId = ?"))) {
 
-		try {
-			ps1 = connection.prepareStatement(
-				SQLTransformer.transform(
-					"select portalPreferencesId, preferences from " +
-						"PortalPreferences where CAST_TEXT(preferences) like " +
-							"?"));
+			while (rs.next()) {
+				long portalPreferencesId = rs.getLong("portalPreferencesId");
 
-			ps1.setString(1, "%com.liferay.portlet.kernel.staging.Staging%");
+				String preferences = rs.getString("preferences");
 
-			rs = ps1.executeQuery();
+				ps2.setString(1, convertStagingPreferencesToJSON(preferences));
+				ps2.setLong(2, portalPreferencesId);
 
-			try (PreparedStatement ps2 =
-					AutoBatchPreparedStatementUtil.autoBatch(
-						connection.prepareStatement(
-							"update PortalPreferences set preferences = ? " +
-								"where portalPreferencesId = ?"))) {
-
-				while (rs.next()) {
-					long portalPreferencesId = rs.getLong(
-						"portalPreferencesId");
-
-					String preferences = rs.getString("preferences");
-
-					ps2.setString(
-						1, convertStagingPreferencesToJSON(preferences));
-					ps2.setLong(2, portalPreferencesId);
-
-					ps2.addBatch();
-				}
-
-				ps2.executeBatch();
+				ps2.addBatch();
 			}
-		}
-		finally {
-			DataAccess.cleanUp(ps1, rs);
+
+			ps2.executeBatch();
 		}
 	}
 

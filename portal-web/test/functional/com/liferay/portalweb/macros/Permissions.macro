@@ -413,7 +413,7 @@
 			<var name="site" value="Site Name" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -509,7 +509,7 @@
 			<var name="site" value="Site Name" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -527,6 +527,7 @@
 
 		<execute macro="Page#add">
 			<var name="page" value="${page}" />
+			<var name="pageName" value="${pageName}" />
 			<var name="pageTemplateName" value="${pageTemplateName}" />
 			<var name="siteName" value="${siteName}" />
 			<var name="sitePageName" value="${pageName}" />
@@ -549,7 +550,7 @@
 			<var name="site" value="Site Name" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -608,7 +609,7 @@
 			<var name="site" value="Site Name" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -666,7 +667,7 @@
 			<var name="site" value="Site Name" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -725,7 +726,7 @@
 			<var name="site" value="${siteName}" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Memberships" />
 		</execute>
 
@@ -741,7 +742,7 @@
 			<var name="site" value="${siteName}" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoSitesUsers">
+		<execute macro="ProductMenu#gotoSitesMembers">
 			<var name="portlet" value="Site Teams" />
 		</execute>
 

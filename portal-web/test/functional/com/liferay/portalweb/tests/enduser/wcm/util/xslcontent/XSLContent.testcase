@@ -119,12 +119,9 @@
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XML Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XML Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XML Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -134,20 +131,13 @@
 
 		<echo message="xml url ${xmlURL}" />
 
-		<execute macro="ProductMenu#gotoSite">
-			<var name="site" value="Site Name" />
-		</execute>
-
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XSL Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XSL Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XSL Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -174,7 +164,7 @@
 
 		<execute function="Click" locator1="Button#SAVE" />
 
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Alert#viewSuccessMessage" />
 
 		<execute function="SelectFrameTop" value1="relative=top" />
 
@@ -260,12 +250,9 @@
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test Corrupt XML Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test Corrupt XML Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test Corrupt XML Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -275,20 +262,13 @@
 
 		<echo message="xml url ${xmlURL}" />
 
-		<execute macro="ProductMenu#gotoSite">
-			<var name="site" value="Site Name" />
-		</execute>
-
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XSL Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XSL Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XSL Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -315,7 +295,7 @@
 
 		<execute function="Click" locator1="Button#SAVE" />
 
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Alert#viewSuccessMessage" />
 
 		<execute function="SelectFrameTop" value1="relative=top" />
 
@@ -389,12 +369,9 @@
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XML Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XML Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XML Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -404,20 +381,13 @@
 
 		<echo message="xml url ${xmlURL}" />
 
-		<execute macro="ProductMenu#gotoSite">
-			<var name="site" value="Site Name" />
-		</execute>
-
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test Corrupt XSL Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test Corrupt XSL Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test Corrupt XSL Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -444,7 +414,7 @@
 
 		<execute function="Click" locator1="Button#SAVE" />
 
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Alert#viewSuccessMessage" />
 
 		<execute function="SelectFrameTop" value1="relative=top" />
 
@@ -516,12 +486,9 @@
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XML Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XML Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XML Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -531,20 +498,13 @@
 
 		<echo message="xml url ${xmlURL}" />
 
-		<execute macro="ProductMenu#gotoSite">
-			<var name="site" value="Site Name" />
-		</execute>
-
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Documents and Media" />
 		</execute>
 
-		<var name="key_dmDocumentTitle" value="Test XSL Title" />
-
-		<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE" value1="Test XSL Title" />
-		<execute function="ClickNoError" locator1="Link#URL" />
-
-		<execute function="Pause" locator1="5000" />
+		<execute macro="XSLContent#gotoDocumentURL">
+			<var name="dmDocumentTitle" value="Test XSL Title" />
+		</execute>
 
 		<var method="selenium#getElementValue('//input[contains(@id,\'url\')]')" name="valueName" />
 
@@ -571,7 +531,7 @@
 
 		<execute function="Click" locator1="Button#SAVE" />
 
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Alert#viewSuccessMessage" />
 
 		<execute function="SelectFrameTop" value1="relative=top" />
 

@@ -26,9 +26,7 @@
 
 		<execute function="Select" locator1="Select#SCOPE" value1="${scopeSelection}" />
 
-		<execute function="AssertClick" locator1="Button#SAVE" value1="Save" />
-
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#SUCCESS" value1="You have successfully updated the setup." />
+		<execute macro="PortletEntry#save" />
 	</command>
 
 	<command name="enableSocialBookmarkSites">
@@ -42,7 +40,7 @@
 	</command>
 
 	<command name="saveConfigurationIFrame">
-		<execute function="AssertClick" locator1="Button#SAVE" value1="Save" />
+		<execute macro="Button#clickSave" />
 	</command>
 
 	<command name="selectConfigurationIFrame">
@@ -78,7 +76,7 @@
 
 		<execute function="Click" locator1="Button#SAVE" />
 
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#SUCCESS" value1="You have successfully updated the setup." />
+		<execute macro="Alert#viewSuccessMessage" />
 
 		<execute macro="BlogsConfiguration#viewScopeSelection">
 			<var name="scopeSelection" value="${scopeSelection}" />
@@ -133,7 +131,9 @@
 	</command>
 
 	<command name="viewNoPermissionCP">
-		<execute function="AssertTextEquals" locator1="Portlet#TITLE" value1="Blogs" />
+		<var name="key_portletTitle" value="Blogs" />
+
+		<execute function="AssertTextEquals" locator1="Home#SITE_ADMINISTRATION_PORTLET_TITLE" value1="Blogs" />
 		<execute function="AssertElementPresent" locator1="NavBar#CONTAINER" />
 		<execute function="AssertTextEquals" locator1="Message#EMPTY_INFO" value1="No entries were found." />
 	</command>

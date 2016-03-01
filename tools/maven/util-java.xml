@@ -4,18 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.liferay.portal</groupId>
-		<artifactId>portal-parent</artifactId>
+		<artifactId>com.liferay.portal.parent</artifactId>
 		<version>@version@</version>
 	</parent>
 	<groupId>com.liferay.portal</groupId>
-	<artifactId>util-java</artifactId>
+	<artifactId>com.liferay.util.java</artifactId>
 	<name>Liferay Util Java</name>
 	<version>@version@</version>
 	<description>Contains useful utilities. Classes are loaded separately for each plugin.</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.liferay.portal</groupId>
-			<artifactId>portal-service</artifactId>
+			<artifactId>com.liferay.portal.kernel</artifactId>
 			<version>@version@</version>
 			<scope>provided</scope>
 		</dependency>

@@ -46,6 +46,7 @@ import com.liferay.portal.kernel.zip.ZipReader;
 import com.liferay.portal.kernel.zip.ZipReaderFactoryUtil;
 import com.liferay.portlet.asset.util.AssetUtil;
 import com.liferay.wiki.configuration.WikiGroupServiceConfiguration;
+import com.liferay.wiki.engine.impl.WikiEngineRenderer;
 import com.liferay.wiki.exception.ImportFilesException;
 import com.liferay.wiki.exception.NoSuchPageException;
 import com.liferay.wiki.importer.WikiImporter;
@@ -55,7 +56,7 @@ import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.service.WikiPageLocalService;
 import com.liferay.wiki.translator.MediaWikiToCreoleTranslator;
-import com.liferay.wiki.util.WikiUtil;
+import com.liferay.wiki.validator.WikiPageTitleValidator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +72,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -148,12 +148,6 @@ public class MediaWikiImporter implements WikiImporter {
 		}
 	}
 
-	@Activate
-	protected void activate() {
-		_wikiPageTitlesRemovePattern = Pattern.compile(
-			_wikiGroupServiceConfiguration.pageTitlesRemoveRegexp());
-	}
-
 	protected String getCreoleRedirectContent(String redirectTitle) {
 		return StringPool.DOUBLE_OPEN_BRACKET + redirectTitle +
 			StringPool.DOUBLE_CLOSE_BRACKET;
@@ -197,7 +191,8 @@ public class MediaWikiImporter implements WikiImporter {
 
 			String format = FORMAT_MEDIAWIKI;
 
-			Collection<String> supportedFormats = WikiUtil.getFormats();
+			Collection<String> supportedFormats =
+				_wikiEngineRenderer.getFormats();
 
 			if (Validator.isNotNull(redirectTitle)) {
 				content = getCreoleRedirectContent(redirectTitle);
@@ -286,7 +281,7 @@ public class MediaWikiImporter implements WikiImporter {
 			options, WikiImporterKeys.OPTIONS_FRONT_PAGE);
 
 		if (Validator.isNotNull(frontPageTitle)) {
-			frontPageTitle = normalizeTitle(frontPageTitle);
+			frontPageTitle = _wikiPageTitleValidator.normalize(frontPageTitle);
 
 			try {
 				if (_wikiPageLocalService.getPagesCount(
@@ -330,14 +325,6 @@ public class MediaWikiImporter implements WikiImporter {
 		description = matcher.replaceAll(StringPool.BLANK);
 
 		return normalize(description, 255);
-	}
-
-	protected String normalizeTitle(String title) {
-		Matcher matcher = _wikiPageTitlesRemovePattern.matcher(title);
-
-		title = matcher.replaceAll(StringPool.BLANK);
-
-		return StringUtil.shorten(title, 255);
 	}
 
 	protected void processImages(
@@ -487,7 +474,7 @@ public class MediaWikiImporter implements WikiImporter {
 				continue;
 			}
 
-			title = normalizeTitle(title);
+			title = _wikiPageTitleValidator.normalize(title);
 
 			percentage = Math.min(
 				10 + (i * (maxPercentage - percentage)) / pageElements.size(),
@@ -609,7 +596,7 @@ public class MediaWikiImporter implements WikiImporter {
 		if (matcher.find()) {
 			redirectTitle = matcher.group(1);
 
-			redirectTitle = normalizeTitle(redirectTitle);
+			redirectTitle = _wikiPageTitleValidator.normalize(redirectTitle);
 
 			redirectTitle += " (disambiguation)";
 		}
@@ -625,7 +612,7 @@ public class MediaWikiImporter implements WikiImporter {
 		if (matcher.find()) {
 			redirectTitle = matcher.group(1);
 
-			redirectTitle = normalizeTitle(redirectTitle);
+			redirectTitle = _wikiPageTitleValidator.normalize(redirectTitle);
 		}
 
 		return redirectTitle;
@@ -709,6 +696,13 @@ public class MediaWikiImporter implements WikiImporter {
 	}
 
 	@Reference(unbind = "-")
+	protected void setWikiEngineRenderer(
+		WikiEngineRenderer wikiEngineRenderer) {
+
+		_wikiEngineRenderer = wikiEngineRenderer;
+	}
+
+	@Reference(unbind = "-")
 	protected void setWikiGroupServiceConfiguration(
 		WikiGroupServiceConfiguration wikiGroupServiceConfiguration) {
 
@@ -720,6 +714,13 @@ public class MediaWikiImporter implements WikiImporter {
 		WikiPageLocalService wikiPageLocalService) {
 
 		_wikiPageLocalService = wikiPageLocalService;
+	}
+
+	@Reference(unbind = "-")
+	protected void setWikiPageTitleValidator(
+		WikiPageTitleValidator wikiPageTitleValidator) {
+
+		_wikiPageTitleValidator = wikiPageTitleValidator;
 	}
 
 	protected String translateMediaWikiImagePaths(String content) {
@@ -758,8 +759,9 @@ public class MediaWikiImporter implements WikiImporter {
 	private final MediaWikiToCreoleTranslator _translator =
 		new MediaWikiToCreoleTranslator();
 	private UserLocalService _userLocalService;
+	private WikiEngineRenderer _wikiEngineRenderer;
 	private WikiGroupServiceConfiguration _wikiGroupServiceConfiguration;
 	private WikiPageLocalService _wikiPageLocalService;
-	private Pattern _wikiPageTitlesRemovePattern;
+	private WikiPageTitleValidator _wikiPageTitleValidator;
 
 }

@@ -76,8 +76,6 @@ if (organization != null) {
 }
 %>
 
-<h3><liferay-ui:message key="organization-site" /></h3>
-
 <c:choose>
 	<c:when test="<%= (organizationGroup == null) || GroupPermissionUtil.contains(permissionChecker, organizationGroup, ActionKeys.UPDATE) %>">
 		<aui:fieldset>
@@ -98,7 +96,9 @@ if (organization != null) {
 				editOrganizationSiteURL.setParameter("viewOrganizationsRedirect", currentURL);
 				%>
 
-				<aui:field-wrapper>
+				<aui:input inlineField="<%= true %>" name="siteId" type="resource" value="<%= String.valueOf(organizationGroup.getGroupId()) %>" />
+
+				<aui:field-wrapper inlineField="<%= true %>">
 					<liferay-ui:icon
 						iconCssClass="icon-cog"
 						label="<%= true %>"

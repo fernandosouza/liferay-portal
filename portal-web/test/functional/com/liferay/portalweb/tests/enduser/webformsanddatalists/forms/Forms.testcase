@@ -98,7 +98,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -158,9 +158,7 @@
 			<var name="selectOption" value="List" />
 		</execute>
 
-		<execute macro="Button#clickSave" />
-
-		<execute macro="Alert#viewRequestCompletedSuccessMessage" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Forms" />
@@ -348,6 +346,8 @@
 
 		<execute macro="Form#clickPublishSwitcher" />
 
+		<execute macro="Button#clickConfirm" />
+
 		<execute macro="Form#viewFormPublish">
 			<var name="fieldLabel" value="Text Field" />
 			<var name="fieldName" value="TextField" />
@@ -364,6 +364,8 @@
 		<execute macro="FormsAdminNavigator#gotoPublish" />
 
 		<execute macro="Form#clickPublishSwitcher" />
+
+		<execute macro="Button#clickConfirm" />
 
 		<execute macro="Form#viewFormNotPublished" />
 	</command>
@@ -416,7 +418,7 @@
 			<var name="formName" value="Test Form" />
 		</execute>
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -538,7 +540,7 @@
 
 		<execute macro="Form#gotoAddFirstField">
 			<var name="fieldType" value="Text" />
-			<var name="previousFieldName" value="name" />
+			<var name="previousFieldLabel" value="name" />
 		</execute>
 
 		<execute macro="Form#editFieldLabel">
@@ -598,7 +600,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -686,7 +688,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -754,7 +756,7 @@
 
 		<execute macro="Form#gotoAddAdditionalField">
 			<var name="fieldType" value="Checkbox" />
-			<var name="previousFieldName" value="TextField" />
+			<var name="previousFieldLabel" value="Text Field" />
 		</execute>
 
 		<execute macro="Form#editFieldLabel">
@@ -765,7 +767,7 @@
 
 		<execute macro="Form#gotoAddAdditionalField">
 			<var name="fieldType" value="Radio" />
-			<var name="previousFieldName" value="CheckboxField" />
+			<var name="previousFieldLabel" value="Checkbox Field" />
 		</execute>
 
 		<execute macro="Form#editFieldLabel">
@@ -787,7 +789,7 @@
 
 		<execute macro="Form#gotoAddAdditionalField">
 			<var name="fieldType" value="Select" />
-			<var name="previousFieldName" value="RadioField" />
+			<var name="previousFieldLabel" value="Radio Field" />
 		</execute>
 
 		<execute macro="Form#editFieldLabel">
@@ -826,7 +828,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -996,7 +998,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1018,7 +1020,7 @@
 		<execute macro="FormsAdminNavigator#gotoViewEntries" />
 
 		<execute macro="FormsAdmin#viewFormTableEntry">
-			<var name="fieldLabel" value="Form" />
+			<var name="fieldLabel" value="Status" />
 			<var name="fieldValue" value="Approved" />
 		</execute>
 
@@ -1078,7 +1080,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1163,7 +1165,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1262,7 +1264,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1354,7 +1356,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1435,7 +1437,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1519,7 +1521,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1601,7 +1603,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1737,7 +1739,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1856,7 +1858,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />
@@ -1900,7 +1902,7 @@
 
 		<execute macro="Form#gotoAddAdditionalField">
 			<var name="fieldType" value="Text" />
-			<var name="previousFieldName" value="VisibleField" />
+			<var name="previousFieldLabel" value="Visible Field" />
 		</execute>
 
 		<execute macro="Form#editFieldLabel">
@@ -1911,7 +1913,7 @@
 
 		<execute macro="FormFields#editText">
 			<var name="fieldName" value="visibility" />
-			<var name="fieldValue" value="VisibleField.equals(&quot;test&quot;)" />
+			<var name="fieldValue" value="equals(VisibleField, &quot;test&quot;)" />
 		</execute>
 
 		<execute macro="FormFields#save" />
@@ -1931,7 +1933,7 @@
 
 		<execute macro="FormPortletConfiguration#selectForm" />
 
-		<execute macro="FormPortletConfiguration#save" />
+		<execute macro="PortletEntry#save" />
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Form Page" />

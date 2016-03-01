@@ -33,6 +33,8 @@ portletDisplay.setURLBack(redirect);
 renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-form") : LanguageUtil.get(request, "edit-form"));
 %>
 
+<div class="loading-animation" id="<portlet:namespace />loader"></div>
+
 <portlet:actionURL name="addRecordSet" var="addRecordSetURL">
 	<portlet:param name="mvcPath" value="/admin/edit_record_set.jsp" />
 </portlet:actionURL>
@@ -41,7 +43,7 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 	<portlet:param name="mvcPath" value="/admin/edit_record_set.jsp" />
 </portlet:actionURL>
 
-<div class="portlet-forms" id="<portlet:namespace />formContainer">
+<div class="hide portlet-forms" id="<portlet:namespace />formContainer">
 	<aui:form action="<%= (recordSet == null) ? addRecordSetURL : updateRecordSetURL %>" cssClass="ddl-form-builder-form" method="post" name="editForm">
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 		<aui:input name="recordSetId" type="hidden" value="<%= recordSetId %>" />
@@ -98,13 +100,13 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 		<aui:fieldset cssClass="ddl-form-basic-info">
 			<div class="container-fluid-1280">
 				<h1>
-					<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-name" editorName="alloyeditor" name="nameEditor" onChangeMethod="OnChangeEditor" onInitMethod="OnInitEditor" placeholder="untitled-form" showSource="<%= false %>" />
+					<liferay-ui:input-editor autoCreate="<%= false %>" contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(name, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-name" editorName="alloyeditor" name="nameEditor" onChangeMethod="OnChangeEditor" onInitMethod="OnInitEditor" placeholder="untitled-form" showSource="<%= false %>" />
 				</h1>
 
 				<aui:input name="name" type="hidden" />
 
 				<h2>
-					<liferay-ui:input-editor contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-description" editorName="alloyeditor" name="descriptionEditor" placeholder="add-a-short-description-for-this-form" showSource="<%= false %>" />
+					<liferay-ui:input-editor autoCreate="<%= false %>" contents="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(description, themeDisplay.getLanguageId())) %>" cssClass="ddl-form-description" editorName="alloyeditor" name="descriptionEditor" placeholder="add-a-short-description-for-this-form" showSource="<%= false %>" />
 				</h2>
 
 				<aui:input name="description" type="hidden" />
@@ -115,9 +117,7 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			<aui:input name="definition" type="hidden" />
 			<aui:input name="layout" type="hidden" />
 
-			<div id="<portlet:namespace />formBuilder">
-				<span class="ddl-loader icon-refresh icon-spin" id="<portlet:namespace />loader"></span>
-			</div>
+			<div id="<portlet:namespace />formBuilder"></div>
 		</aui:fieldset>
 
 		<div class="container-fluid-1280">
@@ -141,12 +141,6 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 		</aui:script>
 
 		<div class="container-fluid-1280 ddl-publish-modal hide" id="<portlet:namespace />publishModal">
-			<div class="alert alert-info">
-				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
-					<liferay-ui:message key="click-here-to-preview-the-form-in-a-new-window" />
-				</a>
-			</div>
-
 			<div class="form-group">
 				<label class="control-label ddl-publish-checkbox" for="<portlet:namespace />publishCheckbox">
 					<span class="pull-left">
@@ -159,14 +153,20 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 				</label>
 			</div>
 
+			<div class="alert alert-info">
+				<a href="<%= ddlFormAdminDisplayContext.getPreviewFormURL() %>" target="_blank">
+					<liferay-ui:message key="click-here-to-preview-the-form-in-a-new-window" />
+				</a>
+			</div>
+
 			<div class="form-group">
 				<label><liferay-ui:message key="copy-this-url-to-share-the-form" /></label>
 
 				<div class="input-group">
-					<input class="form-control" type="text" readOnly value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
+					<input class="form-control" id="<portlet:namespace />clipboard" readOnly type="text" value="<%= ddlFormAdminDisplayContext.getPublishedFormURL() %>" />
 
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><liferay-ui:message key="copy-url" /></button>
+						<button class="btn btn-default" data-clipboard data-target="#<portlet:namespace />clipboard" type="button"><liferay-ui:message key="copy-url" /></button>
 					</span>
 				</div>
 			</div>
@@ -202,8 +202,10 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 										{
 											dataProviders: <%= ddlFormAdminDisplayContext.getSerializedDDMDataProviders() %>,
 											definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
+											description: '<%= HtmlUtil.escapeJS(description) %>',
 											editForm: event.form,
 											layout: <%= ddlFormAdminDisplayContext.getSerializedDDMFormLayout() %>,
+											name: '<%= HtmlUtil.escapeJS(name) %>',
 											namespace: '<portlet:namespace />',
 											publishRecordSetURL: '<%= publishRecordSetURL.toString() %>',
 											recordSetId: <%= recordSetId %>
@@ -295,5 +297,9 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 				}
 			);
 		};
+	</aui:script>
+
+	<aui:script require="metal-clipboard/src/Clipboard">
+		new metalClipboardSrcClipboard.default();
 	</aui:script>
 </div>

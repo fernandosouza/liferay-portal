@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.ModelListener;
-import com.liferay.portal.workflow.kaleo.manager.PortalKaleoManager;
+import com.liferay.portal.workflow.kaleo.runtime.manager.PortalKaleoManager;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -56,6 +56,7 @@ public class CompanyModelListener extends BaseModelListener<Company> {
 		_portalKaleoManager = portalKaleoManager;
 	}
 
+	@Reference
 	private PortalKaleoManager _portalKaleoManager;
 
 }
