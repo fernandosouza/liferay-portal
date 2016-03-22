@@ -64,6 +64,14 @@ AUI.add(
 							addField: Liferay.Language.get('add-field'),
 							cancelRemoveRow: Liferay.Language.get('cancel'),
 							confirmRemoveRow: Liferay.Language.get('yes-delete'),
+							fieldTypes: {
+								checkbox: Liferay.Language.get('field-type-checkbox'),
+								date: Liferay.Language.get('field-type-date'),
+								paragraph: Liferay.Language.get('field-type-paragraph'),
+								radio: Liferay.Language.get('field-type-radio'),
+								select: Liferay.Language.get('field-type-select'),
+								text: Liferay.Language.get('field-type-text')
+							},
 							formTitle: Liferay.Language.get('build-your-form'),
 							modalHeader: Liferay.Language.get('remove-confirmation'),
 							pasteHere: Liferay.Language.get('paste-here'),
@@ -577,6 +585,13 @@ AUI.add(
 					_valueFieldTypesModal: function() {
 						var instance = this;
 
+						var strings = A.merge(
+										instance.get('strings'),
+										{
+											addField: Liferay.Language.get('choose-a-field-type')
+										}
+									);
+
 						var fieldTypesModal = new Liferay.DDL.FormBuilderFieldTypesModal(
 							{
 								draggable: false,
@@ -584,9 +599,7 @@ AUI.add(
 								modal: true,
 								portletNamespace: instance.get('portletNamespace'),
 								resizable: false,
-								strings: {
-									addField: Liferay.Language.get('choose-a-field-type')
-								},
+								strings: strings,
 								visible: false
 							}
 						);
