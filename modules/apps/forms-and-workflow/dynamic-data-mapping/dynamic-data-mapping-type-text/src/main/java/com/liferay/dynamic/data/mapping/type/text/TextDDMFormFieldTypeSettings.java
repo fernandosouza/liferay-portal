@@ -54,7 +54,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 								"visibilityExpression", "validation",
 								"fieldNamespace", "indexType", "localizable",
 								"readOnly", "dataType", "type", "name",
-								"showLabel", "repeatable", "tooltip"
+								"showLabel", "repeatable", "tooltip",
+								"ddmDataProviderInstanceId"
 							}
 						)
 					}
@@ -65,6 +66,9 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 )
 public interface TextDDMFormFieldTypeSettings
 	extends DefaultDDMFormFieldTypeSettings {
+
+	@DDMFormField(label = "%choose-a-data-provider", type = "select")
+	public long ddmDataProviderInstanceId();
 
 	@DDMFormField(
 		label = "%my-text-field-has",
