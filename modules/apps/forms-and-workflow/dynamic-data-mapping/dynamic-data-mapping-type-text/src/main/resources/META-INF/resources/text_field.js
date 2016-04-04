@@ -12,6 +12,14 @@ AUI.add(
 		var TextField = A.Component.create(
 			{
 				ATTRS: {
+					ddmDataProviderInstanceId: {
+						value: 0
+					},
+
+					dataProviderURL: {
+						valueFn: '_valueDataProviderURL'
+					},
+
 					displayStyle: {
 						value: 'singleline'
 					},
@@ -66,6 +74,31 @@ AUI.add(
 						return instance;
 					},
 
+					_getDataSourceData: function(callback) {
+						var instance = this;
+
+						A.io.request(
+							instance.get('dataProviderURL'),
+							{
+								data: {
+									ddmDataProviderInstanceId: instance.get('ddmDataProviderInstanceId')
+								},
+								dataType: 'JSON',
+								method: 'GET',
+								on: {
+									failure: function() {
+										callback.call(instance, null);
+									},
+									success: function() {
+										var result = this.get('responseData');
+
+										callback.call(instance, result);
+									}
+								}
+							}
+						);
+					},
+
 					_renderErrorMessage: function() {
 						var instance = this;
 
@@ -97,6 +130,20 @@ AUI.add(
 
 							inputGroupContainer.placeAfter(feedBack);
 						}
+					},
+
+					_valueDataProviderURL: function() {
+						var instance = this;
+
+						var dataProviderURL;
+
+						var form = instance.getRoot();
+
+						if (form) {
+							dataProviderURL = form.get('dataProviderURL');
+						}
+
+						return dataProviderURL;
 					}
 				}
 			}
