@@ -93,6 +93,20 @@ AUI.add(
 						return instance;
 					},
 
+					toJSON: function() {
+						var instance = this;
+
+						var json = TextField.superclass.toJSON.apply(instance, arguments);
+
+						if (!instance.get('ddmDataProviderInstanceId')) {
+							return json;
+						}
+
+						json.value[instance.get('locale')] = instance.get('dataProviderSelectedValue');
+
+						return json;
+					},
+
 					_getAutoCompateData: function() {
 						var instance = this;
 
