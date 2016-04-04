@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddm-form-field-text',
 	function(A) {
+		var Lang = A.Lang;
+
 		new A.TooltipDelegate(
 			{
 				position: 'left',
@@ -12,12 +14,20 @@ AUI.add(
 		var TextField = A.Component.create(
 			{
 				ATTRS: {
-					ddmDataProviderInstanceId: {
-						value: 0
+					dataProviderSelectedValue: {
+						value: ''
 					},
 
 					dataProviderURL: {
 						valueFn: '_valueDataProviderURL'
+					},
+
+					dataSourceOptions: {
+						value: []
+					},
+
+					ddmDataProviderInstanceId: {
+						value: 0
 					},
 
 					displayStyle: {
@@ -71,14 +81,42 @@ AUI.add(
 							textAreaNode.autosize._uiAutoSize();
 						}
 
+						if (instance.get('displayStyle') === 'singleline' && instance.get('ddmDataProviderInstanceId') && !instance.get('builder') && !instance.get('readOnly')) {
+							instance._getDataSourceData(
+								function(options) {
+									instance.set('dataSourceOptions', options);
+									instance._instantiateAutoComplete();
+								}
+							);
+						}
+
 						return instance;
+					},
+
+					_getAutoCompateData: function() {
+						var instance = this;
+
+						return A.map(
+							instance.get('dataSourceOptions'),
+							function(item) {
+								var label = item.label;
+
+								if (Lang.isObject(label)) {
+									label = label[instance.get('locale')];
+								}
+
+								return [label, item.value];
+							}
+						);
 					},
 
 					_getDataSourceData: function(callback) {
 						var instance = this;
 
+						var url = instance.get('dataProviderURL');
+
 						A.io.request(
-							instance.get('dataProviderURL'),
+							url,
 							{
 								data: {
 									ddmDataProviderInstanceId: instance.get('ddmDataProviderInstanceId')
@@ -95,6 +133,38 @@ AUI.add(
 										callback.call(instance, result);
 									}
 								}
+							}
+						);
+					},
+
+					_instantiateAutoComplete: function(options) {
+						var instance = this;
+
+						this.autoComplete = new A.AutoCompleteDeprecated(
+							{
+								contentBox: instance.get('container').one('.input-group-container'),
+								dataSource: instance._getAutoCompateData(),
+								input: instance.get('container').one('.form-control'),
+								matchKey: 'label',
+								schema: {
+									resultFields: ['label', 'value']
+								}
+							}
+						).render();
+
+						this.autoComplete.on(
+							'itemSelect',
+							function(event, data) {
+								instance.set('dataProviderSelectedValue', data.value);
+
+								instance.fire(
+									'valueChanged',
+									{
+										domEvent: event,
+										field: instance,
+										value: instance.getValue()
+									}
+								);
 							}
 						);
 					},
@@ -153,6 +223,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'liferay-ddm-form-renderer-field']
+		requires: ['aui-autocomplete-deprecated', 'aui-autosize-deprecated', 'aui-tooltip', 'liferay-ddm-form-renderer-field']
 	}
 );
