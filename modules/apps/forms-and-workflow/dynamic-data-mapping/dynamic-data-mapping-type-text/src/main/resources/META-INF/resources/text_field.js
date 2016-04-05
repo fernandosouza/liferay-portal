@@ -182,14 +182,6 @@ AUI.add(
 							function(event, data) {
 								instance.set('dataProviderSelectedValue', data.value);
 
-								instance.fire(
-									'valueChanged',
-									{
-										domEvent: event,
-										field: instance,
-										value: instance.getValue()
-									}
-								);
 							}
 						);
 					},
