@@ -15,7 +15,10 @@ AUI.add(
 			{
 				ATTRS: {
 					dataProviderSelectedValue: {
-						value: ''
+						value: {
+							label: '',
+							value: ''
+						}
 					},
 
 					dataProviderURL: {
@@ -112,6 +115,23 @@ AUI.add(
 						return json;
 					},
 
+					_afterBlur: function() {
+						var instance = this;
+
+						var inputNode = instance.getInputNode();
+
+						var dataProviderSelectedValue = instance.get('dataProviderSelectedValue');
+
+						if (instance._hasDataProvider()) {
+							if (inputNode.get('value') != dataProviderSelectedValue.label) {
+								instance._resetDataProviderSelectedData();
+								inputNode.set('value', '');
+							}
+						}
+
+						TextField.superclass._afterBlur.apply(instance, arguments);
+					},
+
 					_getAutoCompateData: function() {
 						var instance = this;
 
@@ -165,11 +185,15 @@ AUI.add(
 					_instantiateAutoComplete: function(options) {
 						var instance = this;
 
+						var inputNode = instance.getInputNode();
+
+						var dataProviderSelectedData = instance.get('dataProviderSelectedValue');
+
 						this.autoComplete = new A.AutoCompleteDeprecated(
 							{
-								contentBox: instance.get('container').one('.input-group-container'),
+								contentBox: instance.get('container'),
 								dataSource: instance._getAutoCompateData(),
-								input: instance.get('container').one('.form-control'),
+								input: inputNode,
 								matchKey: 'label',
 								schema: {
 									resultFields: ['label', 'value']
@@ -180,8 +204,32 @@ AUI.add(
 						this.autoComplete.on(
 							'itemSelect',
 							function(event, data) {
-								instance.set('dataProviderSelectedValue', data.value);
+								dataProviderSelectedData = data;
+								instance.set('dataProviderSelectedValue', dataProviderSelectedData);
+							}
+						);
 
+						inputNode.on(
+							'keyup',
+							function() {
+								if (dataProviderSelectedData.label != inputNode.get('value')) {
+									instance.set(
+										'dataProviderSelectedValue',
+										{
+											label: dataProviderSelectedData.label,
+											value: ''
+										}
+									);
+								}
+								else {
+									instance.set(
+										'dataProviderSelectedValue',
+										{
+											label: dataProviderSelectedData.label,
+											value: dataProviderSelectedData.value
+										}
+									);
+								}
 							}
 						);
 					},
@@ -196,6 +244,18 @@ AUI.add(
 						var inputGroup = container.one('.input-group-container');
 
 						inputGroup.insert(container.one('.help-block'), 'after');
+					},
+
+					_resetDataProviderSelectedData: function() {
+						var instance = this;
+
+						instance.set(
+							'dataProviderSelectedValue',
+							{
+								label: '',
+								value: ''
+							}
+						);
 					},
 
 					_showFeedback: function() {
