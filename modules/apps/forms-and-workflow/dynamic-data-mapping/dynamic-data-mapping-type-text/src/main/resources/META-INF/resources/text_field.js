@@ -106,11 +106,10 @@ AUI.add(
 						var json = TextField.superclass.toJSON.apply(instance, arguments);
 
 						if (!instance._hasDataProvider()) {
-							json.value[instance.get('locale')] = '';
+							return json;
 						}
-						else {
-							json.value[instance.get('locale')] = instance.get('dataProviderSelectedValue');
-						}
+
+						json.value[instance.get('locale')] = instance.get('dataProviderSelectedValue').value;
 
 						return json;
 					},
