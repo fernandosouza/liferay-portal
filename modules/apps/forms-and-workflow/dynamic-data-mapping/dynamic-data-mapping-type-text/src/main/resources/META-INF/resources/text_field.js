@@ -89,12 +89,7 @@ AUI.add(
 						}
 
 						if (instance.get('displayStyle') === 'singleline' && instance._hasDataProvider() && !instance.get('builder') && !instance.get('readOnly')) {
-							instance._getDataSourceData(
-								function(options) {
-									instance.set('dataSourceOptions', options);
-									instance._instantiateAutoComplete();
-								}
-							);
+							instance._instantiateAutoComplete();
 						}
 
 						return instance;
@@ -114,6 +109,26 @@ AUI.add(
 						return json;
 					},
 
+					_afterAutoCompleteKeyup: function() {
+						var instance = this;
+
+						var dataProviderSelectedData = instance.get('dataProviderSelectedValue');
+
+						var previousData = instance.previousDataProviderData;
+
+						if (dataProviderSelectedData.label != instance.autoComplete.get('value')) {
+							dataProviderSelectedData.value = '';
+						}
+						else {
+							dataProviderSelectedData = A.clone(previousData);
+						}
+
+						instance.set(
+							'dataProviderSelectedValue',
+							dataProviderSelectedData
+						);
+					},
+
 					_afterBlur: function() {
 						var instance = this;
 
@@ -131,11 +146,19 @@ AUI.add(
 						TextField.superclass._afterBlur.apply(instance, arguments);
 					},
 
-					_getAutoCompateData: function() {
+					_afterSelectAutoCompleteItem: function(event) {
+						var instance = this;
+						var requestData = event.result.raw;
+
+						instance.set('dataProviderSelectedValue', requestData);
+						instance.previousDataProviderData = A.clone(requestData);
+					},
+
+					_getAutoCompateData: function(data) {
 						var instance = this;
 
 						return A.map(
-							instance.get('dataSourceOptions'),
+							data,
 							function(item) {
 								var label = item.label;
 
@@ -143,7 +166,7 @@ AUI.add(
 									label = label[instance.get('locale')];
 								}
 
-								return [label, item.value];
+								return { label: label, value: item.value };
 							}
 						);
 					},
@@ -186,50 +209,50 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						var dataProviderSelectedData = instance.get('dataProviderSelectedValue');
-
-						this.autoComplete = new A.AutoCompleteDeprecated(
+						var dataSource = new A.DataSource.IO(
 							{
-								contentBox: instance.get('container'),
-								dataSource: instance._getAutoCompateData(),
-								input: inputNode,
-								matchKey: 'label',
-								schema: {
-									resultFields: ['label', 'value']
-								}
-							}
-						).render();
-
-						this.autoComplete.on(
-							'itemSelect',
-							function(event, data) {
-								dataProviderSelectedData = data;
-								instance.set('dataProviderSelectedValue', dataProviderSelectedData);
+								source: instance.get('dataProviderURL')
 							}
 						);
 
-						inputNode.on(
-							'keyup',
-							function() {
-								if (dataProviderSelectedData.label != inputNode.get('value')) {
-									instance.set(
-										'dataProviderSelectedValue',
-										{
-											label: dataProviderSelectedData.label,
-											value: ''
+						instance.autoComplete = inputNode.plug(
+							A.Plugin.AutoComplete,
+							{
+								queryDelay: 0,
+								requestTemplate: '?query={query}&ddmDataProviderInstanceId=' + instance.get('ddmDataProviderInstanceId'),
+								source: dataSource,
+								resultFilters: function(query, results) {
+									return A.map(
+										results,
+										function(result) {
+											result.display = result.text = result.raw.label;
+
+											return result;
 										}
 									);
-								}
-								else {
-									instance.set(
-										'dataProviderSelectedValue',
-										{
-											label: dataProviderSelectedData.label,
-											value: dataProviderSelectedData.value
+								},
+								resultFormatter: function(query, results) {
+									return A.map(
+										results,
+										function(result) {
+											return result.raw.label;
 										}
 									);
+								},
+								resultListLocator: function(response) {
+									return instance._getAutoCompateData(JSON.parse(response[0].response));
 								}
 							}
+						);
+
+						instance.autoComplete.ac.on(
+							'select',
+							A.bind('_afterSelectAutoCompleteItem', instance)
+						);
+
+						instance.autoComplete.on(
+							'keyup',
+							A.bind('_afterAutoCompleteKeyup', instance)
 						);
 					},
 
@@ -299,6 +322,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-autocomplete-deprecated', 'aui-autosize-deprecated', 'aui-tooltip', 'liferay-ddm-form-renderer-field']
+		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'liferay-ddm-form-renderer-field']
 	}
 );
