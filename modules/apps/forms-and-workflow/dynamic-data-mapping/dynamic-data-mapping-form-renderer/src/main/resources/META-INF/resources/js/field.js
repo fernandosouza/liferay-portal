@@ -405,7 +405,7 @@ AUI.add(
 							Lang.sub(
 								TPL_FORM_FIELD_CONTAINER,
 								{
-									hide: visible ? '' : 'hide'
+									hide: visible ? '' : 'invisible'
 								}
 							)
 						);

@@ -89,7 +89,7 @@ AUI.add(
 
 				var container = instance.get('container');
 
-				container.toggleClass('hide', !event.newVal);
+				container.toggleClass('invisible', !event.newVal);
 			},
 
 			_valueVisible: function() {

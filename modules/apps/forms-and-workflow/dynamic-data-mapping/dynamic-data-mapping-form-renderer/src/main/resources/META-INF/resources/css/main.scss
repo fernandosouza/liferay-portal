@@ -31,10 +31,17 @@
 	}
 
 	.lfr-ddm-form-field-container {
+		opacity: 1;
 		position: relative;
+		transition: opacity 0.5s;
+		visibility: visible;
 
 		&.has-error .liferay-ddm-form-field-date .input-group-addon {
 			border-width: 0 0 2px 0;
+		}
+
+		&.invisible {
+			opacity: 0;
 		}
 
 		@include keyframes(spin) {
