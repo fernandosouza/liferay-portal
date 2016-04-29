@@ -81,7 +81,7 @@ AUI.add(
 					}
 				},
 
-				AUGMENTS: [Liferay.DDM.Renderer.NestedFieldsSupport],
+				AUGMENTS: [Liferay.DDM.Renderer.NestedFieldsSupport, Liferay.DDL.FormBuilderLayoutBuilderSupport],
 
 				CSS_PREFIX: 'form-builder',
 
@@ -235,6 +235,11 @@ AUI.add(
 
 						instance._syncRequiredFieldsWarning();
 						instance._syncRowsLastColumnUI();
+
+						if (instance._fieldBeingMoved) {
+							instance._detachCancelMoveFieldEvents();
+							instance._layoutBuilder.get('chooseColMoveTarget')();
+						}
 					},
 
 					_afterFieldListChange: function() {
@@ -380,6 +385,23 @@ AUI.add(
 						var instance = this;
 
 						event.halt();
+					},
+
+					_onLayoutMoveEnd: function(event) {
+						var instance = this;
+
+						instance._removeMovingMessage();
+						instance._clearHelperPrivateMoveFieldProperties();
+					},
+
+					_onLayoutMoveStart: function(event) {
+						var instance = this;
+
+						var row = event.moveElement;
+
+						if (A.instanceOf(row, A.LayoutRow)) {
+							instance._showMovingRowMessage(row);
+						}
 					},
 
 					_overwriteFieldToolbar: function() {
@@ -627,6 +649,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-builder-support', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );
