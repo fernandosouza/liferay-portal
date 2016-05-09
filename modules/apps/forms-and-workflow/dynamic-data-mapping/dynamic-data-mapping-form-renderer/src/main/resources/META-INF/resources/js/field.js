@@ -300,6 +300,7 @@ AUI.add(
 								label: instance.getLabel(),
 								name: instance.getQualifiedName(),
 								readOnly: instance.get('readOnly'),
+								pathThemeImages: themeDisplay.getPathThemeImages(),
 								tip: instance.getLocalizedValue(instance.get('tip')),
 								value: instance.getContextValue() || ''
 							}

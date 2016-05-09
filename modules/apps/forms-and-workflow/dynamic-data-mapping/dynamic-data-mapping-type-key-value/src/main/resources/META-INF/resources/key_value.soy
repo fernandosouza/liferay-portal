@@ -8,6 +8,7 @@
  * @param key
  * @param label
  * @param name
+ * @param pathThemeImages
  * @param placeholder
  * @param required
  * @param showLabel
@@ -33,7 +34,11 @@
 			{if $tooltip}
 				<span class="input-group-addon">
 					<span class="input-group-addon-content">
-						<a class="help-icon help-icon-default icon-monospaced icon-question" data-original-title="{$tooltip}" data-toggle="popover" href="javascript:;" title="{$tooltip}"></a>
+						<a class="help-icon help-icon-default help-icon-info" data-original-title="{$tooltip}" data-toggle="popover" href="javascript:;" title="{$tooltip}">
+							<svg class="lexicon-icon icon-monospaced">
+								<use xlink:href="{$pathThemeImages}/lexicon/icons.svg#info-circle-open"></use>
+							</svg>
+						</a>
 					</span>
 				</span>
 			{/if}
