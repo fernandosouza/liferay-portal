@@ -70,14 +70,11 @@ AUI.add(
 
 						container.appendTo(instance._getBodyNode());
 
-						instance._showDefaultToolbar();
-
 						settingsForm.render();
 
-						var modal = instance._modal;
+						instance._modal.syncHeight();
 
-						modal.syncHeight();
-						modal.align();
+						instance._showFormContainer();
 
 						instance._previousSettings = JSON.stringify(field.getSettings());
 					},
