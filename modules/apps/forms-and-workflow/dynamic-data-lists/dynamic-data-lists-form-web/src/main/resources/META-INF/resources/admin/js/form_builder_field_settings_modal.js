@@ -251,8 +251,15 @@ AUI.add(
 
 						var footerNode = instance._getFooterNode();
 
-						footerNode.one('.' + CSS_FIELD_SETTINGS_YES).toggle(display);
+						var yesButton = footerNode.one('.' + CSS_FIELD_SETTINGS_YES);
+
 						footerNode.one('.' + CSS_FIELD_SETTINGS_NO).toggle(display);
+
+						yesButton.toggle(display);
+
+						if (display) {
+							yesButton.focus();
+						}
 
 						instance._confirmationToolbarVisible = !!display;
 					},
@@ -271,9 +278,13 @@ AUI.add(
 
 						var field = instance._fieldBeingEdited;
 
-						var container = field.get('settingsForm').get('container');
+						var settingsForm = field.get('settingsForm');
+
+						var container = settingsForm.get('container');
 
 						container.toggle(display);
+
+						settingsForm.getField('label').focus();
 					}
 				}
 			}
