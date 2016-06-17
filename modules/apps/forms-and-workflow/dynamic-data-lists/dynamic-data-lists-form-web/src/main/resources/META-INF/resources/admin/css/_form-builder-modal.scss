@@ -1,5 +1,14 @@
 @import "form-builder-field-types-modal";
 
+.ddl-form-settings-modal,
+.lfr-ddl-form-builder-field-types-modal,
+.lfr-ddl-field-settings-modal,
+.publish-modal-container {
+	.modal-body {
+		background-color: #FFF;
+	}
+}
+
 .dynamic-content-height .modal-body {
 	overflow: auto;
 }
