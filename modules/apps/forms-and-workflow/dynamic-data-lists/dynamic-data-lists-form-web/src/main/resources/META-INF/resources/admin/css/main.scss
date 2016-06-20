@@ -23,49 +23,6 @@
 	}
 }
 
-.ddl-publish-modal {
-	.alert-info {
-		text-align: center;
-	}
-
-	.ddl-publish-checkbox {
-		margin-bottom: 0;
-		width: 100%;
-
-		small {
-			display: block;
-		}
-
-		> span {
-			margin-bottom: 0.4em;
-			margin-top: 0.4em;
-		}
-	}
-
-	.input-checkbox-wrapper {
-		float: right;
-		margin-bottom: 0;
-	}
-
-	.lfr-ddm-repeatable-delete-button {
-		position: absolute;
-		right: 15px;
-		top: 0;
-	}
-
-	select.form-control[multiple] {
-		height: auto;
-	}
-
-	.text-to-copy {
-		background-color: transparent;
-	}
-
-	.toggle-switch {
-		display: none;
-	}
-}
-
 .dynamic-data-mapping-data-providers-modal {
 	max-width: 720px;
 
