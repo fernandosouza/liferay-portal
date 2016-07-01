@@ -46,11 +46,25 @@ public class GetLayoutsAction extends JSONAction {
 		if (cmd.equals("get")) {
 			return getLayoutsJSON(request, groupId, treeId);
 		}
+		else if (cmd.equals("getLayoutsIn")) {
+			return getLayoutsInJSON(request, groupId);
+		}
 		else if (cmd.equals("getAll")) {
 			return LayoutsTreeUtil.getLayoutsJSON(request, groupId, treeId);
 		}
 
 		return null;
+	}
+
+	protected String getLayoutsInJSON(HttpServletRequest request, long groupId)
+		throws Exception {
+
+		boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
+		long includedLayoutId = ParamUtil.getLong(request, "includedLayoutId");
+		int quantity = ParamUtil.getInteger(request, "quantity");
+
+		return LayoutsTreeUtil.getLayoutsJSON(
+			request, groupId, privateLayout, includedLayoutId, quantity);
 	}
 
 	protected String getLayoutsJSON(
