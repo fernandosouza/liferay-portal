@@ -15,6 +15,11 @@ AUI.add(
 
 					fieldTypesDefinitions: {
 						value: {}
+					},
+
+					rules: {
+						validator: Array.isArray,
+						value: []
 					}
 				},
 
@@ -56,7 +61,7 @@ AUI.add(
 							function(fieldSetting) {
 								var name = fieldSetting.name;
 
-								var value = field.get('context.' + name);
+								var value = field.get(name);
 
 								if (name === 'name') {
 									config[name] = field.get('fieldName');
