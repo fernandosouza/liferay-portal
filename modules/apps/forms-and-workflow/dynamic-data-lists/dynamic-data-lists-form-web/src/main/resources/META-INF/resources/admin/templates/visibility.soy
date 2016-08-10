@@ -1,0 +1,31 @@
+{namespace ddl.rule}
+
+/**
+ * Prints the DDL visibility action.
+ *
+ * @param index
+ * @param kebab
+ */
+{template .action autoescape="deprecated-contextual"}
+	<li class="form-builder-rule-action-container">
+		<div class="card card-action card-horizontal">
+			<div class="card-row card-row-padded">
+				<div class="card-col-content card-col-gutters">
+					<div class="action-do-{$index}"></div>
+					<div class="action-the-{$index}"></div>
+				</div>
+			</div>
+			<div class="card-col-field">
+				<div class="dropdown">
+					<a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="javascript:;">
+						{$kebab|noAutoescape}
+					</a>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li class="action-card-edit" data-card-id="{$index}"><a href="javascript:;">Edit</a></li>
+						<li class="action-card-delete"  data-card-id="{$index}"><a href="javascript:;">Delete</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{/template}

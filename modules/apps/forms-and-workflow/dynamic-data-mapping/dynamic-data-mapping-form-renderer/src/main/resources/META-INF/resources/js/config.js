@@ -31,7 +31,6 @@
 						'liferay-ddm-form-renderer-context': {
 							path: 'form_context_support.js',
 							requires: [
-								'liferay-ddm-form-renderer-field-class-factory',
 								'liferay-ddm-form-renderer-layout-visitor',
 								'liferay-ddm-form-renderer-types',
 								'liferay-ddm-form-renderer-util'
@@ -41,6 +40,14 @@
 							path: 'form_evaluation_support.js',
 							requires: []
 						},
+			'liferay-ddm-form-renderer-field-context-support': {
+				path: 'field_context_support.js',
+				requires: [
+					'liferay-ddm-form-renderer-types',
+					'liferay-ddm-form-renderer-util'
+				]
+			},
+
 						'liferay-ddm-form-renderer-expressions-evaluator': {
 							path: 'expressions_evaluator.js',
 							requires: [
@@ -61,19 +68,13 @@
 								'aui-datatype',
 								'aui-node',
 								'liferay-ddm-form-renderer',
+								'liferay-ddm-form-renderer-field-context-support',
 								'liferay-ddm-form-renderer-field-evaluation',
 								'liferay-ddm-form-renderer-field-events',
 								'liferay-ddm-form-renderer-field-feedback',
 								'liferay-ddm-form-renderer-field-repetition',
 								'liferay-ddm-form-renderer-field-validation',
 								'liferay-ddm-form-renderer-nested-fields',
-								'liferay-ddm-form-renderer-types',
-								'liferay-ddm-form-renderer-util'
-							]
-						},
-						'liferay-ddm-form-renderer-field-class-factory': {
-							path: 'field_class_factory.js',
-							requires: [
 								'liferay-ddm-form-renderer-types',
 								'liferay-ddm-form-renderer-util'
 							]
