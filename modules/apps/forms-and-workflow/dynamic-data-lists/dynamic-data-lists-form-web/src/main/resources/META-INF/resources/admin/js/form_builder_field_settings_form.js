@@ -1,13 +1,9 @@
 AUI.add(
-	'liferay-ddl-form-builder-settings-form',
+	'liferay-ddl-form-builder-field-settings-form',
 	function(A) {
-		var CSS_FIELD_SETTINGS_SAVE = A.getClassName('lfr', 'ddl', 'field', 'settings', 'save');
-
 		var TPL_SETTINGS_FORM = '<form action="javascript:;"></form>';
 
 		var TPL_SETTINGS_TOGGLER = '<button class="btn settings-toggler" type="button"><span class="settings-toggle-label"></span><span class="settings-toggle-icon"></span></button>';
-
-		var TPL_SUBMIT_BUTTON = '<button class="hide" type="submit" />';
 
 		var RendererUtil = Liferay.DDM.Renderer.Util;
 
@@ -24,13 +20,16 @@ AUI.add(
 
 				EXTENDS: Liferay.DDM.Renderer.Form,
 
-				NAME: 'liferay-ddl-form-builder-settings-form',
+				NAME: 'liferay-ddl-form-builder-field-settings-form',
 
 				prototype: {
 					initializer: function() {
 						var instance = this;
 
+						var evaluator = instance.get('evaluator');
+
 						instance._eventHandlers.push(
+							evaluator.after('evaluationStarted', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
 							instance.on('*:addOption', instance._afterAddOption),
 							instance.on('*:removeOption', instance.alignModal)
@@ -39,14 +38,37 @@ AUI.add(
 						instance._fieldEventHandlers = [];
 					},
 
-					alignModal: function() {
+					generateFieldName: function(key) {
 						var instance = this;
+
+						var counter = 0;
 
 						var field = instance.get('field');
 
-						var settingsModal = field.getSettingsModal();
+						var builder = field.get('builder');
 
-						settingsModal.align();
+						var existingField;
+
+						if (!key) {
+							key = field.get('context.label');
+						}
+
+						var name = key;
+
+						if (name) {
+							do {
+								if (counter > 0) {
+									name = key + counter;
+								}
+
+								existingField = builder.findField(name);
+
+								counter++;
+							}
+							while (existingField !== undefined && existingField !== field);
+						}
+
+						return name;
 					},
 
 					getEvaluationPayload: function() {
@@ -58,57 +80,6 @@ AUI.add(
 							FormBuilderSettingsForm.superclass.getEvaluationPayload.apply(instance, arguments),
 							{
 								type: field.get('type')
-							}
-						);
-					},
-
-					getSubmitButton: function() {
-						var instance = this;
-
-						var footerNode = instance._getModalStdModeNode(A.WidgetStdMod.FOOTER);
-
-						return footerNode.one('.' + CSS_FIELD_SETTINGS_SAVE);
-					},
-
-					submit: function(callback) {
-						var instance = this;
-
-						instance.validateSettings(
-							function(hasErrors) {
-								if (!hasErrors) {
-									var field = instance.get('field');
-
-									var settingsModal = field.getSettingsModal();
-
-									field.saveSettings(instance);
-
-									settingsModal.fire(
-										'save',
-										{
-											field: field
-										}
-									);
-
-									settingsModal.hide();
-								}
-
-								if (callback) {
-									callback.apply(instance, arguments);
-								}
-							}
-						);
-					},
-
-					validateSettings: function(callback) {
-						var instance = this;
-
-						instance.validate(
-							function(hasErrors) {
-								hasErrors = instance._handleValidationResponse(hasErrors);
-
-								if (callback) {
-									callback.call(instance, hasErrors);
-								}
 							}
 						);
 					},
@@ -141,38 +112,69 @@ AUI.add(
 								}
 							);
 						}
-
-						instance.alignModal();
 					},
 
 					_afterLabelFieldNormalizeKey: function(key) {
 						var instance = this;
 
-						return new A.Do.AlterReturn(null, instance._generateFieldName(A.Do.originalRetVal));
+						return new A.Do.AlterReturn(null, instance.generateFieldName(A.Do.originalRetVal));
 					},
 
 					_afterSettingsFormRender: function() {
 						var instance = this;
 
-						var container = instance.get('container');
-
-						container.append(TPL_SUBMIT_BUTTON);
-
-						instance._createModeToggler();
-						instance._syncModeToggler();
+						var editModeValue = instance.get('editMode');
 
 						var labelField = instance.getField('label');
+
 						var nameField = instance.getField('name');
 
 						(new A.EventHandle(instance._fieldEventHandlers)).detach();
 
 						instance._fieldEventHandlers.push(
+							labelField.bindContainerEvent('keyup', A.bind('_onKeyUpKeyValueInput', instance, labelField), '.key-value-input'),
 							labelField.on('keyChange', A.bind('_onLabelFieldKeyChange', instance)),
 							labelField.after(A.bind('_afterLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
 						);
 
-						labelField.set('key', labelField.normalizeKey(nameField.getValue()));
-						labelField.set('keyInputEnabled', instance.get('editMode'));
+						labelField.set('key', nameField.getValue());
+						labelField.set('keyInputEnabled', editModeValue);
+						labelField.set('generationLocked', !editModeValue);
+
+						if (instance.get('field').get('type') === 'text') {
+							instance._createAutocompleteButton();
+							instance._createAutocompleteContainer();
+						}
+					},
+
+					_createAutocompleteButton: function() {
+						var instance = this;
+
+						var advancedSettingsNode = instance.getPageNode(2);
+
+						advancedSettingsNode.append(instance._getAutocompleteButtonTemplate());
+
+						advancedSettingsNode.one('.autocomplete-button').on('click', A.bind('_onClickAutocompleteButton', instance));
+					},
+
+					_createAutocompleteContainer: function() {
+						var instance = this;
+
+						var sidebarBody = A.one('.sidebar-body');
+
+						var dataSourceTypeContainer = instance.getField('dataSourceType').get('container');
+
+						var ddmDataProviderInstanceIdContainer = instance.getField('ddmDataProviderInstanceId').get('container');
+
+						var optionsContainer = instance.getField('options').get('container');
+
+						sidebarBody.append(instance._getAutocompleteContainerTemplate());
+
+						sidebarBody.one('.autocomplete-body').append(dataSourceTypeContainer);
+						sidebarBody.one('.autocomplete-body').append(ddmDataProviderInstanceIdContainer);
+						sidebarBody.one('.autocomplete-body').append(optionsContainer);
+
+						sidebarBody.one('.autocomplete-header-back').on('click', A.bind('_onClickAutocompleteHeaderBack', instance));
 					},
 
 					_createModeToggler: function() {
@@ -189,47 +191,24 @@ AUI.add(
 						instance.settingsTogglerNode = settingsTogglerNode;
 					},
 
-					_generateFieldName: function(key) {
+					_getAutocompleteButtonTemplate: function() {
 						var instance = this;
 
-						var counter = 0;
+						var autocompleteButtonContainer;
 
-						var field = instance.get('field');
+						autocompleteButtonContainer = ddl.autocomplete.button();
 
-						var builder = field.get('builder');
-
-						var existingField;
-
-						if (!key) {
-							key = field.get('type');
-						}
-
-						var name = key;
-
-						if (name) {
-							do {
-								if (counter > 0) {
-									name = key + counter;
-								}
-
-								existingField = builder.getField(name);
-
-								counter++;
-							}
-							while (existingField !== undefined && existingField !== field);
-						}
-
-						return name;
+						return autocompleteButtonContainer;
 					},
 
-					_getModalStdModeNode: function(mode) {
+					_getAutocompleteContainerTemplate: function() {
 						var instance = this;
 
-						var field = instance.get('field');
+						var autocompleteContainer;
 
-						var settingsModal = field.getSettingsModal();
+						autocompleteContainer = ddl.autocomplete.container({backButton: Liferay.Util.getLexiconIconTpl('angle-left', 'icon-monospaced')});
 
-						return settingsModal._modal.getStdModNode(mode);
+						return autocompleteContainer;
 					},
 
 					_handleValidationResponse: function(hasErrors) {
@@ -252,6 +231,30 @@ AUI.add(
 						return hasErrors;
 					},
 
+					_onClickAutocompleteButton: function() {
+						var instance = this;
+
+						var dataSourceType = instance.getField('dataSourceType');
+						var ddmDataProviderInstanceId = instance.getField('ddmDataProviderInstanceId');
+						var options = instance.getField('options');
+
+						instance.get('container').hide();
+
+						A.one('.sidebar-body').one('.autocomplete-container').show();
+					},
+
+					_onClickAutocompleteHeaderBack: function() {
+						var instance = this;
+
+						var dataSourceType = instance.getField('dataSourceType');
+						var ddmDataProviderInstanceId = instance.getField('ddmDataProviderInstanceId');
+						var options = instance.getField('options');
+
+						instance.get('container').show();
+
+						A.one('.sidebar-body').one('.autocomplete-container').hide();
+					},
+
 					_onClickModeToggler: function(event) {
 						var instance = this;
 
@@ -259,9 +262,13 @@ AUI.add(
 
 						advancedSettingsNode.toggleClass('active');
 
-						instance.alignModal();
-
 						instance._syncModeToggler();
+					},
+
+					_onKeyUpKeyValueInput: function() {
+						var instance = this;
+
+						instance._saveSettings();
 					},
 
 					_onLabelFieldKeyChange: function(event) {
@@ -284,8 +291,14 @@ AUI.add(
 						var instance = this;
 
 						event.preventDefault();
+					},
 
-						instance.submit();
+					_saveSettings: function() {
+						var instance = this;
+
+						var field = instance.get('field');
+
+						field.saveSettings(instance);
 					},
 
 					_syncModeToggler: function() {
