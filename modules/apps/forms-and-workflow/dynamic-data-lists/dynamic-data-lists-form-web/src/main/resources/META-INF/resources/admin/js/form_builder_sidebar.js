@@ -147,7 +147,7 @@ AUI.add(
 						instance.close();
 					},
 
-					_afterPressEscapeKey: function(e) {
+					_afterPressEscapeKey: function() {
 						var instance = this;
 
 						if (instance.get('boundingBox').hasClass('open')) {
