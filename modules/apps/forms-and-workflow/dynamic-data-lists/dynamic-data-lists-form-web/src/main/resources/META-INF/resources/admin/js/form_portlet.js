@@ -215,6 +215,8 @@ AUI.add(
 
 						var rules = JSON.stringify(ruleBuilder.get('rules'));
 
+						definition.rules = instance.get('ruleBuilder').get('rules');
+
 						instance.layoutSerializer.set('pages', pages);
 
 						var layout = JSON.parse(instance.layoutSerializer.serialize());

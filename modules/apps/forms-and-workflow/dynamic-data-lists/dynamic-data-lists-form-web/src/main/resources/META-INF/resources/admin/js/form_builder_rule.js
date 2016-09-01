@@ -123,7 +123,7 @@ AUI.add(
 						var instance = this;
 
 						var contentBox = instance.get('contentBox');
-debugger;
+
 						instance._createFirstOperandField(index, condition).render(contentBox.one('.condition-if-' + index));
 
 						instance._createOperatorField(index, condition).render(contentBox.one('.condition-operator-' + index));
