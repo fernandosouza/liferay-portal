@@ -55,6 +55,20 @@ AUI.add(
 						instance._eventHandlers = eventHandlers;
 					},
 
+					destructor: function() {
+						var instance = this;
+
+						var toolbar = instance.get('toolbar');
+
+						toolbar.destroy();
+
+						instance.settingsForm.destroy();
+
+						(new A.EventHandle(instance._eventHandlers)).detach();
+
+						FormBuilderFieldsSettingsSidebar.superclass.destructor.apply(instance, arguments);
+					},
+
 					getFieldSettings: function() {
 						var instance = this;
 
