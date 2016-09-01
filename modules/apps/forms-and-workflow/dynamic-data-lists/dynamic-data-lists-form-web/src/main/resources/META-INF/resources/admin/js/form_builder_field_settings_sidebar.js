@@ -120,6 +120,10 @@ AUI.add(
 
 						var toolbar = instance.get('toolbar');
 
+						if (instance.settingsForm) {
+							instance._hideSettingsForm();
+						}
+
 						instance._showLoading();
 
 						instance.set('description', field.get('type'));
@@ -136,8 +140,6 @@ AUI.add(
 						var settingsForm = instance.settingsForm;
 
 						var settingsFormContainer = settingsForm.get('container');
-
-						instance._hideSettingsForm();
 
 						instance.set('bodyContent', settingsFormContainer);
 
