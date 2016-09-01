@@ -22,7 +22,6 @@ AUI.add(
 					},
 
 					context: {
-						validator: Lang.isObject,
 						value: {}
 					},
 
@@ -40,12 +39,18 @@ AUI.add(
 						valueFn: '_valueInstanceId'
 					},
 
+					label: {
+						state: true,
+						value: ''
+					},
+
 					locale: {
 						value: themeDisplay.getLanguageId()
 					},
 
 					name: {
 						repaint: false,
+						state: true,
 						value: ''
 					},
 
@@ -62,6 +67,7 @@ AUI.add(
 					},
 
 					readOnly: {
+						state: true,
 						value: false
 					},
 
@@ -70,6 +76,7 @@ AUI.add(
 					},
 
 					showLabel: {
+						state: true,
 						value: true
 					},
 
@@ -77,17 +84,28 @@ AUI.add(
 						value: ''
 					},
 
+					validation: {
+						value: {
+							errorMessage: '',
+							expression: '',
+							type: ''
+						}
+					},
+
 					value: {
+						state: true,
 						repaint: false,
 						value: ''
 					},
 
 					visible: {
+						state: true,
 						value: true
 					}
 				},
 
 				AUGMENTS: [
+					Renderer.FieldContextSupport,
 					Renderer.FieldEvaluationSupport,
 					Renderer.FieldEventsSupport,
 					Renderer.FieldFeedbackSupport,
@@ -101,14 +119,6 @@ AUI.add(
 				NAME: 'liferay-ddm-form-renderer-field',
 
 				prototype: {
-					initializer: function() {
-						var instance = this;
-
-						instance._eventHandlers = [
-							instance.after('contextChange', instance._afterContextChange)
-						];
-					},
-
 					destructor: function() {
 						var instance = this;
 
@@ -214,13 +224,21 @@ AUI.add(
 					getTemplateContext: function() {
 						var instance = this;
 
-						return A.merge(
-							instance.get('context'),
-							{
-								name: instance.getQualifiedName(),
-								value: instance.get('value')
-							}
-						);
+						return {
+							childElementsHTML: instance.get('childElementsHTML'),
+							dir: instance.get('dir'),
+							label: instance.get('label'),
+							multiple: instance.get('multiple'),
+							options: instance.get('options'),
+							readOnly: instance.get('readOnly'),
+							required: instance.get('required'),
+							showLabel: instance.get('showLabel'),
+							tip: instance.get('tip'),
+							strings: instance.get('strings'),
+							visible: instance.get('visible'),
+							name: instance.getQualifiedName(),
+							value: instance.get('value')
+						};
 					},
 
 					getTemplateRenderer: function() {
@@ -315,33 +333,6 @@ AUI.add(
 						var instance = this;
 
 						instance.set('container', instance._valueContainer());
-					},
-
-					_afterContextChange: function(event) {
-						var instance = this;
-
-						if (instance.get('rendered')) {
-							var repaint = false;
-
-							var newContext = event.newVal;
-							var oldContext = event.prevVal;
-
-							for (var name in newContext) {
-								if (!Util.compare(newContext[name], oldContext[name])) {
-									if (instance.isRepaintable(name)) {
-										repaint = true;
-									}
-
-									if (instance.attrAdded(name)) {
-										instance.set(name, newContext[name]);
-									}
-								}
-							}
-
-							if (repaint) {
-								instance.render();
-							}
-						}
 					},
 
 					_createContainer: function() {
@@ -453,6 +444,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-datatype', 'aui-node', 'liferay-ddm-form-renderer', 'liferay-ddm-form-renderer-field-evaluation', 'liferay-ddm-form-renderer-field-events', 'liferay-ddm-form-renderer-field-feedback', 'liferay-ddm-form-renderer-field-repetition', 'liferay-ddm-form-renderer-field-validation', 'liferay-ddm-form-renderer-nested-fields', 'liferay-ddm-form-renderer-types', 'liferay-ddm-form-renderer-util']
+		requires: ['liferay-ddm-form-renderer-field-context-support', 'aui-datatype', 'aui-node', 'liferay-ddm-form-renderer', 'liferay-ddm-form-renderer-field-evaluation', 'liferay-ddm-form-renderer-field-events', 'liferay-ddm-form-renderer-field-feedback', 'liferay-ddm-form-renderer-field-repetition', 'liferay-ddm-form-renderer-field-validation', 'liferay-ddm-form-renderer-nested-fields', 'liferay-ddm-form-renderer-types', 'liferay-ddm-form-renderer-util']
 	}
 );
