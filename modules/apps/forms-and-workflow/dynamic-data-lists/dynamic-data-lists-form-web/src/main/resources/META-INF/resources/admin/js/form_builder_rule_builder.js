@@ -32,7 +32,11 @@ AUI.add(
 					renderUI: function() {
 						var instance = this;
 
-						instance.get('contentBox').setHTML(ddl.rule_builder({addRuleLabel: Liferay.Language.get('add-rule')}));
+						var rulesBuilder = ddl.rule_builder({
+							plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced')
+						})
+
+						instance.get('contentBox').setHTML(rulesBuilder);
 
 						instance._renderPopover();
 
@@ -169,14 +173,15 @@ AUI.add(
 
 						var popover = new A.Popover({
 							align: {
-								node: '.form-builder-rule-builder-add-rule-button-icon'
+								node: '.form-builder-rule-builder-add-rule-button'
 							},
 							cssClass: 'form-builder-rulles-builder-popover',
 							animated: true,
 							bodyContent: TPL_POPOVER,
+							constrain: true,
 							duration: 0.25,
-							trigger: '.form-builder-rule-builder-add-rule-button-icon',
-							position: 'bottom',
+							trigger: '.form-builder-rule-builder-add-rule-button',
+							position: 'top',
 							zIndex: Liferay.zIndex.TOOLTIP,
 							visible: false,
 							hideOn: [{
