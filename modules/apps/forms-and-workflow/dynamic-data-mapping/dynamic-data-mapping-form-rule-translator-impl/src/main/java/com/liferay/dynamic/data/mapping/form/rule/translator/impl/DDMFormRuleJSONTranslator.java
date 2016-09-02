@@ -75,7 +75,7 @@ public class DDMFormRuleJSONTranslator {
 		String fieldName, String property, String value) {
 
 		return String.format(
-			"set(fieldAt(%s, 0), \"%s\", %s)", fieldName, property, value);
+			"set(fieldAt(\"%s\", 0), \"%s\", %s)", fieldName, property, value);
 	}
 
 	protected String translateAction(JSONObject jsonObject)
@@ -210,7 +210,18 @@ public class DDMFormRuleJSONTranslator {
 
 			validateOperandJSON(jsonObject);
 
-			sb.append(jsonObject.getString("value"));
+			String type = jsonObject.getString("type");
+
+			if ("constant".equals(type)) {
+				sb.append(
+					String.format("\"%s\"", jsonObject.getString("value")));
+			}
+			else {
+				sb.append(
+					String.format(
+						"get(fieldAt(\"%s\",0), \"value\")", 
+						jsonObject.getString("value")));
+			}
 
 			if (i < (operands.length() - 1)) {
 				sb.append(", ");
@@ -268,9 +279,9 @@ public class DDMFormRuleJSONTranslator {
 			case "less-than-equals":
 				return "<=";
 			case "equals-to":
-				return "==";
+				return "equals";
 			case "not-equals-to":
-				return "!=";
+				return "!equals";
 			default:
 				return operator;
 		}

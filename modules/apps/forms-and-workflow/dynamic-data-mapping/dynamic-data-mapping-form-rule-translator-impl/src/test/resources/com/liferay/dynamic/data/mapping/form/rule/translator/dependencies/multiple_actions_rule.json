@@ -1,6 +1,6 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "show",
 				"target": "Field1"
@@ -18,6 +18,6 @@
 				"target": "Field4"
 			}
 		],
-		"conditions":[]
+		"conditions": []
 	}
 ]

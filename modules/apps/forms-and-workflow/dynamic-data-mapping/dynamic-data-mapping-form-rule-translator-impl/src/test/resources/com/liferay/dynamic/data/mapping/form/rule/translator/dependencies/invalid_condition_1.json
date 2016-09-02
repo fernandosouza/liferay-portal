@@ -1,12 +1,12 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "enable",
 				"target": "Field1"
 			}
 		],
-		"conditions":[
+		"conditions": [
 			{
 				"operator": "contains"
 			}

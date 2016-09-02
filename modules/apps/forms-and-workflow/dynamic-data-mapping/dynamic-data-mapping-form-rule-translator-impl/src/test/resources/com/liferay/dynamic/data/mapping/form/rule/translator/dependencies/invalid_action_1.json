@@ -1,11 +1,11 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "invalid",
 				"target": "Field3"
 			}
 		],
-		"conditions":[]
+		"conditions": []
 	}
 ]
