@@ -1,12 +1,12 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "show",
 				"target": "Field3"
 			}
 		],
-		"conditions":[
+		"conditions": [
 			{
 				"operands": [
 					{

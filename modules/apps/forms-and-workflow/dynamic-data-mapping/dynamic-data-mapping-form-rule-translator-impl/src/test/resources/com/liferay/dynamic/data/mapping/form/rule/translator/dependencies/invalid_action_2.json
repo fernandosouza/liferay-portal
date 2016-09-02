@@ -1,10 +1,10 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "show"
 			}
 		],
-		"conditions":[]
+		"conditions": []
 	}
 ]

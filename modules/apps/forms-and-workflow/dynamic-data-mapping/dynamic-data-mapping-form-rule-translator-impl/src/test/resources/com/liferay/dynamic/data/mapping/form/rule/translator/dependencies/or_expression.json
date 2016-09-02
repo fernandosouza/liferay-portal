@@ -1,12 +1,12 @@
 [
 	{
-		"actions":[
+		"actions": [
 			{
 				"action": "hide",
 				"target": "Field3"
 			}
 		],
-		"conditions":[
+		"conditions": [
 			{
 				"logic-operator": "OR",
 				"operands": [
