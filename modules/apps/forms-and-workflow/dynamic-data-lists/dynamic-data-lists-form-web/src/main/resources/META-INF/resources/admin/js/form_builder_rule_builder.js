@@ -1,9 +1,11 @@
 AUI.add(
 	'liferay-ddl-form-builder-rule-builder',
 	function(A) {
+		var ddl = window.ddl;
+
 		var TPL_POPOVER = '<ul class="dropdown-menu">' +
 				'<li>' +
-					'<a href="javascript:;" data-rule-type="visibility">' + Liferay.Language.get('visibility') + '</a>' +
+					'<a href="javascript:;" data-rule-type="visibility">' + Liferay.Language.get('show-hide') + '</a>' +
 				'</li>' +
 			'</ul>';
 
@@ -32,7 +34,13 @@ AUI.add(
 					renderUI: function() {
 						var instance = this;
 
-						instance.get('contentBox').setHTML(ddl.rule_builder({addRuleLabel: Liferay.Language.get('add-rule')}));
+						var rulesBuilder = ddl.rule_builder(
+							{
+								plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced')
+							}
+						);
+
+						instance.get('contentBox').setHTML(rulesBuilder);
 
 						instance._renderPopover();
 
@@ -157,18 +165,19 @@ AUI.add(
 						var popover = new A.Popover(
 							{
 								align: {
-									node: '.form-builder-rule-builder-add-rule-button-icon'
+									node: '.form-builder-rule-builder-add-rule-button'
 								},
 								animated: true,
 								bodyContent: TPL_POPOVER,
+								constrain: true,
 								cssClass: 'form-builder-rulles-builder-popover',
 								duration: 0.25,
 								hideOn: [{
 									eventName: 'click',
 									node: A.one(document)
 								}],
-								position: 'bottom',
-								trigger: '.form-builder-rule-builder-add-rule-button-icon',
+								position: 'top',
+								trigger: '.form-builder-rule-builder-add-rule-button',
 								visible: false,
 								zIndex: Liferay.zIndex.TOOLTIP
 							}
