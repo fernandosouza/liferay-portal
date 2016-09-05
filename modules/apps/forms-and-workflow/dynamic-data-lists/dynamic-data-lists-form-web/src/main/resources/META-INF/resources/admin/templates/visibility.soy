@@ -7,21 +7,23 @@
  * @param deleteIcon
  */
 {template .action autoescape="deprecated-contextual"}
-	<li class="form-builder-rule-action-container">
-		<div class="card card-action card-horizontal">
-			<div class="card-row card-row-padded">
-				<div class="card-col-content card-col-gutters">
-					<div class="action-do-{$index}"></div>
-					<div class="action-the-{$index}"></div>
-				</div>
-			</div>
-			<div class="card-col-field">
-				<div class="dropdown">
-					<a class="action-card-delete icon-monospaced" href="javascript:;">
-						{$deleteIcon|noAutoescape}
-					</a>
+	<li class="form-builder-rule-action-container timeline-item">
+		<div class="panel panel-default">
+			<div class="panel-body flex-container">
+				<h4>Do</h4>
+
+				<div class="form-group action-do-{$index}"></div>
+				<div class="form-group action-the-{$index}"></div>
+
+				<div class="timeline-increment-icon">
+					<span class="timeline-icon"></span>
 				</div>
 			</div>
 		</div>
-	</div>
+		<div class="container__trash">
+			<button type="button" class="btn btn-link action-card-delete icon-monospaced" href="javascript:;">
+				{$deleteIcon|noAutoescape}
+			</button>
+		</div>
+	</li>
 {/template}

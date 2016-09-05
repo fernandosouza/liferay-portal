@@ -52,6 +52,8 @@ AUI.add(
 						}
 
 						actionDo = new Liferay.DDM.Field.Select({
+							showLabel: false,
+							label: 'Put this label after',
 							fieldName: index + '-action-the',
 							options: [
 								{
@@ -83,7 +85,7 @@ AUI.add(
 
 						var actionThe = new Liferay.DDM.Field.Select({
 							fieldName: index + '-action-do',
-							showLabel: true,
+							showLabel: false,
 							label: Liferay.Language.get('the'),
 							options: instance.get('fields'),
 							value: value,

@@ -455,6 +455,12 @@ AUI.add(
 						instance.one('#formBuilder').show();
 
 						instance.get('ruleBuilder').hide();
+
+						A.one('.ddl-form-builder-buttons').removeClass('hide');
+						A.one('.portlet-forms').removeClass('ddl-form-rule-builder');
+
+						instance.one('#showRules').removeClass('active');
+						instance.one('#showForm').addClass('active');
 					},
 
 					_onRulesButtonClick: function() {
@@ -463,6 +469,12 @@ AUI.add(
 						instance.one('#formBuilder').hide();
 
 						instance.get('ruleBuilder').show();
+
+						A.one('.ddl-form-builder-buttons').addClass('hide');
+						A.one('.portlet-forms').addClass('ddl-form-rule-builder');
+
+						instance.one('#showRules').addClass('active');
+						instance.one('#showForm').removeClass('active');
 					},
 
 					_onSubmitEditForm: function(event) {

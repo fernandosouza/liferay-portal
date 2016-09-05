@@ -25,7 +25,7 @@
 								'liferay-ddl-form-builder-pages-manager',
 								'liferay-ddl-form-builder-rule',
 								'liferay-ddl-form-builder-rule-visibility',
- 								'liferay-ddl-form-builder-rule-builder',
+								'liferay-ddl-form-builder-rule-builder',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
 								'liferay-ddm-form-renderer'

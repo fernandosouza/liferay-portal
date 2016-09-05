@@ -26,7 +26,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.liferay.dynamic.data.lists.form.web.internal.constants.DDLFormPortletKeys;
+// import com.liferay.dynamic.data.lists.form.web.internal.constants.DDLFormPortletKeys;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetSettings;

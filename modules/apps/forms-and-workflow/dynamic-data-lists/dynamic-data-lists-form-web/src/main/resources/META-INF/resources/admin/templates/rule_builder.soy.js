@@ -19,12 +19,12 @@ if (goog.DEBUG) {
 
 ddl.rule_list = function(opt_data, opt_ignored) {
   var output = '';
-  var ruleList97 = opt_data.rules;
-  var ruleListLen97 = ruleList97.length;
-  if (ruleListLen97 > 0) {
-    for (var ruleIndex97 = 0; ruleIndex97 < ruleListLen97; ruleIndex97++) {
-      var ruleData97 = ruleList97[ruleIndex97];
-      output += '<div class="card card-horizontal card-rule"><div class="card-row card-row-padded"><div class="card-col-content card-col-gutters"><h4>' + soy.$$escapeHtml(ruleData97.type) + '</h4><p>' + soy.$$escapeHtml(ruleData97.description) + '</p></div><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex97) + '"><a href="javascript:;">Edit</a></li><li class="rule-card-delete"  data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex97) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></div>';
+  var ruleList120 = opt_data.rules;
+  var ruleListLen120 = ruleList120.length;
+  if (ruleListLen120 > 0) {
+    for (var ruleIndex120 = 0; ruleIndex120 < ruleListLen120; ruleIndex120++) {
+      var ruleData120 = ruleList120[ruleIndex120];
+      output += '<div class="card card-horizontal card-rule"><div class="card-row card-row-padded"><div class="card-col-content card-col-gutters"><h4>' + soy.$$escapeHtml(ruleData120.type) + '</h4><p>' + soy.$$escapeHtml(ruleData120.description) + '</p></div><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex120) + '"><a href="javascript:;">Edit</a></li><li class="rule-card-delete"  data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex120) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></div>';
     }
   } else {
     output += soy.$$escapeHtml(opt_data.emptyListText);

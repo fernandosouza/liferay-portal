@@ -152,7 +152,7 @@ AUI.add(
 
 						conditionIf = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
+							showLabel: false,
 							label: Liferay.Language.get('if'),
 							options: instance.get('fields'),
 							visible: true,
@@ -178,7 +178,7 @@ AUI.add(
 
 						conditionOperator = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
+							showLabel: false,
 							label: Liferay.Language.get('state'),
 							options: textOperators,
 							visible: true,
@@ -204,7 +204,7 @@ AUI.add(
 
 						conditionThe = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
+							showLabel: false,
 							label: Liferay.Language.get('the'),
 							options: [
 								{
@@ -242,6 +242,7 @@ AUI.add(
 							fieldName: index + '-condition-second-operand-select',
 							options: instance.get('fields'),
 							showLabel: false,
+							label: 'Second Operation',
 							value: value,
 							visible: false
 						});
@@ -292,6 +293,7 @@ AUI.add(
 							options: [],
 							fieldName: index + '-condition-second-operand-input',
 							showLabel: false,
+							label: 'Second Operation Input',
 							value: value,
 							visible: false
 						});
@@ -319,7 +321,8 @@ AUI.add(
 							cancelLabel: Liferay.Language.get('cancel'),
 							conditions: rule ? rule.conditions : [],
 							deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
-							saveLabel: Liferay.Language.get('save')
+							plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
+							saveLabel: Liferay.Language.get('Add Rule')
 						});
 
 						return ruleSettingsContainer;
@@ -432,7 +435,7 @@ AUI.add(
 									instance._conditions[index + '-condition-first-operand'].get('type') !== 'text') {
 									instance._hideSecondOperandField(index);
 
-									instance._conditions[index + '-condition-second-operand-options-select'].set('options', 
+									instance._conditions[index + '-condition-second-operand-options-select'].set('options',
 										instance._getFieldOptions(instance._conditions[index + '-condition-first-operand'].getValue()));
 
 									instance._conditions[index + '-condition-second-operand-options-select'].set('visible', true);

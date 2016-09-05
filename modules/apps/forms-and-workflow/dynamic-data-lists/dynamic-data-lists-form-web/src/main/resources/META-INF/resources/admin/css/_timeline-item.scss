@@ -1,0 +1,52 @@
+.timeline-item {
+    position: relative;
+    color: #869CAD;
+
+    &:first-child {
+        .timeline-icon {
+            background-color: #869CAD;  
+        }
+    }
+
+    & .timeline-icon {
+        border: 2px solid #869CAD;
+    }
+
+    .container__trash {
+        position: absolute;
+        top: 0;
+        cursor: pointer;
+        right: 0;
+        padding: 10px;
+        display: none;
+        
+        &:hover {
+            color: #65B6F0;
+        }
+
+        &--hide {
+            display: none;
+        }
+    }
+
+    &:hover > .container__trash {
+        display: block;
+    }
+
+    .form-group {
+        margin: 0 10px;
+    }
+
+    .form-control {
+        color: #869CAD;
+    }
+
+    .rule-choose-box {
+        display: table-cell;
+    }
+
+    .action-panel {
+        width: 100%; 
+        display: table;
+    }
+}
