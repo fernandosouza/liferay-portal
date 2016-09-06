@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Arrays;
@@ -74,18 +73,10 @@ public class DDMFormRuleModelTranslator {
 	}
 
 	protected String extractFieldName(Expression expression) {
-		if (!(expression instanceof FunctionCallExpression)) {
-			return StringPool.BLANK;
-		}
-
 		FunctionCallExpression functionExpression =
 			(FunctionCallExpression)expression;
 
 		List<Expression> parameters = functionExpression.getParameters();
-
-		if (ListUtil.isEmpty(parameters) || (parameters.size() < 2)) {
-			return StringPool.BLANK;
-		}
 
 		Term fieldName = (Term)parameters.get(0);
 
@@ -93,10 +84,6 @@ public class DDMFormRuleModelTranslator {
 	}
 
 	protected String extractProperty(Expression expression) {
-		if (!(expression instanceof Term)) {
-			return StringPool.BLANK;
-		}
-
 		Term property = (Term)expression;
 
 		return property.getValue();
@@ -375,8 +362,10 @@ public class DDMFormRuleModelTranslator {
 			case "<=":
 				return "less-than-equals";
 			case "equals":
+			case "==":
 				return "equals-to";
 			case "not equals":
+			case "!=":
 				return "not-equals-to";
 			default:
 				return operator;
@@ -414,10 +403,6 @@ public class DDMFormRuleModelTranslator {
 
 	protected void translateSetReadOnlyFunction(
 		Expression expression, JSONObject translatedAction) {
-
-		if (!(expression instanceof Term)) {
-			return;
-		}
 
 		Term valueTerm = (Term)expression;
 
