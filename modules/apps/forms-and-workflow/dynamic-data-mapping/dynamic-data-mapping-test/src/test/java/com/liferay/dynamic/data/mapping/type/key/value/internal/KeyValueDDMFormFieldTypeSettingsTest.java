@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.key.value.internal;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTest;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -58,6 +59,9 @@ public class KeyValueDDMFormFieldTypeSettingsTest
 		Assert.assertArrayEquals(
 			new String[] {"set(fieldAt(\"tooltip\", 0), \"visible\", false)"},
 			ddmFormRuleActions.toArray());
+
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
 
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
