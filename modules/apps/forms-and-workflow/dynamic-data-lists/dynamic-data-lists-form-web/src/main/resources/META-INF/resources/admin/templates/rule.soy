@@ -1,0 +1,87 @@
+{namespace ddl.rule}
+
+/**
+ * Prints the DDL rule settings.
+ *
+ * @param actions
+ * @param cancelLabel
+ * @param conditions
+ * @param deleteIcon
+ * @param saveLabel
+ */
+{template .settings autoescape="deprecated-contextual"}
+	<div class="form-builder-rule-add-condition-container">
+		<a class="btn form-builder-rule-add-condition" href="javascript:;">
+		<span class="form-builder-rule-add-condition-button-icon">+</span>
+		</a>
+	</div>
+	<div class="form-builder-rule-add-action-container">
+		<a class="btn form-builder-rule-add-action" href="javascript:;">
+		<span class="form-builder-rule-add-action-button-icon">+</span>
+		</a>
+	</div>
+
+	<ul class="form-builder-rule-condition-list">
+		{foreach $condition in $conditions}
+			{call .condition}
+				{param index: index($condition) /}
+				{param deleteIcon: $deleteIcon /}
+			{/call}
+			{ifempty}
+				{call .condition}
+					{param index: 0 /}
+					{param deleteIcon: $deleteIcon /}
+				{/call}
+		{/foreach}
+	</ul>
+
+	<ul class="form-builder-rule-action-list">
+		{foreach $action in $actions}
+			{call .action}
+				{param index: index($action) /}
+				{param deleteIcon: $deleteIcon /}
+			{/call}
+			{ifempty}
+				{call .action}
+					{param index: 0 /}
+					{param deleteIcon: $deleteIcon /}
+				{/call}
+		{/foreach}
+	</ul>
+
+	<button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button">
+		<span class="form-builder-rule-settings-save-label">{$saveLabel}</span>
+	</button>
+	<button class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel">
+		<span class="lfr-btn-label">{$cancelLabel}</span>
+	</button>
+{/template}
+
+/**
+ * Prints the DDL rule condition.
+ *
+ * @param index
+ * @param deleteIcon
+ */
+{template .condition autoescape="deprecated-contextual"}
+	<li class="form-builder-rule-condition-container">
+		<div class="card card-condition card-horizontal">
+			<div class="card-row card-row-padded">
+				<div class="card-col-content card-col-gutters">
+					<div class="condition-if-{$index}"></div>
+					<div class="condition-operator-{$index}"></div>
+					<div class="condition-the-{$index}"></div>
+					<div class="condition-type-value-{$index}"></div>
+					<div class="condition-type-value-options-{$index}"></div>
+				</div>
+				<div class="card-col-field">
+ 					<div class="dropdown">
+ 						<a class="condition-card-delete icon-monospaced" href="javascript:;">
+ 							{$deleteIcon|noAutoescape}
+ 						</a>
+ 					</div>
+ 				</div>
+			</div>
+		</div>
+	</div>
+{/template}
