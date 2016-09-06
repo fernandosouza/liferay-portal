@@ -215,6 +215,9 @@ public class DDMFormRuleModelTranslator {
 
 		translatedDDMFormRule.put("actions", translatedActions);
 
+		translatedDDMFormRule.put(
+			"type", ddmFormRule.getDDMFormRuleType().getValue());
+
 		return translatedDDMFormRule;
 	}
 

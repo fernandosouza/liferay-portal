@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.form.rule.translator.impl;
 
 import com.liferay.dynamic.data.mapping.form.rule.translator.DDMFormRuleTranslatorException;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -231,7 +232,11 @@ public class DDMFormRuleJSONTranslator {
 
 		List<String> translatedActions = translateActions(actions);
 
-		return new DDMFormRule(condition, translatedActions);
+		String type = ddmFormRule.getString("type");
+
+		DDMFormRuleType ddmFormRuleType = DDMFormRuleType.parse(type);
+
+		return new DDMFormRule(condition, ddmFormRuleType, translatedActions);
 	}
 
 	protected String translateFunction(String functionName, JSONArray operands)
@@ -386,6 +391,11 @@ public class DDMFormRuleJSONTranslator {
 		if (!ddmFormRule.has("actions")) {
 			throw new DDMFormRuleTranslatorException(
 				"An array with actions is expected.");
+		}
+
+		if (!ddmFormRule.has("type")) {
+			throw new DDMFormRuleTranslatorException(
+				"Rule's type not defined.");
 		}
 	}
 
