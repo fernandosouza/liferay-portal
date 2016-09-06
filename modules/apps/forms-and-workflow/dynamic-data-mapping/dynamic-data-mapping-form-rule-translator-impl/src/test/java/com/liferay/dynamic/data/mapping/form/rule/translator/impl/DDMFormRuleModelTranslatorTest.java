@@ -19,6 +19,7 @@ import com.liferay.dynamic.data.mapping.expression.internal.DDMExpressionFactory
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -34,6 +35,38 @@ import org.junit.Test;
  * @author Leonardo Barros
  */
 public class DDMFormRuleModelTranslatorTest {
+
+	@Test
+	public void testArithmeticCondition() throws Exception {
+		DDMForm ddmForm = new DDMForm();
+
+		DDMFormField ddmFormField1 = new DDMFormField("Field1", "number");
+		ddmForm.addDDMFormField(ddmFormField1);
+
+		DDMFormField ddmFormField2 = new DDMFormField("Field2", "number");
+		ddmForm.addDDMFormField(ddmFormField2);
+
+		String condition = "2 * 7 < 5 / get(fieldAt(\"Field1\", 0), \"value\")";
+
+		String action = "set(fieldAt(\"Field2\", 0), \"visible\", true)";
+
+		List<String> actions = Arrays.asList(action);
+
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
+		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
+
+		ddmForm.setDDMFormRules(ddmFormRules);
+
+		DDMFormRuleModelTranslator ddmFormRuleModelTranslator =
+			createDDMFormRuleModelTranslator(ddmForm);
+
+		String result = ddmFormRuleModelTranslator.translate();
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray(result);
+
+		assertArithmeticCondition(jsonArray);
+	}
 
 	@Test
 	public void testDisableRule() throws Exception {
@@ -53,7 +86,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -110,7 +144,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action1, action2);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.READ_ONLY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -150,7 +185,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -178,7 +214,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -211,7 +248,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -250,7 +288,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.READ_ONLY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -279,7 +318,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.READ_ONLY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -315,7 +355,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -351,7 +392,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.AUTO_FILL, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -387,7 +429,8 @@ public class DDMFormRuleModelTranslatorTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.NOT_AVAILABLE, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -412,21 +455,139 @@ public class DDMFormRuleModelTranslatorTest {
 		Assert.assertEquals(target, jsonObject.getString("target"));
 	}
 
+	protected void assertArithmeticCondition(JSONArray jsonArray) {
+		Assert.assertEquals(1, jsonArray.length());
+
+		JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+		Assert.assertTrue(jsonObject.has("conditions"));
+		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
+
+		JSONArray conditions = jsonObject.getJSONArray("conditions");
+
+		Assert.assertEquals(1, conditions.length());
+
+		JSONObject condition = conditions.getJSONObject(0);
+
+		assertArithmeticCondition(condition);
+
+		JSONArray actions = jsonObject.getJSONArray("actions");
+
+		assertArithmeticConditionActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
+	}
+
+	protected void assertArithmeticCondition(JSONObject jsonObject) {
+		Assert.assertTrue(jsonObject.has("operands"));
+		Assert.assertTrue(jsonObject.has("operator"));
+
+		JSONArray operands = jsonObject.getJSONArray("operands");
+
+		Assert.assertEquals(2, operands.length());
+
+		JSONObject operand1 = operands.getJSONObject(0);
+
+		assertArithmeticConditionOperand1(operand1);
+
+		JSONObject operand2 = operands.getJSONObject(1);
+
+		assertArithmeticConditionOperand2(operand2);
+
+		Assert.assertEquals("less-than", jsonObject.getString("operator"));
+	}
+
+	protected void assertArithmeticConditionActions(JSONArray jsonArray) {
+		Assert.assertEquals(1, jsonArray.length());
+
+		assertAction(jsonArray.getJSONObject(0), "show", "Field2");
+	}
+
+	protected void assertArithmeticConditionOperand1(JSONObject jsonObject) {
+		Assert.assertTrue(jsonObject.has("type"));
+		Assert.assertTrue(jsonObject.has("value"));
+
+		Assert.assertEquals("expression", jsonObject.getString("type"));
+
+		JSONObject expression = jsonObject.getJSONObject("value");
+
+		Assert.assertTrue(expression.has("operands"));
+		Assert.assertTrue(expression.has("operator"));
+
+		Assert.assertEquals("multiplication", expression.getString("operator"));
+
+		JSONArray operands = expression.getJSONArray("operands");
+
+		Assert.assertEquals(2, operands.length());
+
+		JSONObject operand1 = operands.getJSONObject(0);
+
+		Assert.assertTrue(operand1.has("type"));
+		Assert.assertTrue(operand1.has("value"));
+
+		Assert.assertEquals("constant", operand1.getString("type"));
+		Assert.assertEquals("2", operand1.getString("value"));
+
+		JSONObject operand2 = operands.getJSONObject(1);
+
+		Assert.assertTrue(operand2.has("type"));
+		Assert.assertTrue(operand2.has("value"));
+
+		Assert.assertEquals("constant", operand2.getString("type"));
+		Assert.assertEquals("7", operand2.getString("value"));
+	}
+
+	protected void assertArithmeticConditionOperand2(JSONObject jsonObject) {
+		Assert.assertTrue(jsonObject.has("type"));
+		Assert.assertTrue(jsonObject.has("value"));
+
+		Assert.assertEquals("expression", jsonObject.getString("type"));
+
+		JSONObject expression = jsonObject.getJSONObject("value");
+
+		Assert.assertTrue(expression.has("operands"));
+		Assert.assertTrue(expression.has("operator"));
+
+		Assert.assertEquals("division", expression.getString("operator"));
+
+		JSONArray operands = expression.getJSONArray("operands");
+
+		Assert.assertEquals(2, operands.length());
+
+		JSONObject operand1 = operands.getJSONObject(0);
+
+		Assert.assertTrue(operand1.has("type"));
+		Assert.assertTrue(operand1.has("value"));
+
+		Assert.assertEquals("constant", operand1.getString("type"));
+		Assert.assertEquals("5", operand1.getString("value"));
+
+		JSONObject operand2 = operands.getJSONObject(1);
+
+		assertGetFunction(operand2, "Field1", "0");
+	}
+
 	protected void assertDisableRule(JSONArray jsonArray) throws Exception {
 		Assert.assertEquals(1, jsonArray.length());
 
-		JSONObject condition = jsonArray.getJSONObject(0);
+		JSONObject rule = jsonArray.getJSONObject(0);
 
-		Assert.assertTrue(condition.has("conditions"));
-		Assert.assertTrue(condition.has("actions"));
+		Assert.assertTrue(rule.has("conditions"));
+		Assert.assertTrue(rule.has("actions"));
+		Assert.assertTrue(rule.has("type"));
 
-		JSONArray conditions = condition.getJSONArray("conditions");
+		JSONArray conditions = rule.getJSONArray("conditions");
 
 		Assert.assertEquals(1, conditions.length());
 
 		assertDisableRuleCondition1(conditions.getJSONObject(0));
 
-		assertDisableRuleActions(condition.getJSONArray("actions"));
+		assertDisableRuleActions(rule.getJSONArray("actions"));
+
+		String type = rule.getString("type");
+
+		Assert.assertEquals("VISIBILITY", type);
 	}
 
 	protected void assertDisableRuleActions(JSONArray jsonArray) {
@@ -465,6 +626,7 @@ public class DDMFormRuleModelTranslatorTest {
 
 		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -477,6 +639,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertEnableAndVisibleRuleActions(actions);
+
+		Assert.assertEquals("READ_ONLY", jsonObject.getString("type"));
 	}
 
 	protected void assertEnableAndVisibleRuleActions(JSONArray jsonArray) {
@@ -603,6 +767,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertFunctionAsOperandActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
 	}
 
 	protected void assertFunctionAsOperandActions(JSONArray jsonArray) {
@@ -670,6 +836,7 @@ public class DDMFormRuleModelTranslatorTest {
 
 		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -682,6 +849,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertFunctionWithoutParametersActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
 	}
 
 	protected void assertFunctionWithoutParametersActions(JSONArray jsonArray) {
@@ -770,6 +939,7 @@ public class DDMFormRuleModelTranslatorTest {
 
 		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -782,6 +952,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertHideRuleActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
 	}
 
 	protected void assertHideRuleActions(JSONArray jsonArray) {
@@ -819,6 +991,7 @@ public class DDMFormRuleModelTranslatorTest {
 
 		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -830,6 +1003,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertHideWithAndExpressionActions(actions);
+
+		Assert.assertEquals("READ_ONLY", jsonObject.getString("type"));
 	}
 
 	protected void assertHideWithAndExpressionActions(JSONArray jsonArray) {
@@ -893,8 +1068,9 @@ public class DDMFormRuleModelTranslatorTest {
 
 		JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("conditions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -903,6 +1079,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertNoConditionActions(actions);
+
+		Assert.assertEquals("READ_ONLY", jsonObject.getString("type"));
 	}
 
 	protected void assertNoConditionActions(JSONArray jsonArray) {
@@ -931,6 +1109,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertShowRuleActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
 	}
 
 	protected void assertShowRuleActions(JSONArray jsonArray) {
@@ -978,6 +1158,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertShowRuleWithFunctionAsOperatorActions(actions);
+
+		Assert.assertEquals("AUTO_FILL", jsonObject.getString("type"));
 	}
 
 	protected void assertShowRuleWithFunctionAsOperatorActions(
@@ -1033,6 +1215,8 @@ public class DDMFormRuleModelTranslatorTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertShowRuleWithOrExpressionActions(actions);
+
+		Assert.assertEquals("NOT_AVAILABLE", jsonObject.getString("type"));
 	}
 
 	protected void assertShowRuleWithOrExpressionActions(JSONArray jsonArray) {

@@ -21,6 +21,7 @@ import com.liferay.dynamic.data.mapping.form.rule.translator.DDMFormRuleTranslat
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -47,7 +48,8 @@ public class DDMFormRuleTranslatorImplTest {
 
 		List<String> actions = Collections.emptyList();
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.NOT_AVAILABLE, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -93,6 +95,9 @@ public class DDMFormRuleTranslatorImplTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field2\", 0), \"visible\", true)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
@@ -108,7 +113,8 @@ public class DDMFormRuleTranslatorImplTest {
 
 		List<String> actions = Arrays.asList(action);
 
-		DDMFormRule ddmFormRule = new DDMFormRule(condition, actions);
+		DDMFormRule ddmFormRule = new DDMFormRule(
+			condition, DDMFormRuleType.VISIBILITY, actions);
 		List<DDMFormRule> ddmFormRules = Arrays.asList(ddmFormRule);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
@@ -140,6 +146,7 @@ public class DDMFormRuleTranslatorImplTest {
 
 		Assert.assertTrue(jsonObject.has("conditions"));
 		Assert.assertTrue(jsonObject.has("actions"));
+		Assert.assertTrue(jsonObject.has("type"));
 
 		JSONArray conditions = jsonObject.getJSONArray("conditions");
 
@@ -152,6 +159,8 @@ public class DDMFormRuleTranslatorImplTest {
 		JSONArray actions = jsonObject.getJSONArray("actions");
 
 		assertTranslateModelActions(actions);
+
+		Assert.assertEquals("VISIBILITY", jsonObject.getString("type"));
 	}
 
 	protected void assertTranslateModelActions(JSONArray jsonArray) {

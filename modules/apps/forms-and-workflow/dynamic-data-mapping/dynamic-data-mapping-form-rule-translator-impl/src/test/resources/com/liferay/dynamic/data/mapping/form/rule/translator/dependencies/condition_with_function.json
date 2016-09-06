@@ -20,6 +20,7 @@
 				],
 				"operator": "equals"
 			}
-		]
+		],
+		"type": "VISIBILITY"
 	}
 ]

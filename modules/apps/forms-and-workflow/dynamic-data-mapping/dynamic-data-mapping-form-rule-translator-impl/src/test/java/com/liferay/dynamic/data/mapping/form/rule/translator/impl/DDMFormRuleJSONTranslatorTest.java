@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.form.rule.translator.impl;
 
 import com.liferay.dynamic.data.mapping.form.rule.translator.DDMFormRuleTranslatorException;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -58,20 +59,25 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field4\", 0), \"readOnly\", true)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.READ_ONLY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
 	public void testConditionWithAddition() throws Exception {
 		testArithmeticCondition(
 			"condition_with_addition.json", "1 + 3 <= 4",
-			"set(fieldAt(\"Field1\", 0), \"visible\", false)");
+			"set(fieldAt(\"Field1\", 0), \"visible\", false)",
+			DDMFormRuleType.VISIBILITY);
 	}
 
 	@Test
 	public void testConditionWithArithmetic() throws Exception {
 		testArithmeticCondition(
 			"condition_with_arithmetic.json", "5 - 2 > 4 / 3",
-			"set(fieldAt(\"Field1\", 0), \"readOnly\", false)");
+			"set(fieldAt(\"Field1\", 0), \"readOnly\", false)",
+			DDMFormRuleType.READ_ONLY);
 	}
 
 	@Test
@@ -101,6 +107,9 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field3\", 0), \"visible\", true)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
@@ -131,13 +140,17 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field3\", 0), \"readOnly\", false)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.READ_ONLY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
 	public void testConditionWithMultiplication() throws Exception {
 		testArithmeticCondition(
 			"condition_with_multiplication.json", "2 * 5 < 10",
-			"set(fieldAt(\"Field1\", 0), \"readOnly\", true)");
+			"set(fieldAt(\"Field1\", 0), \"readOnly\", true)",
+			DDMFormRuleType.READ_ONLY);
 	}
 
 	@Test
@@ -159,6 +172,7 @@ public class DDMFormRuleJSONTranslatorTest {
 		Assert.assertTrue(ddmFormRule.isEnabled());
 		Assert.assertEquals("TRUE", condition);
 		Assert.assertTrue(actions.isEmpty());
+		Assert.assertNull(ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
@@ -195,6 +209,9 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field1\", 0), \"visible\", true)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test(expected = DDMFormRuleTranslatorException.class)
@@ -242,6 +259,11 @@ public class DDMFormRuleJSONTranslatorTest {
 		testInvalid("invalid_operand.json");
 	}
 
+	@Test(expected = DDMFormRuleTranslatorException.class)
+	public void testInvalidRuleType() throws Exception {
+		testInvalid("invalid_rule_type.json");
+	}
+
 	@Test
 	public void testMultipleActionsRule() throws Exception {
 		String json = read("multiple_actions_rule.json");
@@ -281,6 +303,9 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field4\", 0), \"readOnly\", true)", action4);
+
+		Assert.assertEquals(
+			DDMFormRuleType.READ_ONLY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
@@ -311,6 +336,9 @@ public class DDMFormRuleJSONTranslatorTest {
 
 		Assert.assertEquals(
 			"set(fieldAt(\"Field3\", 0), \"visible\", false)", action);
+
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
 	}
 
 	@Test
@@ -353,7 +381,7 @@ public class DDMFormRuleJSONTranslatorTest {
 	}
 
 	protected void testArithmeticCondition(
-			String file, String condition, String action)
+			String file, String condition, String action, DDMFormRuleType type)
 		throws Exception {
 
 		String json = read(file);
@@ -374,6 +402,8 @@ public class DDMFormRuleJSONTranslatorTest {
 		Assert.assertEquals(1, actions.size());
 
 		Assert.assertEquals(action, actions.get(0));
+
+		Assert.assertEquals(type, ddmFormRule.getDDMFormRuleType());
 	}
 
 	protected void testInvalid(String file) throws Exception {
