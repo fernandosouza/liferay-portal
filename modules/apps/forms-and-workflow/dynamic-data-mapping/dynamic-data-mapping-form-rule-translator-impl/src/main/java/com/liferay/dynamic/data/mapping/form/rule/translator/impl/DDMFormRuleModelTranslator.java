@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Arrays;
@@ -74,18 +73,10 @@ public class DDMFormRuleModelTranslator {
 	}
 
 	protected String extractFieldName(Expression expression) {
-		if (!(expression instanceof FunctionCallExpression)) {
-			return StringPool.BLANK;
-		}
-
 		FunctionCallExpression functionExpression =
 			(FunctionCallExpression)expression;
 
 		List<Expression> parameters = functionExpression.getParameters();
-
-		if (ListUtil.isEmpty(parameters) || (parameters.size() < 2)) {
-			return StringPool.BLANK;
-		}
 
 		Term fieldName = (Term)parameters.get(0);
 
@@ -93,10 +84,6 @@ public class DDMFormRuleModelTranslator {
 	}
 
 	protected String extractProperty(Expression expression) {
-		if (!(expression instanceof Term)) {
-			return StringPool.BLANK;
-		}
-
 		Term property = (Term)expression;
 
 		return property.getValue();
@@ -253,7 +240,11 @@ public class DDMFormRuleModelTranslator {
 
 		JSONObject translatedCondition = _jsonFactory.createJSONObject();
 
-		translatedCondition.put("operator", expression.getFunctionName());
+		String functionName = expression.getFunctionName();
+
+		functionName = translateOperator(functionName);
+
+		translatedCondition.put("operator", functionName);
 
 		translatedConditions.put(translatedCondition);
 
@@ -272,13 +263,29 @@ public class DDMFormRuleModelTranslator {
 		JSONObject translatedOperand = _jsonFactory.createJSONObject();
 		JSONObject translatedFunction = _jsonFactory.createJSONObject();
 
+		String functionName = functionCallExpression.getFunctionName();
+
+		functionName = translateOperator(functionName);
+
+		List<Expression> parameters = functionCallExpression.getParameters();
+
+		if ("get".equals(functionName)) {
+			translatedOperand.put("type", "field");
+
+			FunctionCallExpression fieldAtFunction =
+				(FunctionCallExpression)parameters.get(0);
+
+			String fieldName = extractFieldName(fieldAtFunction);
+
+			translatedOperand.put("value", fieldName);
+
+			return translatedOperand;
+		}
+
 		translatedOperand.put("type", "function");
 		translatedOperand.put("value", translatedFunction);
 
-		translatedFunction.put(
-			"name", functionCallExpression.getFunctionName());
-
-		List<Expression> parameters = functionCallExpression.getParameters();
+		translatedFunction.put("name", functionName);
 
 		JSONArray translatedOperands = translateOperands(parameters);
 
@@ -375,8 +382,10 @@ public class DDMFormRuleModelTranslator {
 			case "<=":
 				return "less-than-equals";
 			case "equals":
+			case "==":
 				return "equals-to";
 			case "not equals":
+			case "!=":
 				return "not-equals-to";
 			default:
 				return operator;
@@ -414,10 +423,6 @@ public class DDMFormRuleModelTranslator {
 
 	protected void translateSetReadOnlyFunction(
 		Expression expression, JSONObject translatedAction) {
-
-		if (!(expression instanceof Term)) {
-			return;
-		}
 
 		Term valueTerm = (Term)expression;
 

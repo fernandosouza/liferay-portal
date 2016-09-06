@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,23 @@ public class DDMFormRuleJSONTranslator {
 		return ddmFormRules;
 	}
 
+	protected String escapeOperand(
+		String functionName, String translatedOperand) {
+
+		if (Validator.isNumber(translatedOperand)) {
+			return translatedOperand;
+		}
+
+		if ("equals".equals(functionName) ||
+			"not equals".equals(functionName) ||
+			"contains".equals(functionName)) {
+
+			return StringPool.QUOTE + translatedOperand + StringPool.QUOTE;
+		}
+
+		return translatedOperand;
+	}
+
 	protected boolean isAvailableAction(String action) {
 		for (String availableAction : _AVAILABLE_ACTIONS) {
 			if (availableAction.equals(action)) {
@@ -66,6 +84,11 @@ public class DDMFormRuleJSONTranslator {
 		}
 
 		return false;
+	}
+
+	protected boolean isConstantOperand(JSONObject jsonObject) {
+		String type = jsonObject.getString("type");
+		return "constant".equals(type);
 	}
 
 	protected boolean isFunctionOperator(String operator) {
@@ -264,6 +287,11 @@ public class DDMFormRuleJSONTranslator {
 
 			String translatedOperand = translateOperand(jsonObject);
 
+			if (isConstantOperand(jsonObject)) {
+				translatedOperand = escapeOperand(
+					functionName, translatedOperand);
+			}
+
 			sb.append(translatedOperand);
 
 			if (i < (operands.length() - 1)) {
@@ -293,8 +321,7 @@ public class DDMFormRuleJSONTranslator {
 		String type = operand.getString("type");
 
 		if ("constant".equals(type)) {
-			return StringPool.QUOTE + operand.getString("value") +
-				StringPool.QUOTE;
+			return operand.getString("value");
 		}
 		else if ("arithmetic".equals(type)) {
 			JSONObject jsonObject = operand.getJSONObject("value");
@@ -343,6 +370,10 @@ public class DDMFormRuleJSONTranslator {
 				return "equals";
 			case "not-equals-to":
 				return "not equals";
+			case "is-url":
+				return "isURL";
+			case "is-email-address":
+				return "isEmailAddress";
 			default:
 				return operator;
 		}
