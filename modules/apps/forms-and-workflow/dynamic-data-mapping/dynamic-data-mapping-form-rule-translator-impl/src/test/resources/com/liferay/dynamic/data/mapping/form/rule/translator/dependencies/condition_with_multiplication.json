@@ -32,6 +32,7 @@
 				],
 				"operator": "less-than"
 			}
-		]
+		],
+		"type": "READ_ONLY"
 	}
 ]

@@ -18,6 +18,7 @@
 				"target": "Field4"
 			}
 		],
-		"conditions": []
+		"conditions": [],
+		"type": "READ_ONLY"
 	}
 ]
