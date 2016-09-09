@@ -75,8 +75,16 @@ public class DDMFormRuleJSONTranslator {
 	protected String mountSetFunctionCall(
 		String fieldName, String property, String value) {
 
-		return String.format(
-			"set(fieldAt(\"%s\", 0), \"%s\", %s)", fieldName, property, value);
+		if ("value".equals(property)) {
+			return String.format(
+				"set(fieldAt(\"%s\", 0), \"%s\", \"%s\")", fieldName, property,
+				value);
+		}
+		else {
+			return String.format(
+				"set(fieldAt(\"%s\", 0), \"%s\", %s)", fieldName, property,
+				value);
+		}
 	}
 
 	protected String translateAction(JSONObject action)
@@ -285,7 +293,8 @@ public class DDMFormRuleJSONTranslator {
 		String type = operand.getString("type");
 
 		if ("constant".equals(type)) {
-			return operand.getString("value");
+			return StringPool.QUOTE + operand.getString("value") +
+				StringPool.QUOTE;
 		}
 		else if ("arithmetic".equals(type)) {
 			JSONObject jsonObject = operand.getJSONObject("value");
