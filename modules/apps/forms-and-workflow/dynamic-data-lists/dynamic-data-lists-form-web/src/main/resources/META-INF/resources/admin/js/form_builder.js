@@ -219,22 +219,25 @@ AUI.add(
 
 						var contains = false;
 
+						instance.eachFields(function(currentField) {
+							if (currentField === field) {
+								contains = true;
+							}
+						});
+
+						return contains;
+					},
+
+					eachFields: function(callback) {
+						var instance = this;
+
 						var visitor = instance.get('visitor');
 
 						visitor.set('pages', instance.get('layouts'));
 
-						visitor.set(
-							'fieldHandler',
-							function(currentField) {
-								if (currentField === field) {
-									contains = true;
-								}
-							}
-						);
+						visitor.set('fieldHandler', callback);
 
 						visitor.visit();
-
-						return contains;
 					},
 
 					createField: function(fieldType) {
@@ -646,18 +649,16 @@ AUI.add(
 
 						visitor.set('pages', instance.get('layouts'));
 
-						visitor.set(
-							'fieldHandler',
-							function(field) {
-								var fieldVisible = boundingBox.contains(field.get('container'));
+						instance.eachFields(function(field) {
+							var fieldVisible = boundingBox.contains(field.get('container'));
 
-								if (fieldVisible && field.get('context.required')) {
-									hasRequiredField = true;
-								}
+								// if (fieldVisible && field.get('context.required')) {
+								// 	hasRequiredField = true;
+								// }
+							if (fieldVisible && field.get('required')) {
+								hasRequiredField = true;
 							}
-						);
-
-						visitor.visit();
+						});
 
 						instance._requiredFieldsWarningNode.toggle(hasRequiredField);
 					},
