@@ -1,0 +1,27 @@
+{namespace ddl.rule}
+
+/**
+ * Prints the DDL visibility action.
+ *
+ * @param index
+ * @param deleteIcon
+ */
+{template .action autoescape="deprecated-contextual"}
+	<li class="form-builder-rule-action-container-{$index}">
+		<div class="card card-action card-horizontal">
+			<div class="card-row card-row-padded">
+				<div class="card-col-content card-col-gutters">
+					<div class="action-do-{$index}"></div>
+					<div class="action-the-{$index}"></div>
+				</div>
+			</div>
+			<div class="card-col-field">
+				<div class="dropdown">
+					<a class="action-card-delete icon-monospaced" href="javascript:;">
+						{$deleteIcon|noAutoescape}
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{/template}
