@@ -11,7 +11,7 @@ if (typeof ddl.rule == 'undefined') { ddl.rule = {}; }
 
 
 ddl.rule.action = function(opt_data, opt_ignored) {
-  return '<li class="form-builder-rule-action-container-' + soy.$$escapeHtmlAttribute(opt_data.index) + '"><div class="card card-action card-horizontal"><div class="card-row card-row-padded"><div class="card-col-content card-col-gutters"><div class="action-do-' + soy.$$escapeHtmlAttribute(opt_data.index) + '"></div><div class="action-the-' + soy.$$escapeHtmlAttribute(opt_data.index) + '"></div></div></div><div class="card-col-field"><div class="dropdown"><a class="action-card-delete icon-monospaced" href="javascript:;">' + soy.$$filterNoAutoescape(opt_data.deleteIcon) + '</a></div></div></div></div>';
+  return '<li class="form-builder-rule-action-container-' + soy.$$escapeHtmlAttribute(opt_data.index) + ' timeline-item"><div class="panel panel-default"><div class="panel-body flex-container"><h4>Do</h4><div class="action-do-' + soy.$$escapeHtmlAttribute(opt_data.index) + ' form-group"></div><div class="action-the-' + soy.$$escapeHtmlAttribute(opt_data.index) + ' form-group"></div><div class="timeline-increment-icon"><span class="timeline-icon"></span></div></div></div><div class="container__trash"><button class="btn btn-link action-card-delete icon-monospaced" data-card-id="' + soy.$$escapeHtmlAttribute(opt_data.index) + '" href="javascript:;" type="button">' + soy.$$filterNoAutoescape(opt_data.deleteIcon) + '</button></div></li>';
 };
 if (goog.DEBUG) {
   ddl.rule.action.soyTemplateName = 'ddl.rule.action';

@@ -7,25 +7,25 @@
  * @param cancelLabel
  * @param conditions
  * @param deleteIcon
+ * @param plusIcon
  * @param saveLabel
  */
 {template .settings autoescape="deprecated-contextual"}
-	<div class="form-builder-rule-add-condition-container">
-		<a class="btn form-builder-rule-add-condition" href="javascript:;">
-		<span class="form-builder-rule-add-condition-button-icon">+</span>
-		</a>
-	</div>
-	<div class="form-builder-rule-add-action-container">
-		<a class="btn form-builder-rule-add-action" href="javascript:;">
-		<span class="form-builder-rule-add-action-button-icon">+</span>
-		</a>
+	<div class="top-informations">
+		<h2 class="text-default">Apply Show and Hide Rule</h2>
+		<h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4>
 	</div>
 
-	<ul class="form-builder-rule-condition-list">
+	<ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">
+		{call .rulesHeader}
+			{param title: 'Condition' /}
+		{/call}
+
 		{foreach $condition in $conditions}
 			{call .condition}
 				{param index: index($condition) /}
 				{param deleteIcon: $deleteIcon /}
+				{param type: $condition.type /}
 			{/call}
 			{ifempty}
 				{call .condition}
@@ -35,7 +35,16 @@
 		{/foreach}
 	</ul>
 
-	<ul class="form-builder-rule-action-list">
+	{call .btnAddNewTimelineItem}
+		{param plusIcon: $plusIcon /}
+		{param cssClass: 'form-builder-rule-add-condition' /}
+	{/call}
+
+	<ul class="action-list liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-action-list timeline">
+		{call .rulesHeader}
+			{param title: 'Actions' /}
+		{/call}
+
 		{foreach $action in $actions}
 			{call .action}
 				{param index: index($action) /}
@@ -49,12 +58,19 @@
 		{/foreach}
 	</ul>
 
-	<button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button">
-		<span class="form-builder-rule-settings-save-label">{$saveLabel}</span>
-	</button>
-	<button class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel">
-		<span class="lfr-btn-label">{$cancelLabel}</span>
-	</button>
+	{call .btnAddNewTimelineItem}
+		{param plusIcon: $plusIcon /}
+		{param cssClass: 'form-builder-rule-add-action' /}
+	{/call}
+
+	<div class="liferay-ddl-form-rule-builder-footer">
+		<button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button">
+			<span class="form-builder-rule-settings-save-label">{$saveLabel}</span>
+		</button>
+		<button type="button" class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel">
+			<span class="lfr-btn-label">{$cancelLabel}</span>
+		</button>
+	</div>
 {/template}
 
 /**
@@ -62,26 +78,88 @@
  *
  * @param index
  * @param deleteIcon
+ * @param? type
  */
 {template .condition autoescape="deprecated-contextual"}
-	<li class="form-builder-rule-condition-container-{$index}">
-		<div class="card card-condition card-horizontal">
-			<div class="card-row card-row-padded">
-				<div class="card-col-content card-col-gutters">
-					<div class="condition-if-{$index}"></div>
-					<div class="condition-operator-{$index}"></div>
-					<div class="condition-the-{$index}"></div>
-					<div class="condition-type-value-{$index}"></div>
-					<div class="condition-type-value-options-{$index}"></div>
+	<li class="form-builder-rule-condition-container-{$index} timeline-item">
+		<div class="panel panel-default">
+			<div class="panel-body flex-container">
+				<h4>If</h4>
+
+				<div class="form-group condition-if-{$index}"></div>
+				<div class="form-group condition-operator-{$index}"></div>
+				<div class="form-group condition-the-{$index}"></div>
+				<div class="form-group condition-type-value-{$index}"></div>
+				<div class="form-group condition-type-value-options-{$index}"></div>
+
+				<div class="timeline-increment-icon">
+					<span class="timeline-icon"></span>
 				</div>
-				<div class="card-col-field">
- 					<div class="dropdown">
- 						<a class="condition-card-delete icon-monospaced" data-card-id="{$index}" href="javascript:;">
- 							{$deleteIcon|noAutoescape}
- 						</a>
- 					</div>
- 				</div>
 			</div>
 		</div>
+
+		<div class="operator panel panel-default panel-inline">
+			<div class="panel-body text-uppercase">Or {$type} (Fixed value)</div>
+		</div>
+
+		<div class="container__trash">
+			<button
+				class="btn btn-link condition-card-delete icon-monospaced"
+				data-card-id="{$index}"
+				href="javascript:;"
+				type="button">
+				{$deleteIcon|noAutoescape}
+			</button>
+		</div>
+	</li>
+{/template}
+
+/**
+ * Prints the DDL rule condition.
+ *
+ * @param plusIcon
+ * @param? cssClass
+ */
+{template .btnAddNewTimelineItem autoescape="deprecated-contextual"}
+	<div class="addbutton-timeline-item">
+		<div class="timeline-increment-icon add-condition">
+			<a href="javascript:;" aria-role="button" class="btn btn-xs btn-primary form-builder-timeline-add-item {$cssClass or ''}">
+				{$plusIcon|noAutoescape}
+			</a>
+		</div>
 	</div>
+{/template}
+
+
+/**
+ * @param title
+ */
+{template .rulesHeader}
+	
+	<li class="timeline-item">
+		<div class="panel panel-default">
+			<div class="panel-body flex-container">
+				<div class="h4 panel-title">
+					{$title}
+				</div>
+
+				<div class="btn-group dropdown" style="block">
+				    <button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">
+				       or <span class="caret"></span>
+				    </button>
+
+				    <ul class="dropdown-menu">
+				        <li class="operation-item text-uppercase"><a>or</a></li>
+				        <li class="divider"></li>
+				        <li class="operation-item text-uppercase"><a>and</a></li>
+				    </ul>
+				</div>
+
+				<div class="timeline-increment-icon">
+					<span class="timeline-icon"></span>
+				</div>
+			</div>
+		</div>
+	</li>					
+
 {/template}

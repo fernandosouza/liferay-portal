@@ -84,7 +84,7 @@ AUI.add(
 					_handleAddActionClick: function() {
 						var instance = this;
 
-						var actionListNode = instance.get('contentBox').one('.form-builder-rule-action-list');
+						var actionListNode = instance.get('contentBox').one('.liferay-ddl-form-rule-builder-action-list');
 
 						var index = instance._actionsIndexes[instance._actionsIndexes.length - 1] + 1;
 

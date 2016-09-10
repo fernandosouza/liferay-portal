@@ -198,6 +198,7 @@ AUI.add(
 							conditions: rule ? rule.conditions : [],
 							deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
 							saveLabel: Liferay.Language.get('save')
+							plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
 							showLabel: false
 						});
 
@@ -240,7 +241,7 @@ AUI.add(
 					_handleAddConditionClick: function() {
 						var instance = this;
 
-						var conditionListNode = instance.get('contentBox').one('.form-builder-rule-condition-list');
+						var conditionListNode = instance.get('contentBox').one('.liferay-ddl-form-rule-builder-condition-list');
 
 						var index = instance._conditionsIndexes[instance._conditionsIndexes.length - 1] + 1;
 
