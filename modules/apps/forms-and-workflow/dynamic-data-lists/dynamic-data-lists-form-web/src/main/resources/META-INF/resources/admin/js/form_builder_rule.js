@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddl-form-builder-rule',
 	function(A) {
+		var ddl = window.ddl;
+
 		var textOperators = [
 			{
 				label: Liferay.Language.get('equals-to'),
@@ -160,6 +162,7 @@ AUI.add(
 							{
 								fieldName: index + '-target',
 								options: instance.getActionOptions(),
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -209,7 +212,7 @@ AUI.add(
 								fieldName: index + '-action',
 								label: Liferay.Language.get('the'),
 								options: instance.get('fields'),
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -368,6 +371,7 @@ AUI.add(
 								conditions: rule ? rule.conditions : [],
 								deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
 								plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
+								showLabel: false,
 								strings: instance.get('strings')
 							}
 						);
@@ -379,12 +383,12 @@ AUI.add(
 						var instance = this;
 
 						switch (type) {
-							case 'fields':
-								return instance._conditions[index + '-condition-second-operand-select'];
-							case 'options':
-								return instance._conditions[index + '-condition-second-operand-options-select'];
-							default:
-								return instance._conditions[index + '-condition-second-operand-input'];
+						case 'fields':
+							return instance._conditions[index + '-condition-second-operand-select'];
+						case 'options':
+							return instance._conditions[index + '-condition-second-operand-options-select'];
+						default:
+							return instance._conditions[index + '-condition-second-operand-input'];
 						}
 					},
 
@@ -591,7 +595,7 @@ AUI.add(
 								fieldName: index + '-condition-first-operand',
 								label: instance.get('strings').if,
 								options: instance.get('fields'),
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -750,7 +754,7 @@ AUI.add(
 										value: 'field'
 									}
 								],
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: instance._isBinaryCondition(index)
 							}
