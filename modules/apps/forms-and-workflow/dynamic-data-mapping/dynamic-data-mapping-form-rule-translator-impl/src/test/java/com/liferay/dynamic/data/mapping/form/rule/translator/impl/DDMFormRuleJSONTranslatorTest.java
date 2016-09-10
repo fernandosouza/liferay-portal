@@ -368,6 +368,50 @@ public class DDMFormRuleJSONTranslatorTest {
 			"set(fieldAt(\"Field2\", 0), \"visible\", true)", action);
 	}
 
+	@Test
+	public void testTwoRules() throws Exception {
+		String json = read("two_rules.json");
+
+		DDMFormRuleJSONTranslator ddmFormRuleJSONTranslator =
+			new DDMFormRuleJSONTranslator(json, _jsonFactory);
+
+		List<DDMFormRule> ddmFormRules = ddmFormRuleJSONTranslator.translate();
+
+		Assert.assertEquals(2, ddmFormRules.size());
+
+		DDMFormRule ddmFormRule = ddmFormRules.get(0);
+
+		List<String> actions = ddmFormRule.getActions();
+		String condition = ddmFormRule.getCondition();
+
+		Assert.assertEquals(
+			"equals(get(fieldAt(\"Field1\", 0), \"value\"), \"showField\")",
+			condition);
+
+		Assert.assertEquals(1, actions.size());
+
+		String action = actions.get(0);
+
+		Assert.assertEquals(
+			"set(fieldAt(\"Field2\", 0), \"visible\", true)", action);
+
+		ddmFormRule = ddmFormRules.get(1);
+
+		actions = ddmFormRule.getActions();
+		condition = ddmFormRule.getCondition();
+
+		Assert.assertEquals(
+			"equals(get(fieldAt(\"Field3\", 0), \"value\"), \"hideField\")",
+			condition);
+
+		Assert.assertEquals(1, actions.size());
+
+		action = actions.get(0);
+
+		Assert.assertEquals(
+			"set(fieldAt(\"Field2\", 0), \"visible\", false)", action);
+	}
+
 	protected String getBasePath() {
 		return "com/liferay/dynamic/data/mapping/form/rule/" +
 			"translator/dependencies/";

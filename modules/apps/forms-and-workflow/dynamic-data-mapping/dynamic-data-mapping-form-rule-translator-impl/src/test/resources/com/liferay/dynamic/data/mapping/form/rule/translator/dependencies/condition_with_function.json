@@ -18,7 +18,7 @@
 						"value": "Field2"
 					}
 				],
-				"operator": "equals"
+				"operator": "equals-to"
 			}
 		],
 		"type": "VISIBILITY"
