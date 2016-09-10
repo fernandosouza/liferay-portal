@@ -191,7 +191,7 @@ AUI.add(
 
 						var rulesList = instance.get('contentBox').one('.form-builder-rule-builder-rules-list');
 
-						var emptyListText = Liferay.Language.get('there-are-no-rules-yet-click-on-plus-icon-bellow-to-add-the-first');
+						var emptyListText = Liferay.Language.get('there-are-no-rules-click-on-plus-button-in-the-right-bottom-corner-to-create-a-rule');
 
 						rulesList.setHTML(ddl.rule_list({emptyListText: emptyListText, kebab: Liferay.Util.getLexiconIconTpl('ellipsis-v', 'icon-monospaced'), rules: rules}));
 					},
