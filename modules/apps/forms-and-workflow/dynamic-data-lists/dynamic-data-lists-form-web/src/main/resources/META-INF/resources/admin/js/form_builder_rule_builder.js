@@ -3,7 +3,7 @@ AUI.add(
 	function(A) {
 			var TPL_POPOVER = '<ul class="dropdown-menu">' +
 					'<li>' +
-						'<a href="javascript:;" data-rule-type="visibility">' + Liferay.Language.get('visibility') + '</a>' +
+						'<a href="javascript:;" data-rule-type="visibility">' + Liferay.Language.get('show-hide') + '</a>' +
 					'</li>' +
 				'</ul>';
 
