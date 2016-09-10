@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddl-form-builder-rule-visibility',
 	function(A) {
+		var ddl = window.ddl;
+
 		var FormBuilderRuleVisibility = A.Component.create(
 			{
 				ATTRS: {
@@ -50,6 +52,7 @@ AUI.add(
 										value: 'hide'
 									}
 								],
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -72,9 +75,8 @@ AUI.add(
 						var field = new Liferay.DDM.Field.Select(
 							{
 								fieldName: index + '-action-do',
-								label: Liferay.Language.get('the'),
 								options: instance.get('fields'),
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}

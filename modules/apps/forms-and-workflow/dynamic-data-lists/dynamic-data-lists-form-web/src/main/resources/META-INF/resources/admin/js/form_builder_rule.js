@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddl-form-builder-rule',
 	function(A) {
+		var ddl = window.ddl;
+
 		var textOperators = [
 			{
 				label: Liferay.Language.get('equals-to'),
@@ -216,7 +218,8 @@ AUI.add(
 								cancelLabel: Liferay.Language.get('cancel'),
 								conditions: rule ? rule.conditions : [],
 								deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
-								saveLabel: Liferay.Language.get('save')
+								saveLabel: Liferay.Language.get('save'),
+								showLabel: false
 							}
 						);
 
@@ -227,12 +230,12 @@ AUI.add(
 						var instance = this;
 
 						switch (type) {
-							case 'fields':
-								return instance._conditions[index + '-condition-second-operand-select'];
-							case 'options':
-								return instance._conditions[index + '-condition-second-operand-options-select'];
-							default:
-								return instance._conditions[index + '-condition-second-operand-input'];
+						case 'fields':
+							return instance._conditions[index + '-condition-second-operand-select'];
+						case 'options':
+							return instance._conditions[index + '-condition-second-operand-options-select'];
+						default:
+							return instance._conditions[index + '-condition-second-operand-input'];
 						}
 					},
 
@@ -422,9 +425,8 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-first-operand',
-								label: Liferay.Language.get('if'),
 								options: instance.get('fields'),
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -448,9 +450,8 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-operator',
-								label: Liferay.Language.get('state'),
 								options: textOperators,
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}
@@ -553,7 +554,6 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-second-operand-type',
-								label: Liferay.Language.get('the'),
 								options: [
 									{
 										label: Liferay.Language.get('value'),
@@ -564,7 +564,7 @@ AUI.add(
 										value: 'field'
 									}
 								],
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: instance._isBinaryCondition(index)
 							}
