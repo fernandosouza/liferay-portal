@@ -50,7 +50,8 @@ AUI.add(
 								}
 							],
 							value: value,
-							visible: true
+							visible: true,
+							showLabel: false
 						});
 
 						field.render(container);
@@ -69,8 +70,7 @@ AUI.add(
 
 						var field = new Liferay.DDM.Field.Select({
 							fieldName: index + '-action-do',
-							showLabel: true,
-							label: Liferay.Language.get('the'),
+							showLabel: false,
 							options: instance.get('fields'),
 							value: value,
 							visible: true

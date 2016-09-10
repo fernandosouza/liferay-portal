@@ -198,6 +198,7 @@ AUI.add(
 							conditions: rule ? rule.conditions : [],
 							deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
 							saveLabel: Liferay.Language.get('save')
+							showLabel: false
 						});
 
 						return ruleSettingsContainer;
@@ -391,12 +392,11 @@ AUI.add(
 
 						var field = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
-							label: Liferay.Language.get('if'),
 							options: instance.get('fields'),
 							visible: true,
 							fieldName: index + '-condition-first-operand',
 							value: value
+							showLabel: false,
 						});
 
 						field.render(container);
@@ -415,12 +415,11 @@ AUI.add(
 
 						var field = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
-							label: Liferay.Language.get('state'),
 							options: textOperators,
 							visible: true,
 							fieldName: index + '-condition-operator',
 							value: value
+							showLabel: false,
 						});
 
 						field.render(container);
@@ -526,8 +525,7 @@ AUI.add(
 
 						var field = new Liferay.DDM.Field.Select({
 							bubbleTargets: [instance],
-							showLabel: true,
-							label: Liferay.Language.get('the'),
+							showLabel: false,
 							options: [
 								{
 									label: Liferay.Language.get('value'),
