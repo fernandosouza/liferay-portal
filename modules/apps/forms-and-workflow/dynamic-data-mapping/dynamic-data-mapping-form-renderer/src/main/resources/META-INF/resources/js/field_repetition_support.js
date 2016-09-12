@@ -97,7 +97,7 @@ AUI.add(
 
 				var fieldClassName = fieldType.get('className');
 
-				var fieldClass = AObject.getValue(window, fieldClassName.split('.'));
+				var fieldClass = A.Object.getValue(window, fieldClassName.split('.'));
 
 				var field = new fieldClass(config).render();
 
