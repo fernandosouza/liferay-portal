@@ -1,0 +1,33 @@
+{namespace ddl.rule}
+
+/**
+ * Prints the DDL visibility action.
+ *
+ * @param index
+ * @param deleteIcon
+ */
+{template .action autoescape="deprecated-contextual"}
+	<li class="form-builder-rule-action-container-{$index} timeline-item">
+		<div class="panel panel-default">
+			<div class="panel-body flex-container">
+				<h4>Do</h4>
+
+				<div class="action-do-{$index} form-group"></div>
+				<div class="action-the-{$index} form-group"></div>
+
+				<div class="timeline-increment-icon">
+ 					<span class="timeline-icon"></span>
+  				</div>
+			</div>
+		</div>
+		<div class="container__trash">
+			<button
+				class="btn btn-link action-card-delete icon-monospaced"
+				data-card-id="{$index}"
+				href="javascript:;"
+				type="button">
+				{$deleteIcon|noAutoescape}
+			</button>
+		</div>
+	</li>
+{/template}
