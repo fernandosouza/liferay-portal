@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddl-form-builder-rule',
 	function(A) {
+		var CSS_CAN_REMOVE_ITEM = A.getClassName('can', 'remove', 'item');
+
 		var ddl = window.ddl;
 
 		var textOperators = [
@@ -83,6 +85,9 @@ AUI.add(
 
 						contentBox.delegate('click', A.bind(instance._handleAddConditionClick, instance), '.form-builder-rule-add-condition');
 						contentBox.delegate('click', A.bind(instance._handleAddActionClick, instance), '.form-builder-rule-add-action');
+
+						instance.after(instance._toggleShowRemoveButton, instance, '_addAction');
+						instance.after(instance._toggleShowRemoveButton, instance, '_addCondition');
 
 						instance.on('*:valueChanged', A.bind(instance._handleFieldValueChanged, instance));
 					},
@@ -307,6 +312,8 @@ AUI.add(
 								instance._actionsIndexes.splice(actionIndex, 1);
 							}
 						}
+
+						instance._toggleShowRemoveButton();
 					},
 
 					_handleDeleteConditionClick: function(event) {
@@ -335,6 +342,8 @@ AUI.add(
 								instance._conditionsIndexes.splice(conditionIndex, 1);
 							}
 						}
+
+						instance._toggleShowRemoveButton();
 					},
 
 					_handleFieldValueChanged: function(event) {
@@ -574,6 +583,24 @@ AUI.add(
 						field.render(container);
 
 						instance._conditions[index + '-condition-second-operand-type'] = field;
+					},
+
+					_toggleShowRemoveButton: function() {
+						var instance = this;
+
+						var contentBox = instance.get('contentBox');
+
+						var conditionList = contentBox.one('.liferay-ddl-form-builder-rule-condition-list');
+
+						var actionList = contentBox.one('.liferay-ddl-form-builder-rule-action-list');
+
+						var conditionItems = conditionList.all('.timeline-item');
+
+						var actionItems = actionList.all('.timeline-item');
+
+						conditionList.toggleClass(CSS_CAN_REMOVE_ITEM, conditionItems.size() > 2);
+
+						actionList.toggleClass(CSS_CAN_REMOVE_ITEM, actionItems.size() > 2);
 					},
 
 					_updateSecondOperandFieldVisibility: function(index) {
