@@ -51,8 +51,12 @@ AUI.add(
 						value: 0
 					},
 
-					rules: {
+					ruleBuilder: {
+						valueFn: '_valueRuleBuilder'
 					},
+
+					rules: {
+					}
 				},
 
 				AUGMENTS: [Liferay.PortletBase],
@@ -106,6 +110,8 @@ AUI.add(
 						instance.one('.portlet-forms').removeClass('hide');
 
 						instance.get('formBuilder').render(instance.one('#formBuilder'));
+
+						instance.get('ruleBuilder').render(instance.one('#ruleBuilder'));
 
 						instance.createEditor(instance.ns('descriptionEditor'));
 						instance.createEditor(instance.ns('nameEditor'));
@@ -195,11 +201,15 @@ AUI.add(
 
 						var formBuilder = instance.get('formBuilder');
 
+						var ruleBuilder = instance.get('ruleBuilder');
+
 						var pages = formBuilder.get('layouts');
 
 						instance.definitionSerializer.set('pages', pages);
 
 						var definition = JSON.parse(instance.definitionSerializer.serialize());
+
+						var rules = JSON.stringify(ruleBuilder.get('rules'));
 
 						instance.layoutSerializer.set('pages', pages);
 
@@ -209,7 +219,8 @@ AUI.add(
 							definition: definition,
 							description: instance.get('description'),
 							layout: layout,
-							name: instance.get('name')
+							name: instance.get('name'),
+							rules: rules
 						};
 					},
 
@@ -312,6 +323,8 @@ AUI.add(
 						instance.one('#layout').val(JSON.stringify(state.layout));
 
 						instance.one('#name').val(state.name);
+
+						instance.one('#rules').val(state.rules);
 
 						var publishCheckbox = instance.one('#publishCheckbox');
 
@@ -434,12 +447,16 @@ AUI.add(
 						var instance = this;
 
 						instance.one('#formBuilder').show();
+
+						instance.get('ruleBuilder').hide();
 					},
 
 					_onRulesButtonClick: function() {
 						var instance = this;
 
 						instance.one('#formBuilder').hide();
+
+						instance.get('ruleBuilder').show();
 					},
 
 					_onSubmitEditForm: function(event) {
@@ -493,6 +510,19 @@ AUI.add(
 								recordSetId: instance.get('recordSetId')
 							}
 						);
+					},
+
+					_valueRuleBuilder: function() {
+						var instance = this;
+
+						return new Liferay.DDL.FormBuilderRuleBuilder(
+							{
+								formBuilder: instance.get('formBuilder'),
+								namespace: '<portlet:namespace />',
+								rules: instance.get('rules'),
+								visible: false
+							}
+						);
 					}
 				}
 			}
@@ -502,6 +532,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder', 'liferay-ddl-form-builder-definition-serializer', 'liferay-ddl-form-builder-layout-serializer', 'liferay-portlet-base', 'liferay-util-window']
+		requires: ['liferay-ddl-form-builder', 'liferay-ddl-form-builder-definition-serializer', 'liferay-ddl-form-builder-layout-serializer', 'liferay-ddl-form-builder-rule-builder', 'liferay-portlet-base', 'liferay-util-window']
 	}
 );
