@@ -2,6 +2,9 @@ AUI.add(
 	'liferay-ddl-form-builder-rule-builder',
 	function(A) {
 		var TPL_POPOVER = '<ul class="dropdown-menu">' +
+				'<li>' +
+					'<a href="javascript:;" data-rule-type="visibility">' + Liferay.Language.get('visibility') + '</a>' +
+				'</li>' +
 			'</ul>';
 
 		var FormBuilderRuleBuilder = A.Component.create(
