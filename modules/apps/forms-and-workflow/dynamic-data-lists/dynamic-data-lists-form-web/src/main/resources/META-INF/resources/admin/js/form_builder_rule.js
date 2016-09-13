@@ -297,7 +297,7 @@ AUI.add(
 
 						var index = event.currentTarget.getData('card-id');
 
-						if (instance.instance._actionsIndexes.length > 1) {
+						if (instance._actionsIndexes.length > 1) {
 							instance._actions[index + '-action-do'].destroy();
 							instance._actions[index + '-action-the'].destroy();
 
