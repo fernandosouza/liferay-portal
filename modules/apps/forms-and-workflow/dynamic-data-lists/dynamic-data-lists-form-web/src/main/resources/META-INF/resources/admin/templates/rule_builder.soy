@@ -7,11 +7,11 @@
  */
 {template .rule_builder  autoescape="deprecated-contextual"}
 	<div class="form-builder-rule-builder-container">
-		<h1 class="text-default form-builder-section-title">Rules Builder</h1>
+		<h1 class="form-builder-section-title text-default">Rules Builder</h1>
 
 		<ul class="ddl-form-body-content liferay-ddl-form-rule-rules-list tabular-list-group"></ul>
 		<div class="form-builder-rule-builder-add-rule-container">
-			<div class="btn-action-secondary btn-bottom-right form-builder-rule-builder-add-rule-button dropdown">
+			<div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button">
 				<button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">
 					{$plusIcon|noAutoescape}
 				</button>
@@ -43,7 +43,7 @@
 					{call .condition} {param content: $rule.conditions[0].operands[1].type + ' ' + $rule.conditions[0].operands[1].value /} {/call}
 
 					<br />
-					
+
 					{call .action}
 						{param rule: $rule /}
 					{/call}
@@ -60,7 +60,7 @@
 							<li class="rule-card-delete"  data-card-id="{index($rule)}"><a href="javascript:;">Delete</a></li>
 						</ul>
 					</div>
-				</div>	
+				</div>
 			</div>
 		</li>
 		{ifempty}

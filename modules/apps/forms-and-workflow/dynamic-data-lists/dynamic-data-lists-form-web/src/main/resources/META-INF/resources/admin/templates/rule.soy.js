@@ -63,3 +63,11 @@ ddl.rule.rulesHeader = function(opt_data, opt_ignored) {
 if (goog.DEBUG) {
   ddl.rule.rulesHeader.soyTemplateName = 'ddl.rule.rulesHeader';
 }
+
+
+ddl.rule.operatorsOptions = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="btn-group dropdown" style="block"><button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">or <span class="caret"></span></button><ul class="dropdown-menu"><li class="operation-item text-uppercase"><a>or</a></li><li class="divider"></li><li class="operation-item text-uppercase"><a>and</a></li></ul></div>');
+};
+if (goog.DEBUG) {
+  ddl.rule.operatorsOptions.soyTemplateName = 'ddl.rule.operatorsOptions';
+}
