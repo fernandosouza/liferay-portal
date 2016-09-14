@@ -189,7 +189,7 @@ AUI.add(
 					_renderRules: function(rules) {
 						var instance = this;
 
-						var rulesList = instance.get('contentBox').one('.form-builder-rule-builder-rules-list');
+						var rulesList = instance.get('contentBox').one('.liferay-ddl-form-rule-rules-list');
 
 						var emptyListText = Liferay.Language.get('there-are-no-rules-click-on-plus-button-in-the-right-bottom-corner-to-create-a-rule');
 
