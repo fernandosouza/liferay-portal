@@ -7,9 +7,10 @@
  */
 {template .rule_builder autoescape="deprecated-contextual"}
 	<div class="form-builder-rule-builder-container">
-		<div class="form-builder-rule-builder-rules-list"></div>
+		<h1 class="form-builder-section-title text-default">Rules Builder</h1>
+		<ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group"></ul>
 		<div class="form-builder-rule-builder-add-rule-container">
-			<div class="btn-action-secondary btn-bottom-right form-builder-rule-builder-add-rule-button dropdown">
+			<div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button">
 				<button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">
 					{$plusIcon|noAutoescape}
 				</button>
@@ -27,11 +28,26 @@
  */
 {template .rule_list autoescape="deprecated-contextual"}
 	{foreach $rule in $rules}
-		<div class="card card-horizontal card-rule">
-			<div class="card-row card-row-padded">
-				<div class="card-col-content card-col-gutters">
-					<p>{$rule['logical-operator']}</p>
-				</div>
+		<li class="list-group-item">
+			<div class="list-group-item-field">
+				<h4 class="form-builder-rule-builder-rules-list-type text-left">{$rule['logical-operator']}</h4>
+			</div>
+			<div class="clamp-horizontal list-group-item-content">
+				<p class="text-default">
+					If {call .condition} {param content: $rule.conditions[0].operands[0].type + ' ' + $rule.conditions[0].operands[0].value /} {/call}
+
+					<em> is {$rule.conditions[0].operator} </em>,
+
+					{call .condition} {param content: $rule.conditions[0].operands[1].type + ' ' + $rule.conditions[0].operands[1].value /} {/call}
+
+					<br />
+
+					{call .action}
+						{param rule: $rule /}
+					{/call}
+				</p>
+			</div>
+			<div class="list-group-item-field">
 				<div class="card-col-field">
 					<div class="dropdown">
 						<a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">
@@ -48,7 +64,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 		{ifempty}
 			{$strings.emptyListText}
 	{/foreach}
