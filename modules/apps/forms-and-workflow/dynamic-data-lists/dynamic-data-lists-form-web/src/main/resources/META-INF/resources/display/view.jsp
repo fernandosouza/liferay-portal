@@ -113,7 +113,7 @@ long recordSetId = ddlFormDisplayContext.getRecordSetId();
 							</div>
 						</div>
 
-						<div class="container-fluid-1280 ddl-form-builder-app">
+						<div class="container-fluid-1280 ddl-form-body-content ddl-form-builder-content">
 							<%= ddlFormDisplayContext.getDDMFormHTML() %>
 						</div>
 					</aui:form>

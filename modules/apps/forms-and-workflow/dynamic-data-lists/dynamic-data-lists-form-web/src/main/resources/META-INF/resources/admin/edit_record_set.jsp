@@ -146,12 +146,15 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			</div>
 		</aui:fieldset>
 
-		<aui:fieldset cssClass="container-fluid-1280 ddl-form-builder-app">
+		<aui:fieldset cssClass="container-fluid-1280 ddl-form-body-content ddl-form-builder-content">
 			<aui:input name="definition" type="hidden" />
 			<aui:input name="layout" type="hidden" />
 			<aui:input name="rules" type="hidden" />
 
 			<div id="<portlet:namespace />formBuilder"></div>
+		</aui:fieldset>
+
+		<aui:fieldset cssClass="container-fluid-1280 ddl-rules-builder-content hide">
 			<div id="<portlet:namespace />ruleBuilder"></div>
 		</aui:fieldset>
 
