@@ -448,9 +448,9 @@ AUI.add(
 					_onFormButtonClick: function() {
 						var instance = this;
 
-						instance.one('#formBuilder').show();
+						instance.one('.ddl-form-builder-content').show();
 
-						instance.get('ruleBuilder').hide();
+						instance.one('.ddl-rules-builder-content').hide();
 
 						A.one('.ddl-form-builder-buttons').removeClass('hide');
 						A.one('.portlet-forms').removeClass('liferay-ddl-form-rule-builder');
@@ -462,9 +462,9 @@ AUI.add(
 					_onRulesButtonClick: function() {
 						var instance = this;
 
-						instance.one('#formBuilder').hide();
+						instance.one('.ddl-form-builder-content').hide();
 
-						instance.get('ruleBuilder').show();
+						instance.one('.ddl-rules-builder-content').show();
 
 						A.one('.ddl-form-builder-buttons').addClass('hide');
 						A.one('.portlet-forms').addClass('liferay-ddl-form-rule-builder');
@@ -532,8 +532,7 @@ AUI.add(
 						return new Liferay.DDL.FormBuilderRuleBuilder(
 							{
 								formBuilder: instance.get('formBuilder'),
-								rules: instance.get('rules'),
-								visible: false
+								rules: instance.get('rules')
 							}
 						);
 					}

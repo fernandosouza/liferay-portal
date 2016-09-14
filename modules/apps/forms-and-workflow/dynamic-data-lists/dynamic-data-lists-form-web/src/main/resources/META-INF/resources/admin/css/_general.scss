@@ -19,6 +19,10 @@
 	}
 }
 
+.ddl-form-body-content {
+	margin-top: $baseline * 4;
+}
+
 .ddl-form-settings-modal,
 .ddl-publish-modal,
 .dynamic-data-mapping-data-providers-modal {
@@ -237,9 +241,7 @@
 		}
 	}
 
-	.ddl-form-builder-app {
-		margin-top: $baseline * 4;
-
+	.ddl-form-builder-content {
 		.form-builder-content,
 		.lfr-ddm-form-content {
 			background: #FFF;
