@@ -10,7 +10,7 @@ if (typeof ddl == 'undefined') { var ddl = {}; }
 
 
 ddl.rule_builder = function(opt_data, opt_ignored) {
-  return '<div class="form-builder-rule-builder-container"><h1 class="form-builder-section-title text-default">Rules Builder</h1><ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group"></ul><div class="form-builder-rule-builder-add-rule-container"><div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button"><button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">' + soy.$$filterNoAutoescape(opt_data.plusIcon) + '</button></div></div></div>';
+  return '<div class="form-builder-rule-builder-container"><h1 class="form-builder-section-title text-default">Rules Builder</h1><div class="liferay-ddl-form-rule-rules-list-container"></div><div class="form-builder-rule-builder-add-rule-container"><div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button"><button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">' + soy.$$filterNoAutoescape(opt_data.plusIcon) + '</button></div></div></div>';
 };
 if (goog.DEBUG) {
   ddl.rule_builder.soyTemplateName = 'ddl.rule_builder';
@@ -19,20 +19,31 @@ if (goog.DEBUG) {
 
 ddl.rule_list = function(opt_data, opt_ignored) {
   var output = '';
-  var ruleList161 = opt_data.rules;
-  var ruleListLen161 = ruleList161.length;
-  if (ruleListLen161 > 0) {
-    for (var ruleIndex161 = 0; ruleIndex161 < ruleListLen161; ruleIndex161++) {
-      var ruleData161 = ruleList161[ruleIndex161];
-      output += '<li class="list-group-item"><div class="list-group-item-field"><h4 class="form-builder-rule-builder-rules-list-type text-left">' + soy.$$escapeHtml(ruleData161.type) + '</h4></div><div class="clamp-horizontal list-group-item-content"><p class="text-default">If ' + ddl.condition({content: ruleData161.conditions[0].operands[0].type + ' ' + ruleData161.conditions[0].operands[0].value}) + '<em> is ' + soy.$$escapeHtml(ruleData161.conditions[0].operator) + ' </em>,' + ddl.condition({content: ruleData161.conditions[0].operands[1].type + ' ' + ruleData161.conditions[0].operands[1].value}) + '<br />' + ddl.action({rule: ruleData161}) + '</p></div><div class="list-group-item-field"><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex161) + '"><a href="javascript:;">Edit</a></li><li class="rule-card-delete" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex161) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></li>';
+  if (opt_data.rules.length > 0) {
+    output += '<ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group">';
+    var ruleList163 = opt_data.rules;
+    var ruleListLen163 = ruleList163.length;
+    for (var ruleIndex163 = 0; ruleIndex163 < ruleListLen163; ruleIndex163++) {
+      var ruleData163 = ruleList163[ruleIndex163];
+      output += '<li class="list-group-item"><div class="list-group-item-field"><h4 class="form-builder-rule-builder-rules-list-type text-left">' + soy.$$escapeHtml(ruleData163.type) + '</h4></div><div class="clamp-horizontal list-group-item-content"><p class="text-default">If ' + ddl.condition({content: ruleData163.conditions[0].operands[0].type + ' ' + ruleData163.conditions[0].operands[0].value}) + '<em> is ' + soy.$$escapeHtml(ruleData163.conditions[0].operator) + ', </em>' + ddl.condition({content: ruleData163.conditions[0].operands[1].value}) + '<br />' + ddl.action({rule: ruleData163}) + '</p></div><div class="list-group-item-field"><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex163) + '"><a href="javascript:;">Edit</a></li><li class="rule-card-delete" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex163) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></li>';
     }
+    output += '</ul>';
   } else {
-    output += soy.$$escapeHtml(opt_data.strings.emptyListText);
+    output += ddl.empty_list({message: opt_data.strings.emptyListText});
   }
   return output;
 };
 if (goog.DEBUG) {
   ddl.rule_list.soyTemplateName = 'ddl.rule_list';
+}
+
+
+ddl.empty_list = function(opt_data, opt_ignored) {
+  opt_data = opt_data || {};
+  return '<div class="main-content-body"><div class="card main-content-card taglib-empty-result-message"><div class="card-row card-row-padded"><div class="taglib-empty-result-message-header-has-plus-btn"></div>' + ((opt_data.message) ? '<div class="text-center text-muted"><p class="text-default">' + soy.$$escapeHtml(opt_data.message) + '</p></div>' : '') + '</div></div></div>';
+};
+if (goog.DEBUG) {
+  ddl.empty_list.soyTemplateName = 'ddl.empty_list';
 }
 
 
