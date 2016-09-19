@@ -8,7 +8,9 @@
 {template .rule_builder autoescape="deprecated-contextual"}
 	<div class="form-builder-rule-builder-container">
 		<h1 class="form-builder-section-title text-default">Rules Builder</h1>
-		<ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group"></ul>
+
+		<div class="liferay-ddl-form-rule-rules-list-container"></div>
+
 		<div class="form-builder-rule-builder-add-rule-container">
 			<div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button">
 				<button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">
@@ -26,46 +28,116 @@
  * @param strings
  * @param kebab
  */
-{template .rule_list autoescape="deprecated-contextual"}
-	{foreach $rule in $rules}
-		<li class="list-group-item">
-			<div class="list-group-item-field">
-				<h4 class="form-builder-rule-builder-rules-list-type text-left">{$rule['logical-operator']}</h4>
-			</div>
-			<div class="clamp-horizontal list-group-item-content">
-				<p class="text-default">
-					If {call .condition} {param content: $rule.conditions[0].operands[0].type + ' ' + $rule.conditions[0].operands[0].value /} {/call}
+{template .rule_list  autoescape="deprecated-contextual"}
+	{if length($rules) > 0}
+		<ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group">
+		{foreach $rule in $rules}
+			<li class="list-group-item">
+				<div class="list-group-item-field">
+					<h4 class="form-builder-rule-builder-rules-list-type text-left">{$rule['logical-operator']}</h4>
+				</div>
+				<div class="clamp-horizontal list-group-item-content">
+					<p class="text-default">
+						If {call .condition} {param content: $rule.conditions[0].operands[0].type + ' ' + $rule.conditions[0].operands[0].value /} {/call}
 
-					<em> is {$rule.conditions[0].operator} </em>,
+						<em> is {$rule.conditions[0].operator}, </em>
 
-					{call .condition} {param content: $rule.conditions[0].operands[1].type + ' ' + $rule.conditions[0].operands[1].value /} {/call}
+						{call .condition} {param content: $rule.conditions[0].operands[1].value /} {/call}
 
-					<br />
+						<br />
 
-					{call .action}
-						{param rule: $rule /}
-					{/call}
-				</p>
-			</div>
-			<div class="list-group-item-field">
-				<div class="card-col-field">
-					<div class="dropdown">
-						<a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">
-							{$kebab|noAutoescape}
-						</a>
-						<ul class="dropdown-menu dropdown-menu-right">
-							<li class="rule-card-edit" data-card-id="{index($rule)}">
-								<a href="javascript:;">{$strings.edit}</a>
-							</li>
-							<li class="rule-card-delete" data-card-id="{index($rule)}">
-								<a href="javascript:;">{$strings.delete}</a>
-							</li>
-						</ul>
+						{call .action}
+							{param rule: $rule /}
+						{/call}
+					</p>
+				</div>
+				<div class="list-group-item-field">
+					<div class="card-col-field">
+						<div class="dropdown">
+							<a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">
+								{$kebab|noAutoescape}
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li class="rule-card-edit" data-card-id="{index($rule)}">
+									<a href="javascript:;">{$strings.edit}</a>
+								</li>
+								<li class="rule-card-delete" data-card-id="{index($rule)}">
+									<a href="javascript:;">{$strings.delete}</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
+			</li>
+		{/foreach}
+		</ul>
+	{else}
+		{call .empty_list}
+			{param message: $strings.emptyListText /}
+		{/call}
+	{/if}
+{/template}
+
+/**
+ * Prints the DDL form card rule.
+ *
+ * @param? message
+ */
+{template .empty_list autoescape="deprecated-contextual"}
+	<div class="main-content-body">
+		<div class="card main-content-card taglib-empty-result-message">
+			<div class="card-row card-row-padded">
+				<div class="taglib-empty-result-message-header-has-plus-btn"></div>
+				{if $message}
+				<div class="text-center text-muted">
+					<p class="text-default">{$message}</p>
+				</div>
+				{/if}
 			</div>
+		</div>
+	</div>
+{/template}
+
+/**
+ * Prints the list of rule types on the Popover.
+ *
+ * @param strings
+ */
+{template .rule_types autoescape="deprecated-contextual"}
+	<ul class="dropdown-menu">
+		<li>
+			<a href="javascript:;" data-rule-type="visibility">{$strings.showHide}</a>
+			<a href="javascript:;" data-rule-type="readonly">{$strings.enableDisable}</a>
+			<a href="javascript:;" data-rule-type="require">{$strings.require}</a>
 		</li>
-		{ifempty}
-			{$strings.emptyListText}
-	{/foreach}
+	</ul>
+{/template}
+
+/**
+ * Prints the DDL form card rule.
+ *
+ * @param? content
+ */
+{template .badge autoescape="deprecated-contextual"}
+	<span class="badge badge-default badge-sm">{$content}</span>
+{/template}
+
+/**
+ * Prints Rules Conditions.
+ *
+ * @param content
+ */
+{template .condition autoescape="deprecated-contextual"}
+	{call .badge}
+		{param content: $content /}
+	{/call}
+{/template}
+
+/**
+ * Prints Rules Actions.
+ *
+ * @param rule
+ */
+{template .action autoescape="deprecated-contextual"}
+	<em>{$rule.actions[0].action}</em> {call .badge} {param content: $rule.actions[0].target /} {/call}
 {/template}
