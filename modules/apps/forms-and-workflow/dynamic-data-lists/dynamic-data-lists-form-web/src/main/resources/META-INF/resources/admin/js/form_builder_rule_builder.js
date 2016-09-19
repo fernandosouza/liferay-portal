@@ -189,11 +189,19 @@ AUI.add(
 					_renderRules: function(rules) {
 						var instance = this;
 
-						var rulesList = instance.get('contentBox').one('.liferay-ddl-form-rule-rules-list');
+						var rulesList = instance.get('contentBox').one('.liferay-ddl-form-rule-rules-list-container');
 
 						var emptyListText = Liferay.Language.get('there-are-no-rules-click-on-plus-button-in-the-right-bottom-corner-to-create-a-rule');
 
-						rulesList.setHTML(ddl.rule_list({emptyListText: emptyListText, kebab: Liferay.Util.getLexiconIconTpl('ellipsis-v', 'icon-monospaced'), rules: rules}));
+						rulesList.setHTML(
+							ddl.rule_list(
+								{
+									emptyListText: emptyListText,
+									kebab: Liferay.Util.getLexiconIconTpl('ellipsis-v', 'icon-monospaced'),
+									rules: rules
+								}
+							)
+						);
 					},
 
 					_renderRuleSettings: function(ruleType, rule) {
