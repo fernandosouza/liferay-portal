@@ -25,6 +25,11 @@ AUI.add(
 
 					fieldTypesDefinitions: {
 						value: {}
+					},
+
+					rules: {
+						validator: Array.isArray,
+						value: []
 					}
 				},
 
@@ -40,9 +45,10 @@ AUI.add(
 
 						var definition = A.JSON.stringify(
 							{
-								availableLanguageIds: instance.get('availableLanguageIds'),
-								defaultLanguageId: instance.get('defaultLanguageId'),
-								fields: instance.get('fields')
+								availableLanguageIds: ['en_US'],
+								defaultLanguageId: 'en_US',
+								fields: instance.get('fields'),
+								rules: instance.get('rules')
 							}
 						);
 
