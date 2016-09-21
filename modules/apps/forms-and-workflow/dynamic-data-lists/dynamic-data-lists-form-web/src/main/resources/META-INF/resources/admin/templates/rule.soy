@@ -12,7 +12,7 @@
  */
 {template .settings autoescape="deprecated-contextual"}
 	<div class="top-informations">
-		<h2 class="text-default">{$strings.title}</h2>
+		<h2 class="form-builder-section-title text-default">{$strings.title}</h2>
 		<h4 class="text-default">{$strings.description}</h4>
 	</div>
 
@@ -20,6 +20,9 @@
 		{call .rulesHeader}
 			{param logicalOperator: $logicalOperator /}
 			{param title: 'Condition' /}
+			{param extraContent kind="html"}
+				{call .logicOperatorDropDown data="all" /}
+			{/param}
 		{/call}
 
 		{foreach $condition in $conditions}
@@ -134,11 +137,10 @@
 {/template}
 
 /**
- * @param? logicalOperator
  * @param title
+ * @param? extraContent
  */
-{template .rulesHeader}
-	
+{template .rulesHeader autoescape="deprecated-contextual"}
 	<li class="timeline-item">
 		<div class="panel panel-default">
 			<div class="flex-container panel-body">
@@ -146,25 +148,34 @@
 					{$title}
 				</div>
 
-				<div class="btn-group dropdown" style="block">
-				    <button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">
-				       {$logicalOperator} <span class="caret"></span>
-				    </button>
-
-				    <ul class="dropdown-menu">
-				        <li class="logic-operator text-uppercase"><a>or</a></li>
-				        <li class="divider"></li>
-				        <li class="logic-operator text-uppercase"><a>and</a></li>
-				    </ul>
-				</div>
+				{if $extraContent}
+					{$extraContent|noAutoescape}
+				{/if}
 
 				<div class="timeline-increment-icon">
 					<span class="timeline-icon"></span>
 				</div>
 			</div>
 		</div>
-	</li>					
+	</li>
+{/template}
 
+/**
+ * Prints Logic Operator Dropdown
+ * @param? logicalOperator
+ */
+{template .logicOperatorDropDown autoescape="strict" kind="html"}
+	<div class="btn-group dropdown" style="block">
+		<button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">
+			{$logicalOperator} <span class="caret"></span>
+		</button>
+
+		<ul class="dropdown-menu">
+			<li class="logic-operator text-uppercase"><a>or</a></li>
+			<li class="divider"></li>
+			<li class="logic-operator text-uppercase"><a>and</a></li>
+		</ul>
+	</div>
 {/template}
 
 /**
@@ -183,8 +194,8 @@
 				<div class="target-{$index} form-group"></div>
 
 				<div class="timeline-increment-icon">
- 					<span class="timeline-icon"></span>
-  				</div>
+					<span class="timeline-icon"></span>
+				</div>
 			</div>
 		</div>
 		<div class="container-trash">
