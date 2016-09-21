@@ -12,11 +12,6 @@
 		margin-top: 12px;
 		padding: 12px 24px;
 	}
-
-	.top-informations {
-		margin-bottom: $baseline * 3;
-		margin-top: $baseline * 3;
-	}
 }
 
 .liferay-ddl-form-rule-builder-timeline {
@@ -108,10 +103,6 @@
 	}
 }
 
-.form-builder-rule-builder-rules-list {
-	margin-top: $baseline * 4;
-}
-
 .form-builder-rule-builder-rules-list-type {
 	margin: 0;
 	padding: $baseline;
@@ -140,4 +131,8 @@
 		margin-left: 3px;
 		padding: 0;
 	}
+}
+
+.form-builder-rule-builder-rule-description {
+	padding: $baseline;
 }

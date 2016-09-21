@@ -113,9 +113,7 @@ AUI.add(
 							};
 						}
 
-						if (rule.conditions[0]) {
-							instance.set('logicOperator', rule.conditions[0]['logic-operator']);
-						}
+						instance.set('logicOperator', rule['logical-operator']);
 
 						contentBox.setHTML(instance._getRuleContainerTemplate(rule));
 
@@ -247,6 +245,30 @@ AUI.add(
 						return actions;
 					},
 
+					_getFieldLabel: function(fieldValue) {
+						var instance = this;
+
+						var fields = instance.get('fields');
+
+						for (var index in fields) {
+							if (fields[index].value === fieldValue) {
+								return fields[index].label;
+							}
+						}
+					},
+
+					_getOptionsLabel: function(field, optionValue) {
+						var instance = this;
+
+						var options = field.get('options');
+
+						for (var index in options) {
+							if (options[index].value === optionValue) {
+								return options[index].label;
+							}
+						}
+					},
+
 					_getConditions: function() {
 						var instance = this;
 
@@ -259,7 +281,8 @@ AUI.add(
 								'operands': [
 									{
 										type: 'field',
-										value: instance._getFirstOperandValue(index)
+										value: instance._getFirstOperandValue(index),
+										label: instance._getFieldLabel(instance._getFirstOperandValue(index))
 									}
 								],
 								operator: instance._getOperatorValue(index)
@@ -267,12 +290,23 @@ AUI.add(
 
 							if (instance._isBinaryCondition(index)) {
 								if (instance._getSecondOperandTypeValue(index) === 'constant') {
-									condition.operands.push(
-										{
-											type: 'constant',
-											value: instance._getSecondOperandValue(index, 'input') || instance._getSecondOperandValue(index, 'options')
-										}
-									);
+									if (!!instance._getSecondOperandValue(index, 'input')) {
+										condition.operands.push(
+											{
+												type: 'constant',
+												value: instance._getSecondOperandValue(index, 'input')
+											}
+										);
+									}
+									else {
+										condition.operands.push(
+											{
+												type: 'constant',
+												value: instance._getSecondOperandValue(index, 'options'),
+												label:  instance._getOptionsLabel(instance._getSecondOperand(index, 'options'), instance._getSecondOperandValue(index, 'options'))
+											}
+										);
+									}
 								}
 								else {
 									condition.operands.push(
@@ -383,6 +417,18 @@ AUI.add(
 						return instance._getSecondOperand(index, type).getValue();
 					},
 
+					_getFieldType: function(fieldValue) {
+						var instance = this;
+
+						var fields = instance.get('fields');
+
+						for (var index in fields) {
+							if (fields[index].value === fieldValue) {
+								return fields[index].type;
+							}
+						}
+					},
+
 					_handleAddActionClick: function() {
 						var instance = this;
 
@@ -413,7 +459,8 @@ AUI.add(
 							ddl.rule.condition(
 								{
 									deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
-									index: index
+									index: index,
+									logicOperator: instance.get('logicOperator')
 								}
 							)
 						);
@@ -435,11 +482,11 @@ AUI.add(
 						var index = event.currentTarget.getData('card-id');
 
 						if (instance._actionsIndexes.length > 1) {
-							instance._actions[index + '-action-do'].destroy();
-							instance._actions[index + '-action-the'].destroy();
+							instance._actions[index + '-action'].destroy();
+							instance._actions[index + '-target'].destroy();
 
-							delete instance._actions[index + '-action-do'];
-							delete instance._actions[index + '-action-the'];
+							delete instance._actions[index + '-action'];
+							delete instance._actions[index + '-target'];
 
 							instance.get('boundingBox').one('.form-builder-rule-action-container-' + index).remove(true);
 
@@ -507,7 +554,11 @@ AUI.add(
 					_handleLogicOperatorChange: function(event) {
 						var instance = this;
 
+						event.preventDefault();
+
 						instance.set('logicOperator', event.currentTarget.get('text'));
+
+						A.one('.dropdown-toggle-operator .dropdown-toggle-selected-value').setHTML(event.currentTarget.get('text'));
 					},
 
 					_handleSaveClick: function() {
@@ -542,7 +593,7 @@ AUI.add(
 					_isFieldList: function(field) {
 						var instance = this;
 
-						return instance._getFieldOptions(field.getValue()).length > 0 && field.get('type') !== 'text';
+						return instance._getFieldOptions(field.getValue()).length > 0 && instance._getFieldType(field.getValue()) !== 'text';
 					},
 
 					_isUnaryCondition: function(index) {
@@ -807,7 +858,7 @@ AUI.add(
 							else {
 								var options = instance._getFieldOptions(instance._getFirstOperandValue(index));
 
-								if (options.length > 0 && instance._getFirstOperand(index).get('type') !== 'text') {
+								if (options.length > 0 && instance._getFieldType(instance._getFirstOperandValue(index)) !== 'text') {
 									instance._getSecondOperand(index, 'options').set('options', options);
 									instance._getSecondOperand(index, 'options').set('visible', true);
 

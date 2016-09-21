@@ -18,7 +18,11 @@ AUI.add(
 						value: {
 							delete: Liferay.Language.get('delete'),
 							edit: Liferay.Language.get('edit'),
-							emptyListText: Liferay.Language.get('there-are-no-rules-yet-click-on-plus-icon-bellow-to-add-the-first')
+							emptyListText: Liferay.Language.get('there-are-no-rules-yet-click-on-plus-icon-bellow-to-add-the-first'),
+							'equals-to': Liferay.Language.get('equals-to'),
+							'not-equals-to': Liferay.Language.get('not-equals-to'),
+							'contains': Liferay.Language.get('contains'),
+							'not-contains': Liferay.Language.get('not-contains')
 						}
 					}
 				},
@@ -73,7 +77,8 @@ AUI.add(
 									{
 										label: field.get('label'),
 										options: field.get('options'),
-										value: field.get('fieldName')
+										value: field.get('fieldName'),
+										type: field.get('type')
 									}
 								);
 							}
