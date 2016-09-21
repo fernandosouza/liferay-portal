@@ -24,21 +24,31 @@ AUI.add(
 
 				instance._eventHandlers = [];
 
-				instance._repaintableAttributes = {};
+				instance._unrepaintableAttributes = {};
 
 				instance.bindFieldClassAttributesStatus(fieldClass);
 			},
 
-			bindFieldClassAttributesStatus: function(fieldClass) {
+			bindFieldClassAttributesStatus: function(fieldClass) {				
 				var instance = this;
 
 				var EXTENDS = fieldClass;
 
+				var context = instance.get('context');
+
 				var setAttributeChangeEvent = function(attributeName) {
 					if (EXTENDS.ATTRS[attributeName].state) {
-						instance._repaintableAttributes[attributeName] = true;
+						if (!context[attributeName]) {
+							context[attributeName] = instance.get(attributeName);
+						}
+						else {
+							instance.set(attributeName, context[attributeName]);
+						}												
 
 						instance.after(attributeName + 'Change', A.bind(instance._afterAttributeChange, instance, attributeName));
+					}
+					else {
+						instance._unrepaintableAttributes[attributeName] = true;
 					}
 				};
 
@@ -56,7 +66,7 @@ AUI.add(
 
 				var context = instance.get('context');
 
-				return context && instance._repaintableAttributes[attributeName] && context.hasOwnProperty(attributeName);
+				return context && context.hasOwnProperty(attributeName) && !instance._unrepaintableAttributes[attributeName];
 			},
 
 			_afterAttributeChange: function(name) {
