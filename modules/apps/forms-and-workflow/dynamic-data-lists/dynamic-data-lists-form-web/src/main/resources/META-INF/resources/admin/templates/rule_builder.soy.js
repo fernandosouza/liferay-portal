@@ -21,11 +21,25 @@ ddl.rule_list = function(opt_data, opt_ignored) {
   var output = '';
   if (opt_data.rules.length > 0) {
     output += '<ul class="ddl-form-body-content form-builder-rule-builder-rules-list tabular-list-group">';
-    var ruleList178 = opt_data.rules;
-    var ruleListLen178 = ruleList178.length;
-    for (var ruleIndex178 = 0; ruleIndex178 < ruleListLen178; ruleIndex178++) {
-      var ruleData178 = ruleList178[ruleIndex178];
-      output += '<li class="list-group-item"><div class="clamp-horizontal list-group-item-content"><p class="text-default">If ' + ddl.condition({content: ruleData178.conditions[0].operands[0].type + ' ' + ruleData178.conditions[0].operands[0].value}) + '<em> is ' + soy.$$escapeHtml(ruleData178.conditions[0].operator) + ', </em>' + ddl.condition({content: ruleData178.conditions[0].operands[1].value}) + '<br />' + ddl.action({rule: ruleData178}) + '</p></div><div class="list-group-item-field"><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex178) + '"><a href="javascript:;">' + soy.$$escapeHtml(opt_data.strings.edit) + '</a></li><li class="rule-card-delete" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex178) + '"><a href="javascript:;">' + soy.$$escapeHtml(opt_data.strings['delete']) + '</a></li></ul></div></div></div></li>';
+    var ruleList194 = opt_data.rules;
+    var ruleListLen194 = ruleList194.length;
+    for (var ruleIndex194 = 0; ruleIndex194 < ruleListLen194; ruleIndex194++) {
+      var ruleData194 = ruleList194[ruleIndex194];
+      output += '<li class="list-group-item"><div class="clamp-horizontal list-group-item-content"><p class="text-default form-builder-rule-builder-rule-description"><b>If </b>';
+      var conditionList172 = ruleData194.conditions;
+      var conditionListLen172 = conditionList172.length;
+      for (var conditionIndex172 = 0; conditionIndex172 < conditionListLen172; conditionIndex172++) {
+        var conditionData172 = conditionList172[conditionIndex172];
+        output += ddl.condition({operandType: conditionData172.operands[0].type, operandValue: conditionData172.operands[0].label != null ? conditionData172.operands[0].label : conditionData172.operands[0].value}) + '<b class="text-lowercase"><em> ' + soy.$$escapeHtml(opt_data.strings[conditionData172.operator]) + ' </em></b>' + ddl.condition({operandType: conditionData172.operands[1].type, operandValue: conditionData172.operands[1].label != null ? conditionData172.operands[1].label : conditionData172.operands[1].value}) + ((! (conditionIndex172 == conditionListLen172 - 1)) ? ', <br /><b> and </b>' : '');
+      }
+      output += '<br />';
+      var actionList180 = ruleData194.actions;
+      var actionListLen180 = actionList180.length;
+      for (var actionIndex180 = 0; actionIndex180 < actionListLen180; actionIndex180++) {
+        var actionData180 = actionList180[actionIndex180];
+        output += ddl.action({action: actionData180}) + ((! (actionIndex180 == actionListLen180 - 1)) ? ', <br /><b> and </b>' : '');
+      }
+      output += '</p></div><div class="list-group-item-field"><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex194) + '"><a href="javascript:;">' + soy.$$escapeHtml(opt_data.strings.edit) + '</a></li><li class="rule-card-delete" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex194) + '"><a href="javascript:;">' + soy.$$escapeHtml(opt_data.strings['delete']) + '</a></li></ul></div></div></div></li>';
     }
     output += '</ul>';
   } else {
@@ -65,7 +79,7 @@ if (goog.DEBUG) {
 
 
 ddl.condition = function(opt_data, opt_ignored) {
-  return '' + ddl.badge(opt_data);
+  return '<span>' + soy.$$escapeHtml(opt_data.operandType) + ' </span>' + ddl.badge({content: opt_data.operandValue});
 };
 if (goog.DEBUG) {
   ddl.condition.soyTemplateName = 'ddl.condition';
@@ -73,7 +87,7 @@ if (goog.DEBUG) {
 
 
 ddl.action = function(opt_data, opt_ignored) {
-  return '<em>' + soy.$$escapeHtml(opt_data.rule.actions[0].action) + '</em> ' + ddl.badge({content: opt_data.rule.actions[0].target});
+  return '<b>' + soy.$$escapeHtml(opt_data.action.action) + '</b> ' + ddl.badge({content: opt_data.action.target});
 };
 if (goog.DEBUG) {
   ddl.action.soyTemplateName = 'ddl.action';
