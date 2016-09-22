@@ -47,7 +47,7 @@ AUI.add(
 
 						instance._eventHandlers.push(
 							instance.after('optionsChange', instance._afterOptionsChange),
-							instance.after('visibelChange', instance._afterVisibleChange)
+							instance.after('visibleChange', instance._afterTextFieldVisibleChange)
 						);
 
 						instance.bindInputEvent('focus', instance._onFocusInput);
@@ -132,7 +132,7 @@ AUI.add(
 						}
 					},
 
-					_afterVisibleChange: function() {
+					_afterTextFieldVisibleChange: function() {
 						var instance = this;
 
 						if(!instance._autoComplete) {

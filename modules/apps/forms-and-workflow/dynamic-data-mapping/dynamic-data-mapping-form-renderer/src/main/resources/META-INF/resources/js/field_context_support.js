@@ -36,7 +36,7 @@ AUI.add(
 				instance.bindFieldClassAttributesStatus(fieldClass);
 			},
 
-			bindFieldClassAttributesStatus: function(fieldClass) {				
+			bindFieldClassAttributesStatus: function(fieldClass) {
 				var instance = this;
 
 				var EXTENDS = fieldClass;
@@ -50,13 +50,6 @@ AUI.add(
 						}
 						else {
 							instance.set(attributeName, context[attributeName]);
-						}												
-
-						if (context[attributeName]) {
-							instance.set(attributeName, context[attributeName]);
-						}
-						else {
-							context[attributeName] = instance.get(attributeName);
 						}
 
 						instance.after(attributeName + 'Change', A.bind(instance._afterAttributeChange, instance, attributeName));
