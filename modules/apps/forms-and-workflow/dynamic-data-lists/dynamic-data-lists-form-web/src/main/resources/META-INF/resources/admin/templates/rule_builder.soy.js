@@ -10,7 +10,7 @@ if (typeof ddl == 'undefined') { var ddl = {}; }
 
 
 ddl.rule_builder = function(opt_data, opt_ignored) {
-  return '<div class="form-builder-rule-builder-container"><h1 class="form-builder-section-title text-default">Rules Builder</h1><div class="liferay-ddl-form-rule-rules-list-container"></div><div class="form-builder-rule-builder-add-rule-container"><div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button"><button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">' + soy.$$filterNoAutoescape(opt_data.plusIcon) + '</button></div></div></div>';
+  return '<div class="form-builder-rule-builder-container"><h1 class="form-builder-section-title text-default">Rule Builder</h1><div class="liferay-ddl-form-rule-rules-list-container"></div><div class="form-builder-rule-builder-add-rule-container"><div class="btn-action-secondary btn-bottom-right dropdown form-builder-rule-builder-add-rule-button"><button class="btn btn-primary form-builder-rule-builder-add-rule-button-icon" type="button">' + soy.$$filterNoAutoescape(opt_data.plusIcon) + '</button></div></div></div>';
 };
 if (goog.DEBUG) {
   ddl.rule_builder.soyTemplateName = 'ddl.rule_builder';
