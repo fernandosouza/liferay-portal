@@ -14,31 +14,31 @@
 
 package com.liferay.portal.portlet.bridge.soy.internal;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.HtmlImpl;
 
+import java.io.Writer;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import org.osgi.framework.Bundle;
 
@@ -57,14 +57,10 @@ public class SoyPortletHelperTest {
 	public void testgetPortletJavaScriptWithBundleWithoutPackageFile()
 		throws Exception {
 
-		Bundle bundle = mock(Bundle.class);
-
-		SoyPortletHelper soyPortletHelper = new SoyPortletHelper(bundle);
-
-		Template template = mock(Template.class);
+		SoyPortletHelper soyPortletHelper = new SoyPortletHelper(_mockBundle);
 
 		String portletJavaScript = soyPortletHelper.getPortletJavaScript(
-			template, "View", StringUtil.randomString(),
+			_mockTemplate, "View", StringUtil.randomString(),
 			Collections.<String>emptySet());
 
 		Assert.assertEquals(StringPool.BLANK, portletJavaScript);
@@ -74,15 +70,26 @@ public class SoyPortletHelperTest {
 	public void testgetPortletJavaScriptWithBundleWithPackageFile()
 		throws Exception {
 
-		Bundle bundle = mock(Bundle.class);
+		Bundle bundle = (Bundle)ProxyUtil.newProxyInstance(
+			Bundle.class.getClassLoader(), new Class<?>[] {Bundle.class},
+			new InvocationHandler() {
 
-		Class<?> clazz = getClass();
+				@Override
+				public Object invoke(Object proxy, Method method, Object[] args)
+					throws NoSuchMethodException {
 
-		when(
-			bundle.getEntry(Matchers.eq("package.json"))
-		).thenReturn(
-			clazz.getResource("dependencies/package.json")
-		);
+					if (method.equals(
+							Bundle.class.getMethod("getEntry", String.class)) &&
+						"package.json".equals(args[0])) {
+
+						return SoyPortletHelperTest.class.getResource(
+							"dependencies/package.json");
+					}
+
+					return null;
+				}
+
+			});
 
 		SoyPortletHelper soyPortletHelper = new SoyPortletHelper(bundle);
 
@@ -94,6 +101,7 @@ public class SoyPortletHelperTest {
 
 		String portletComponentId = portletNamespace.concat("PortletComponent");
 
+		jsonObject.put(TemplateConstants.NAMESPACE, portletNamespace);
 		jsonObject.put("element", StringPool.POUND.concat(portletComponentId));
 		jsonObject.put("id", portletComponentId);
 
@@ -106,9 +114,9 @@ public class SoyPortletHelperTest {
 
 		// Actual
 
-		Template template = createMockedTemplate();
+		Template template = new MockTemplate();
 
-		template.put(TemplateConstants.NAMESPACE, StringUtil.randomString());
+		template.put(TemplateConstants.NAMESPACE, portletNamespace);
 		template.put("element", StringPool.POUND.concat(portletComponentId));
 		template.put("id", portletComponentId);
 		template.put("key 1", "value 1");
@@ -121,76 +129,13 @@ public class SoyPortletHelperTest {
 
 	@Test
 	public void testTemplateNamespace() throws Exception {
-		Bundle bundle = mock(Bundle.class);
-
 		String path = "View";
 
-		SoyPortletHelper soyPortletHelper = new SoyPortletHelper(bundle);
+		SoyPortletHelper soyPortletHelper = new SoyPortletHelper(_mockBundle);
 
 		Assert.assertEquals(
 			path.concat(".render"),
 			soyPortletHelper.getTemplateNamespace(path));
-	}
-
-	protected Template createMockedTemplate() {
-		Template template = mock(Template.class);
-
-		final Map<String, Object> context = new HashMap<>();
-
-		when(
-			template.put(Matchers.anyString(), Matchers.any())
-		).then(
-			new Answer<Void>() {
-
-				@Override
-				public Void answer(InvocationOnMock invocationOnMock)
-					throws Throwable {
-
-					Object[] args = invocationOnMock.getArguments();
-
-					context.put(String.valueOf(args[0]), args[1]);
-
-					return null;
-				}
-
-			}
-		);
-
-		when(
-			template.get(Matchers.anyString())
-		).then(
-			new Answer<Object>() {
-
-				@Override
-				public Object answer(InvocationOnMock invocationOnMock)
-					throws Throwable {
-
-					Object[] args = invocationOnMock.getArguments();
-
-					return context.get(String.valueOf(args[0]));
-				}
-
-			}
-		);
-
-		when(
-			template.getKeys()
-		).then(
-			new Answer<String[]>() {
-
-				@Override
-				public String[] answer(InvocationOnMock invocationOnMock)
-					throws Throwable {
-
-					Set<String> keySet = context.keySet();
-
-					return keySet.toArray(new String[keySet.size()]);
-				}
-
-			}
-		);
-
-		return template;
 	}
 
 	protected void setUpHtmlUtil() {
@@ -203,6 +148,57 @@ public class SoyPortletHelperTest {
 		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
 
 		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
+	}
+
+	private final Bundle _mockBundle = (Bundle)ProxyUtil.newProxyInstance(
+		Bundle.class.getClassLoader(), new Class<?>[] {Bundle.class},
+		new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) {
+				return null;
+			}
+
+		});
+
+	private final Template _mockTemplate = (Template)ProxyUtil.newProxyInstance(
+		Template.class.getClassLoader(), new Class<?>[] {Template.class},
+		new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) {
+				return null;
+			}
+
+		});
+
+	private static class MockTemplate
+		extends HashMap<String, Object> implements Template {
+
+		@Override
+		public void doProcessTemplate(Writer writer) {
+		}
+
+		@Override
+		public Object get(String key) {
+			return super.get(key);
+		}
+
+		@Override
+		public String[] getKeys() {
+			Set<String> keys = keySet();
+
+			return keys.toArray(new String[keys.size()]);
+		}
+
+		@Override
+		public void prepare(HttpServletRequest request) {
+		}
+
+		@Override
+		public void processTemplate(Writer writer) {
+		}
+
 	}
 
 }

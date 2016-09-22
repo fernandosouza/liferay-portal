@@ -4,6 +4,16 @@ AUI.add(
 		var DefinitionSerializer = A.Component.create(
 			{
 				ATTRS: {
+					availableLanguageIds: {
+						value: [
+							themeDisplay.getDefaultLanguageId()
+						]
+					},
+
+					defaultLanguageId: {
+						value: themeDisplay.getDefaultLanguageId()
+					},
+
 					fieldHandler: {
 						valueFn: '_valueFieldHandler'
 					},
@@ -15,6 +25,11 @@ AUI.add(
 
 					fieldTypesDefinitions: {
 						value: {}
+					},
+
+					rules: {
+						validator: Array.isArray,
+						value: []
 					}
 				},
 
@@ -30,9 +45,10 @@ AUI.add(
 
 						var definition = A.JSON.stringify(
 							{
-								availableLanguageIds: ['en_US'],
-								defaultLanguageId: 'en_US',
-								fields: instance.get('fields')
+								availableLanguageIds: instance.get('availableLanguageIds'),
+								defaultLanguageId: instance.get('defaultLanguageId'),
+								fields: instance.get('fields'),
+								rules: instance.get('rules')
 							}
 						);
 
@@ -50,7 +66,7 @@ AUI.add(
 
 						var definitionFields = fieldTypesDefinitions[field.get('type')];
 
-						var languageId = themeDisplay.getLanguageId();
+						var languageId = themeDisplay.getDefaultLanguageId();
 
 						definitionFields.forEach(
 							function(fieldSetting) {

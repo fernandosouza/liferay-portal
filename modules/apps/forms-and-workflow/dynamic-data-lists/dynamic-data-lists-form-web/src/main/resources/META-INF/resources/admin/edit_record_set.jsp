@@ -46,7 +46,7 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 <div class="hide portlet-forms" id="<portlet:namespace />formContainer">
 	<aui:nav-bar cssClass="collapse-basic-search" id="toolbar" markupView="lexicon">
 		<aui:nav cssClass="navbar-nav">
-			<aui:nav-item id="showForm" label="Build" selected="<%= true %>" />
+			<aui:nav-item id="showForm" label="Builder" selected="<%= true %>" />
 			<aui:nav-item id="showRules" label="Rules" />
 		</aui:nav>
 	</aui:nav-bar>
@@ -230,6 +230,7 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 										{
 											definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
 											description: '<%= HtmlUtil.escapeJS(description) %>',
+
 											editForm: event.form,
 											evaluatorURL: '<%= ddlFormAdminDisplayContext.getDDMFormContextProviderServletURL() %>',
 											fieldTypesDefinitions: <%= ddlFormAdminDisplayContext.getDDMFormFieldTypesDefinitionsMap() %>,
@@ -238,7 +239,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 											name: '<%= HtmlUtil.escapeJS(name) %>',
 											namespace: '<portlet:namespace />',
 											publishRecordSetURL: '<%= publishRecordSetURL.toString() %>',
-											recordSetId: <%= recordSetId %>
+											recordSetId: <%= recordSetId %>,
+											rules: <%= ddlFormAdminDisplayContext.getSerializedDDMFormRules() %>
 										}
 									)
 								);
