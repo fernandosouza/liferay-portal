@@ -45,11 +45,11 @@ AUI.add(
 
 				var setAttributeChangeEvent = function(attributeName) {
 					if (EXTENDS.ATTRS[attributeName].state) {
-						if (!context[attributeName]) {
-							context[attributeName] = instance.get(attributeName);
+						if (context[attributeName]) {
+							instance.set(attributeName, context[attributeName]);
 						}
 						else {
-							instance.set(attributeName, context[attributeName]);
+							context[attributeName] = instance.get(attributeName);
 						}
 
 						instance.after(attributeName + 'Change', A.bind(instance._afterAttributeChange, instance, attributeName));
@@ -58,6 +58,19 @@ AUI.add(
 						instance._unrepaintableAttributes[attributeName] = true;
 					}
 				};
+
+				for (var attr in context) {
+					if (!instance.getAttrs().hasOwnProperty(attr)) {
+
+						var config = {
+							state: true,
+							value: context[attr]
+						};
+
+						instance.addAttr(attr, config);
+						instance.after(attr + 'Change', A.bind(instance._afterAttributeChange, instance, attr));
+					}
+				}
 
 				while (EXTENDS) {
 					AObject.keys(EXTENDS.ATTRS).forEach(setAttributeChangeEvent);
