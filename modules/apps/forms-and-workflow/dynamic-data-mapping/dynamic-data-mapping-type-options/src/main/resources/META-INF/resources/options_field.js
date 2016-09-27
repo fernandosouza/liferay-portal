@@ -279,8 +279,6 @@ AUI.add(
 							);
 
 							instance.moveOption(option, dragStartIndex, dragEndIndex);
-
-							instance.evaluate();
 						}
 					},
 
@@ -398,8 +396,6 @@ AUI.add(
 						option.remove();
 
 						instance.fire('removeOption');
-
-						instance.evaluate();
 					},
 
 					_onOptionValueChange: function(event) {
