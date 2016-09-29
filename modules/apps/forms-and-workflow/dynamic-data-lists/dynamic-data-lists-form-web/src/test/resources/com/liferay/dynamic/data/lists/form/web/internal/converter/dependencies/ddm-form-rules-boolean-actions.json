@@ -5,6 +5,6 @@
 			"setRequired('Field3', true)",
 			"setVisible('Field4', true)"
 		],
-		"condition": "equals(getValue('Field1'), getValue('Field2'))"
+		"condition": "not(equals(getValue('Field1'), getValue('Field2')))"
 	}
 ]

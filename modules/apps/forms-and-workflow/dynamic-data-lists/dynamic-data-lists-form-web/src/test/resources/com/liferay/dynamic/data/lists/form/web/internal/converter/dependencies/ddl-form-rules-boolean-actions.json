@@ -27,7 +27,7 @@
 						"value": "Field2"
 					}
 				],
-				"operator": "equals-to"
+				"operator": "not-equals-to"
 			}
 		],
 		"logical-operator": "AND"
