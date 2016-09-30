@@ -152,8 +152,7 @@ public class ConfiguratorExtension implements Extension {
 			_logger.log(
 				Logger.LOG_WARNING,
 				"Supplier from factory configuration description " +
-					factoryConfigurationDescription + " threw an " +
-						"exception: ",
+					factoryConfigurationDescription + " threw an exception: ",
 				t);
 
 			return;
@@ -187,8 +186,8 @@ public class ConfiguratorExtension implements Extension {
 		catch (Throwable t) {
 			_logger.log(
 				Logger.LOG_WARNING,
-				"Supplier from description " + description + " threw " +
-					" an exception: ",
+				"Supplier from description " + description + " threw an " +
+					"exception: ",
 				t);
 
 			return;

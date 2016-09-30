@@ -157,7 +157,7 @@ public class ProjectTemplatesTest {
 
 		File mavenProjectDir = _buildTemplateWithMaven(
 			"activator", "bar-activator", "-DclassName=BarActivator",
-			"-DclassName=HelloWorld");
+			"-Dpackage=bar.activator");
 
 		_buildProjects(
 			gradleProjectDir, mavenProjectDir,
@@ -1044,16 +1044,19 @@ public class ProjectTemplatesTest {
 	private void _testBundlesDiff(File bundleFile1, File bundleFile2)
 		throws Exception {
 
-		PrintStream originalPrintStream = System.out;
+		PrintStream originalErrorStream = System.err;
+		PrintStream originalOutputStream = System.out;
 
-		originalPrintStream.flush();
+		originalErrorStream.flush();
+		originalOutputStream.flush();
 
-		ByteArrayOutputStream byteArrayOutputStream =
-			new ByteArrayOutputStream();
+		ByteArrayOutputStream newErrorStream = new ByteArrayOutputStream();
+		ByteArrayOutputStream newOutputStream = new ByteArrayOutputStream();
+
+		System.setErr(new PrintStream(newErrorStream, true));
+		System.setOut(new PrintStream(newOutputStream, true));
 
 		try (bnd bnd = new bnd()) {
-			System.setOut(new PrintStream(byteArrayOutputStream, true));
-
 			String[] args = {
 				"diff", "--ignore", _BUNDLES_DIFF_IGNORES,
 				bundleFile1.getAbsolutePath(), bundleFile2.getAbsolutePath()
@@ -1062,12 +1065,19 @@ public class ProjectTemplatesTest {
 			bnd.start(args);
 		}
 		finally {
-			System.setOut(originalPrintStream);
+			System.setErr(originalErrorStream);
+			System.setOut(originalOutputStream);
+		}
+
+		String output = newErrorStream.toString();
+
+		if (Validator.isNull(output)) {
+			output = newOutputStream.toString();
 		}
 
 		Assert.assertEquals(
 			"Bundle " + bundleFile1 + " and " + bundleFile2 + " do not match",
-			"", byteArrayOutputStream.toString());
+			"", output);
 	}
 
 	private File _testContains(File dir, String fileName, String... strings)

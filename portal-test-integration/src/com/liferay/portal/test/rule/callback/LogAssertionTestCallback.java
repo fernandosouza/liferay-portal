@@ -60,8 +60,6 @@ public class LogAssertionTestCallback
 
 		if (currentThread != _thread) {
 			_concurrentFailures.put(currentThread, error);
-
-			_thread.interrupt();
 		}
 		else {
 			throw error;
