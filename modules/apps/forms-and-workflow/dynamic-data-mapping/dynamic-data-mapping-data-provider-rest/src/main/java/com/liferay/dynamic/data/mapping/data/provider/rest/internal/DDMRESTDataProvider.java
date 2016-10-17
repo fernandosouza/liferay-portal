@@ -56,8 +56,11 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		throws DDMDataProviderException {
 
 		try {
+			DDMDataProviderRequest ddmDataProviderRequest =
+				new DDMDataProviderRequest(ddmDataProviderContext);
+
 			DDMDataProviderResponse ddmDataProviderResponse = doGetData(
-				ddmDataProviderContext);
+				ddmDataProviderRequest);
 
 			DDMRESTDataProviderSettings ddmRESTDataProviderSettings =
 				ddmDataProviderContext.getSettingsInstance(
@@ -87,10 +90,7 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		throws DDMDataProviderException {
 
 		try {
-			DDMDataProviderContext ddmDataProviderContext =
-				ddmDataProviderRequest.getDDMDataProviderContext();
-
-			return doGetData(ddmDataProviderContext);
+			return doGetData(ddmDataProviderRequest);
 		}
 		catch (PortalException pe) {
 			throw new DDMDataProviderException(pe);
@@ -128,8 +128,11 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 	}
 
 	protected DDMDataProviderResponse doGetData(
-			DDMDataProviderContext ddmDataProviderContext)
+			DDMDataProviderRequest ddmDataProviderRequest)
 		throws JSONException {
+
+		DDMDataProviderContext ddmDataProviderContext =
+			ddmDataProviderRequest.getDDMDataProviderContext();
 
 		DDMRESTDataProviderSettings ddmRESTDataProviderSettings =
 			ddmDataProviderContext.getSettingsInstance(
@@ -149,7 +152,26 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		if (ddmRESTDataProviderSettings.filterable()) {
 			httpRequest.query(
 				ddmRESTDataProviderSettings.filterParameterName(),
-				ddmDataProviderContext.getParameter("filterParameterValue"));
+				ddmDataProviderRequest.getFilterValue());
+		}
+
+		if (ddmRESTDataProviderSettings.pagination()) {
+			if (ddmRESTDataProviderSettings.pagedType().equals("offset")) {
+				httpRequest.query(
+					ddmRESTDataProviderSettings.offsetParameterName(),
+					ddmDataProviderRequest.getOffsetValue());
+				httpRequest.query(
+					ddmRESTDataProviderSettings.limitParameterName(),
+					ddmDataProviderRequest.getLimitValue());
+			}
+			else {
+				httpRequest.query(
+					ddmRESTDataProviderSettings.startParameterName(),
+					ddmDataProviderRequest.getStartValue());
+				httpRequest.query(
+					ddmRESTDataProviderSettings.endParameterName(),
+					ddmDataProviderRequest.getEndValue());
+			}
 		}
 
 		String cacheKey = getCacheKey(httpRequest);
