@@ -96,10 +96,13 @@ public class SelectDDMFormFieldTemplateContextContributor
 	}
 
 	protected void addDDMDataProviderContextParameters(
-		HttpServletRequest request,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
 		DDMDataProviderContext ddmDataProviderContext,
 		List<DDMDataProviderContextContributor>
 			ddmDataProviderContextContributors) {
+
+		HttpServletRequest request =
+			ddmFormFieldRenderingContext.getHttpServletRequest();
 
 		for (DDMDataProviderContextContributor
 				ddmDataProviderContextContributor :
@@ -114,6 +117,33 @@ public class SelectDDMFormFieldTemplateContextContributor
 
 			ddmDataProviderContext.addParameters(parameters);
 		}
+	}
+
+	protected DDMDataProviderRequest createDDMDataProviderRequest(
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		DDMDataProviderContext ddmDataProviderContext) {
+
+		DDMDataProviderRequest ddmDataProviderRequest =
+			new DDMDataProviderRequest(ddmDataProviderContext);
+
+		ddmDataProviderRequest.setFilterValue(
+			ddmFormFieldRenderingContext.getValue());
+
+		Map<String, String> pagination =
+			(Map<String, String>)ddmFormFieldRenderingContext.getProperty(
+				"pagination");
+
+		if (pagination != null) {
+			ddmDataProviderRequest.setEndValue(pagination.get("end"));
+
+			ddmDataProviderRequest.setLimitValue(pagination.get("limit"));
+
+			ddmDataProviderRequest.setOffsetValue(pagination.get("offset"));
+
+			ddmDataProviderRequest.setStartValue(pagination.get("start"));
+		}
+
+		return ddmDataProviderRequest;
 	}
 
 	protected DDMFormFieldOptions getDDMFormFieldOptions(
@@ -167,8 +197,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 						ddmDataProviderInstance.getType());
 
 					addDDMDataProviderContextParameters(
-						ddmFormFieldRenderingContext.getHttpServletRequest(),
-						ddmDataProviderContext,
+						ddmFormFieldRenderingContext, ddmDataProviderContext,
 						ddmDataProviderContextContributors);
 				}
 
@@ -176,7 +205,8 @@ public class SelectDDMFormFieldTemplateContextContributor
 					ddmFormFieldRenderingContext.getHttpServletRequest());
 
 				DDMDataProviderRequest ddmDataProviderRequest =
-					new DDMDataProviderRequest(ddmDataProviderContext);
+					createDDMDataProviderRequest(
+						ddmFormFieldRenderingContext, ddmDataProviderContext);
 
 				DDMDataProviderResponse ddmDataProviderResponse =
 					ddmDataProvider.getData(ddmDataProviderRequest);
