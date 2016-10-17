@@ -190,6 +190,12 @@ AUI.add(
 						);
 					},
 
+					_isClickInAField: function(node) {
+						var instance = this;
+
+						return node.ancestorsByClassName('.ddm-form-field-container').size();
+					},
+
 					_isClickInSidebar: function(node) {
 						var instance = this;
 
@@ -232,7 +238,7 @@ AUI.add(
 						var target = event.target;
 
 						if (instance.get('open') &&
-							!(instance._isClickInSidebar(target) || instance.settingsForm.hasFocus())) {
+							!(instance._isClickInSidebar(target) || instance.settingsForm.hasFocus() || instance._isClickInAField(target))) {
 							instance.close();
 						}
 					},
