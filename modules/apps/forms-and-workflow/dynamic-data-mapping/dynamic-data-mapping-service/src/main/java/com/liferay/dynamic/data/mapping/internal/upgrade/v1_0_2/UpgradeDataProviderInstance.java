@@ -35,6 +35,16 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 		_jsonFactory = jsonFactory;
 	}
 
+	protected JSONObject createFieldValue(String name, String value) {
+		JSONObject fieldValueJSONObject = _jsonFactory.createJSONObject();
+
+		fieldValueJSONObject.put("instanceId", StringUtil.randomString(8));
+		fieldValueJSONObject.put("name", name);
+		fieldValueJSONObject.put("value", value);
+
+		return fieldValueJSONObject;
+	}
+
 	@Override
 	protected void doUpgrade() throws Exception {
 		StringBundler sb = new StringBundler(3);
@@ -87,21 +97,14 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 	protected void upgradeDataProviderInstanceFieldValues(
 		JSONArray fieldValuesJSONArray) {
 
-		JSONObject fieldValueJSONObject = _jsonFactory.createJSONObject();
-
-		fieldValueJSONObject.put("instanceId", StringUtil.randomString(8));
-		fieldValueJSONObject.put("name", "filterable");
-		fieldValueJSONObject.put("value", "false");
-
-		fieldValuesJSONArray.put(fieldValueJSONObject);
-
-		fieldValueJSONObject = _jsonFactory.createJSONObject();
-
-		fieldValueJSONObject.put("instanceId", StringUtil.randomString(8));
-		fieldValueJSONObject.put("name", "filterParameterName");
-		fieldValueJSONObject.put("value", "");
-
-		fieldValuesJSONArray.put(fieldValueJSONObject);
+		fieldValuesJSONArray.put(createFieldValue("filterable", "false"));
+		fieldValuesJSONArray.put(createFieldValue("filterParameterName", ""));
+		fieldValuesJSONArray.put(createFieldValue("pagination", "false"));
+		fieldValuesJSONArray.put(createFieldValue("pagedType", "offset"));
+		fieldValuesJSONArray.put(createFieldValue("startParameterName", ""));
+		fieldValuesJSONArray.put(createFieldValue("endParameterName", ""));
+		fieldValuesJSONArray.put(createFieldValue("offsetParameterName", ""));
+		fieldValuesJSONArray.put(createFieldValue("limitParameterName", ""));
 	}
 
 	private final JSONFactory _jsonFactory;
