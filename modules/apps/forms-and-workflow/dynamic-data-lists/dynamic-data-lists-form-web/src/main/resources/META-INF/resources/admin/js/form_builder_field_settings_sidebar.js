@@ -236,7 +236,7 @@ AUI.add(
 						);
 					},
 
-					_onClickDocument: function() {
+					_onClickDocument: function(event) {
 						var instance = this;
 
 						if (instance.get('open') && !instance.hasFocus(event.target)) {
