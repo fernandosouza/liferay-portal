@@ -35,10 +35,12 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -91,15 +93,24 @@ public class SelectDDMFormFieldTemplateContextContributor
 		parameters.put("strings", stringsMap);
 		parameters.put(
 			"value", getValue(ddmFormField, ddmFormFieldRenderingContext));
+		
+//		String pathThemeImages = ((ThemeDisplay)ddmFormFieldRenderingContext.getHttpServletRequest()
+//				.getAttribute(WebKeys.THEME_DISPLAY)).getPathThemeImages();
+//		
+//		parameters.put(
+//			"pathThemeImages", pathThemeImages);
 
 		return parameters;
 	}
 
 	protected void addDDMDataProviderContextParameters(
-		HttpServletRequest request,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
 		DDMDataProviderContext ddmDataProviderContext,
 		List<DDMDataProviderContextContributor>
 			ddmDataProviderContextContributors) {
+
+		HttpServletRequest request =
+			ddmFormFieldRenderingContext.getHttpServletRequest();
 
 		for (DDMDataProviderContextContributor
 				ddmDataProviderContextContributor :
@@ -114,6 +125,33 @@ public class SelectDDMFormFieldTemplateContextContributor
 
 			ddmDataProviderContext.addParameters(parameters);
 		}
+	}
+
+	protected DDMDataProviderRequest createDDMDataProviderRequest(
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		DDMDataProviderContext ddmDataProviderContext) {
+
+		DDMDataProviderRequest ddmDataProviderRequest =
+			new DDMDataProviderRequest(ddmDataProviderContext);
+
+		ddmDataProviderRequest.setFilterValue(
+			ddmFormFieldRenderingContext.getValue());
+
+		Map<String, String> pagination =
+			(Map<String, String>)ddmFormFieldRenderingContext.getProperty(
+				"pagination");
+
+		if (pagination != null) {
+			ddmDataProviderRequest.setEndValue(pagination.get("end"));
+
+			ddmDataProviderRequest.setLimitValue(pagination.get("limit"));
+
+			ddmDataProviderRequest.setOffsetValue(pagination.get("offset"));
+
+			ddmDataProviderRequest.setStartValue(pagination.get("start"));
+		}
+
+		return ddmDataProviderRequest;
 	}
 
 	protected DDMFormFieldOptions getDDMFormFieldOptions(
@@ -167,8 +205,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 						ddmDataProviderInstance.getType());
 
 					addDDMDataProviderContextParameters(
-						ddmFormFieldRenderingContext.getHttpServletRequest(),
-						ddmDataProviderContext,
+						ddmFormFieldRenderingContext, ddmDataProviderContext,
 						ddmDataProviderContextContributors);
 				}
 
@@ -176,7 +213,8 @@ public class SelectDDMFormFieldTemplateContextContributor
 					ddmFormFieldRenderingContext.getHttpServletRequest());
 
 				DDMDataProviderRequest ddmDataProviderRequest =
-					new DDMDataProviderRequest(ddmDataProviderContext);
+					createDDMDataProviderRequest(
+						ddmFormFieldRenderingContext, ddmDataProviderContext);
 
 				DDMDataProviderResponse ddmDataProviderResponse =
 					ddmDataProvider.getData(ddmDataProviderRequest);

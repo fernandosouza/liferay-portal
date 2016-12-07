@@ -33,6 +33,28 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 				"setRequired('filterParameterName', true)"
 			},
 			condition = "equals(getValue('filterable'), true)"
+		),
+		@DDMFormRule(
+			actions = {"setVisible('pagedType', true)"},
+			condition = "equals(getValue('pagination'), true)"
+		),
+		@DDMFormRule(
+			actions = {
+				"setVisible('limitParameterName', true)",
+				"setVisible('offsetParameterName', true)",
+				"setRequired('limitParameterName', true)",
+				"setRequired('offsetParameterName', true)"
+			},
+			condition = "equals(getValue('pagedType'), 'offset') && equals(getValue('pagination'), true)"
+		),
+		@DDMFormRule(
+			actions = {
+				"setVisible('startParameterName', true)",
+				"setVisible('endParameterName', true)",
+				"setRequired('startParameterName', true)",
+				"setRequired('endParameterName', true)"
+			},
+			condition = "equals(getValue('pagedType'), 'start') && equals(getValue('pagination'), true)"
 		)
 	}
 )
@@ -46,7 +68,10 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 							size = 12,
 							value = {
 								"url", "key", "value", "username", "password",
-								"filterable", "filterParameterName", "cacheable"
+								"filterable", "filterParameterName",
+								"pagination", "pagedType", "startParameterName",
+								"endParameterName", "offsetParameterName",
+								"limitParameterName", "cacheable"
 							}
 						)
 					}
@@ -62,6 +87,15 @@ public interface DDMRESTDataProviderSettings {
 		properties = "showAsSwitcher=true"
 	)
 	public boolean cacheable();
+
+	@DDMFormField(
+		label = "%end-parameter-name",
+		properties = {
+			"placeholder=%enter-a-name-that-matches-one-of-the-rest-providers-parameters",
+			"tooltip=%the-parameter-whose-value-will-be-used-as-a-end-by-the-rest-provider"
+		}
+	)
+	public String endParameterName();
 
 	@DDMFormField(
 		label = "%support-filtering-by-keyword",
@@ -89,6 +123,37 @@ public interface DDMRESTDataProviderSettings {
 	public String key();
 
 	@DDMFormField(
+		label = "%limit-parameter-name",
+		properties = {
+			"placeholder=%enter-a-name-that-matches-one-of-the-rest-providers-parameters",
+			"tooltip=%the-parameter-whose-value-will-be-used-as-a-limit-by-the-rest-provider"
+		}
+	)
+	public String limitParameterName();
+
+	@DDMFormField(
+		label = "%offset-parameter-name",
+		properties = {
+			"placeholder=%enter-a-name-that-matches-one-of-the-rest-providers-parameters",
+			"tooltip=%the-parameter-whose-value-will-be-used-as-an-offset-by-the-rest-provider"
+		}
+	)
+	public String offsetParameterName();
+
+	@DDMFormField(
+		label = "%pagination-type",
+		optionLabels = {"%offset-and-limit", "%start-and-end"},
+		optionValues = {"offset", "start"}, predefinedValue = "offset",
+		properties = {"inline=true"}, type = "radio"
+	)
+	public String pagedType();
+
+	@DDMFormField(
+		label = "%support-pagination", properties = "showAsSwitcher=true"
+	)
+	public boolean pagination();
+
+	@DDMFormField(
 		label = "%password",
 		properties = {
 			"placeholder=%enter-a-password",
@@ -96,6 +161,15 @@ public interface DDMRESTDataProviderSettings {
 		}
 	)
 	public String password();
+
+	@DDMFormField(
+		label = "%start-parameter-name",
+		properties = {
+			"placeholder=%enter-a-name-that-matches-one-of-the-rest-providers-parameters",
+			"tooltip=%the-parameter-whose-value-will-be-used-as-a-start-by-the-rest-provider"
+		}
+	)
+	public String startParameterName();
 
 	@DDMFormField(
 		label = "%url",

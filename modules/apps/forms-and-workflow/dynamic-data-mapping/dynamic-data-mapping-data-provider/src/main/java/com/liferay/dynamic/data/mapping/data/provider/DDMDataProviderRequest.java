@@ -29,6 +29,51 @@ public class DDMDataProviderRequest {
 		return _ddmDataProviderContext;
 	}
 
+	public String getEndValue() {
+		return _endValue;
+	}
+
+	public String getFilterValue() {
+		return _filterValue;
+	}
+
+	public String getLimitValue() {
+		return _limitValue;
+	}
+
+	public String getOffsetValue() {
+		return _offsetValue;
+	}
+
+	public String getStartValue() {
+		return _startValue;
+	}
+
+	public void setEndValue(String endValue) {
+		_endValue = endValue;
+	}
+
+	public void setFilterValue(String filterValue) {
+		_filterValue = filterValue;
+	}
+
+	public void setLimitValue(String limitValue) {
+		_limitValue = limitValue;
+	}
+
+	public void setOffsetValue(String offsetValue) {
+		_offsetValue = offsetValue;
+	}
+
+	public void setStartValue(String startValue) {
+		_startValue = startValue;
+	}
+
 	private final DDMDataProviderContext _ddmDataProviderContext;
+	private String _endValue;
+	private String _filterValue;
+	private String _limitValue;
+	private String _offsetValue;
+	private String _startValue;
 
 }

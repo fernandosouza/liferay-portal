@@ -46,6 +46,19 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-select',
 
 				prototype: {
+
+					initializer: function() {
+						var instance = this;
+
+						instance._eventHandlers.push(
+							instance.bindContainerEvent('click', instance._afterClickSelectTrigger, '.select-field-single-chosen')
+						);
+					},
+
+					_afterClickSelectTrigger: function(event) {
+						console.log("Here");
+					},
+
 					cleanSelect: function() {
 						var instance = this;
 
@@ -63,6 +76,8 @@ AUI.add(
 							SelectField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								options: instance.get('options'),
+								selecteAngleDownIcon: Liferay.Util.getLexiconIconTpl('angle-down', 'icon-monospaced'),
+								selecteSearchIcon: Liferay.Util.getLexiconIconTpl('search', 'icon-monospaced'),
 								strings: instance.get('strings'),
 								value: instance.getValueArray()
 							}

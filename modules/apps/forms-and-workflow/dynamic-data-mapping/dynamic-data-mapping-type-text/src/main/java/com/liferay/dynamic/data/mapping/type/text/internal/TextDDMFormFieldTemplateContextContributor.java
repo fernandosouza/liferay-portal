@@ -119,10 +119,33 @@ public class TextDDMFormFieldTemplateContextContributor
 
 			ddmDataProviderContext.addParameters(parameters);
 		}
+	}
 
-		ddmDataProviderContext.addParameter(
-			"filterParameterValue",
-			String.valueOf(ddmFormFieldRenderingContext.getValue()));
+	protected DDMDataProviderRequest createDDMDataProviderRequest(
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		DDMDataProviderContext ddmDataProviderContext) {
+
+		DDMDataProviderRequest ddmDataProviderRequest =
+			new DDMDataProviderRequest(ddmDataProviderContext);
+
+		ddmDataProviderRequest.setFilterValue(
+			ddmFormFieldRenderingContext.getValue());
+
+		Map<String, String> pagination =
+			(Map<String, String>)ddmFormFieldRenderingContext.getProperty(
+				"pagination");
+
+		if (pagination != null) {
+			ddmDataProviderRequest.setEndValue(pagination.get("end"));
+
+			ddmDataProviderRequest.setLimitValue(pagination.get("limit"));
+
+			ddmDataProviderRequest.setOffsetValue(pagination.get("offset"));
+
+			ddmDataProviderRequest.setStartValue(pagination.get("start"));
+		}
+
+		return ddmDataProviderRequest;
 	}
 
 	protected DDMFormFieldOptions getDDMFormFieldOptions(
@@ -184,7 +207,8 @@ public class TextDDMFormFieldTemplateContextContributor
 					ddmFormFieldRenderingContext.getHttpServletRequest());
 
 				DDMDataProviderRequest ddmDataProviderRequest =
-					new DDMDataProviderRequest(ddmDataProviderContext);
+					createDDMDataProviderRequest(
+						ddmFormFieldRenderingContext, ddmDataProviderContext);
 
 				DDMDataProviderResponse ddmDataProviderResponse =
 					ddmDataProvider.getData(ddmDataProviderRequest);
