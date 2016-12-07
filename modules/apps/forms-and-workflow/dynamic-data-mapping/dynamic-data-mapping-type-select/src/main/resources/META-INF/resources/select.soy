@@ -18,6 +18,8 @@
  * @param options
  * @param readOnly
  * @param required
+ * @param? selecteAngleDownIcon
+ * @param? selecteSearchIcon
  * @param showLabel
  * @param tip
  * @param strings
@@ -41,26 +43,85 @@
 				{/if}
 			{/if}
 
-			<div class="input-group-container">
-				<select class="form-control" dir="{$dir}" {if $readOnly}disabled{/if} id="{$name}" name="{$name}" {if $multiple}multiple size="{length($options)}"{/if}>
-					{if not $readOnly}
-						<option dir="{$dir}" disabled {if length($value) == 0}selected{/if} value="">
-							{$strings.chooseAnOption}
-						</option>
-					{/if}
+			<div class="input-group-container form-builder-select-field">
 
-					{foreach $option in $options}
-						{let $selected}
-							{foreach $currentValue in $value}
-								{if $currentValue == $option.value}
-									selected
+				{let $selectedValue}
+					{if not $readOnly}
+						{$strings.chooseAnOption}
+					{else}
+						{if $options.length}
+							{$options[0].value}
+						{/if}
+					{/if}
+				{/let}
+
+				{if not $multiple}
+					<a class="select-field-single-chosen" href="javascript:;" dir="{$dir}" id="{$name}" name="{$name}">
+						<span class="option-selected">{$selectedValue}</span>
+					</a>
+				{else}
+					//TODO Multiple select
+				{/if}
+
+				{if not $readOnly}
+					<div class="drop-chosen hide">
+						<div class="search-chosen">
+							<div class="select-search-container">
+								{if $selecteSearchIcon}
+									<a class="" href="javascript:;">{$selecteSearchIcon|noAutoescape}</a>
 								{/if}
+							</div>
+							<input placeholder="Search" class="drop-chosen-search" type="text" autocomplete="off">
+						</div>
+						<ul class="results-chosen">
+							{foreach $option in $options}
+								{let $selected}
+									{foreach $currentValue in $value}
+										{if $currentValue == $option.value}
+											selected
+										{/if}
+									{/foreach}
+								{/let}
+								<li class="{$selected ? 'option-selected' : ''}" data-option-index="{index($option)}">
+									{$option.value}
+								</li>
 							{/foreach}
-						{/let}
+						</ul>
+					</div>
+				{/if}
+
+				// OLD VERSION
+				//
+				 <select class="form-control hide" dir="{$dir}" {if $readOnly}disabled{/if} id="{$name}" name="{$name}" {if $multiple}multiple size="{length($options)}"{/if}>
+				 	{if not $readOnly}
+				 		<option dir="{$dir}" disabled {if length($value) == 0}selected{/if} value="">
+				 			{$strings.chooseAnOption}
+				 		</option>
+				 	{/if}
+
+				 	{foreach $option in $options}
+				 		{let $selected}
+				 			{foreach $currentValue in $value}
+				 				{if $currentValue == $option.value}
+				 					selected
+				 				{/if}
+				 			{/foreach}
+				 		{/let}
 
 						<option dir="{$dir}" {$selected} value="{$option.value}">{$option.label}</option>
 					{/foreach}
 				</select>
+
+				// <a class="" href="javascript:;">
+				// 	<svg class="lexicon-icon lexicon-icon-angle-down icon-monospaced" role="image">
+				// 		<use xlink:href="{$pathThemeImages}/lexicon/icons.svg#angle-down" />
+				// 	</svg>
+				// </a>
+
+				{if $selecteAngleDownIcon}
+					<a class="select-arrow-down-container" href="javascript:;">{$selecteAngleDownIcon|noAutoescape}</a>
+				{/if}
+
 			</div>
 
 			{if $childElementsHTML}

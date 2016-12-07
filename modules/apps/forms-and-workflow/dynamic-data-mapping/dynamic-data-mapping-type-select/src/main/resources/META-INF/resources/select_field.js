@@ -46,6 +46,69 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-select',
 
 				prototype: {
+
+					initializer: function() {
+						var instance = this;
+
+						var container = instance.get('container')
+
+						instance._eventHandlers.push(
+							A.one('doc').after('click', instance.closeList.bind(instance)),
+							instance.bindContainerEvent('click', instance._afterClickSelectTrigger, '.form-builder-select-field'),
+							instance.bindContainerEvent('click', instance._onClickItem, 'li')
+						);
+					},
+
+					_afterClickSelectTrigger: function(event) {
+						var instance = this;
+
+						var target = event.target;
+
+						if (target.ancestor('.search-chosen')) {
+							return;
+						}
+
+						instance.get('container').one('.drop-chosen').toggleClass('hide');
+					},
+
+					closeList: function(event) {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						var ancestor = event.target.ancestor('.form-builder-select-field');
+
+						if (ancestor && ancestor == container.one('.form-builder-select-field')) {
+							return;
+						};
+
+						if (instance._isListOpen()) {
+							instance.get('container').one('.drop-chosen').addClass('hide');
+						}
+					},
+
+					_onClickItem: function(event) {
+						var instance = this;
+
+						var target = event.target;
+
+						var options = instance.get('options');
+
+						var index = event.target.getAttribute('data-option-index');
+
+						var option = options[index];
+
+						instance.setValue([option]);
+
+						instance.get('container').one('.option-selected').text(option.value);
+					},
+
+					_isListOpen() {
+						var instance = this;
+
+						return !instance.get('container').one('.drop-chosen').hasClass('hide');
+					},
+
 					cleanSelect: function() {
 						var instance = this;
 
@@ -63,6 +126,8 @@ AUI.add(
 							SelectField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								options: instance.get('options'),
+								selecteAngleDownIcon: Liferay.Util.getLexiconIconTpl('angle-down', 'icon-monospaced'),
+								selecteSearchIcon: Liferay.Util.getLexiconIconTpl('search', 'icon-monospaced'),
 								strings: instance.get('strings'),
 								value: instance.getValueArray()
 							}
