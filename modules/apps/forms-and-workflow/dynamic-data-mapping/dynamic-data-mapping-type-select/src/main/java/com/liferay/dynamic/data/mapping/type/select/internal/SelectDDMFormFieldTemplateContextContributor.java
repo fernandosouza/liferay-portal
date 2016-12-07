@@ -35,10 +35,12 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +93,12 @@ public class SelectDDMFormFieldTemplateContextContributor
 		parameters.put("strings", stringsMap);
 		parameters.put(
 			"value", getValue(ddmFormField, ddmFormFieldRenderingContext));
+		
+//		String pathThemeImages = ((ThemeDisplay)ddmFormFieldRenderingContext.getHttpServletRequest()
+//				.getAttribute(WebKeys.THEME_DISPLAY)).getPathThemeImages();
+//		
+//		parameters.put(
+//			"pathThemeImages", pathThemeImages);
 
 		return parameters;
 	}
