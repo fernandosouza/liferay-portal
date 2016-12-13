@@ -10,6 +10,25 @@
 	}
 }
 
+.lfr-ddm-form-field-repeatable-add-button,
+.lfr-ddm-form-field-repeatable-delete-button {
+	position: absolute;
+	top: 0;
+
+	&:hover,
+	&:focus {
+		text-decoration: none;
+	}
+}
+
+.lfr-ddm-form-field-repeatable-add-button, {
+	right: 0;
+}
+
+.lfr-ddm-form-field-repeatable-delete-button {
+	right: 15px;
+}
+
 .lfr-ddm-form-container {
 	.form-control-feedback {
 		margin-left: -20px;
@@ -46,18 +65,6 @@
 
 		.icon-asterisk {
 			margin-left: 4px;
-		}
-
-		.lfr-ddm-form-field-repeatable-add-button {
-			position: absolute;
-			right: 0;
-			top: 0;
-		}
-
-		.lfr-ddm-form-field-repeatable-delete-button {
-			position: absolute;
-			right: 15px;
-			top: 0;
 		}
 
 		.liferay-ddm-form-field-date .input-group-addon {
