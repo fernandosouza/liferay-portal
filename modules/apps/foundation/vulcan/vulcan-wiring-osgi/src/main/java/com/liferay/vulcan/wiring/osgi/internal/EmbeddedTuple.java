@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi;
+package com.liferay.vulcan.wiring.osgi.internal;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -22,30 +22,31 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-public class RelationTuple<T, S> {
+public class EmbeddedTuple<T, S> {
 
-	public RelationTuple(
-		String name, Class<S> type, Function<T, Optional<S>> objectFunction) {
+	public EmbeddedTuple(
+		String key, Class<S> modelClass,
+		Function<T, Optional<S>> modelFunction) {
 
-		_name = name;
-		_type = type;
-		_objectFunction = objectFunction;
+		_key = key;
+		_modelClass = modelClass;
+		_modelFunction = modelFunction;
 	}
 
-	public String getName() {
-		return _name;
+	public String getKey() {
+		return _key;
 	}
 
-	public Function<T, Optional<S>> getObjectFunction() {
-		return _objectFunction;
+	public Class<S> getModelClass() {
+		return _modelClass;
 	}
 
-	public Class<S> getType() {
-		return _type;
+	public Function<T, Optional<S>> getModelFunction() {
+		return _modelFunction;
 	}
 
-	private final String _name;
-	private final Function<T, Optional<S>> _objectFunction;
-	private final Class<S> _type;
+	private final String _key;
+	private final Class<S> _modelClass;
+	private final Function<T, Optional<S>> _modelFunction;
 
 }

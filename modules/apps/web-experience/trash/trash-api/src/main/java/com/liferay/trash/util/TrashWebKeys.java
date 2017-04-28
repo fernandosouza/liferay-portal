@@ -12,24 +12,13 @@
  * details.
  */
 
-package com.liferay.exportimport.test.util;
-
-import com.liferay.exportimport.kernel.lar.UserIdStrategy;
-import com.liferay.portal.kernel.test.util.TestPropsValues;
+package com.liferay.trash.util;
 
 /**
- * @author Daniel Kocsis
+ * @author Eudaldo Alonso
  */
-public class TestUserIdStrategy implements UserIdStrategy {
+public class TrashWebKeys {
 
-	@Override
-	public long getUserId(String userUuid) {
-		try {
-			return TestPropsValues.getUserId();
-		}
-		catch (Exception e) {
-			return 0;
-		}
-	}
+	public static final String TRASH_HELPER = "TRASH_HELPER";
 
 }

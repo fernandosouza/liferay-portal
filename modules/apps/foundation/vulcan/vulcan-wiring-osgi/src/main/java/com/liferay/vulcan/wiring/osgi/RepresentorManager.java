@@ -15,8 +15,8 @@
 package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.ModelRepresentorMapper;
+import com.liferay.vulcan.wiring.osgi.internal.EmbeddedTuple;
 import com.liferay.vulcan.wiring.osgi.internal.GenericUtil;
-import com.liferay.vulcan.wiring.osgi.internal.InvalidGenericException;
 import com.liferay.vulcan.wiring.osgi.internal.ModelRepresentorMapperTuple;
 import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
 
@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -47,10 +47,22 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(immediate = true, service = RepresentorManager.class)
 public class RepresentorManager {
 
+	public RepresentorManager() {
+		Bundle bundle = FrameworkUtil.getBundle(RepresentorManager.class);
+
+		_bundleContext = bundle.getBundleContext();
+	}
+
+	public <T, V> List<EmbeddedTuple<T, V>> getEmbeddedTuples(
+		Class<T> modelClass) {
+
+		return (List)_embeddedTuples.get(modelClass.getName());
+	}
+
 	public <T> Map<String, Function<T, Object>> getFieldFunctions(
 		Class<T> modelClass) {
 
-		return (Map)_fieldFunctionMaps.get(modelClass.getName());
+		return (Map)_fieldFunctions.get(modelClass.getName());
 	}
 
 	public <T> String getIdentifier(Class<T> modelClass, T model) {
@@ -60,23 +72,28 @@ public class RepresentorManager {
 		return identifierFunction.apply(model);
 	}
 
-	public <T> Optional<ModelRepresentorMapper<T>> getModelRepresentorMapper(
-		Class<T> modelClass) {
+	public <T> Optional<ModelRepresentorMapper<T>>
+		getModelRepresentorMapperOptional(Class<T> modelClass) {
 
-		return Optional.ofNullable(
-			_modelRepresentorMappers.get(
-				modelClass.getName())).map(TreeSet::first).map(
-				modelRepresentorMapperTuple ->
-					(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
-						getModelRepresentorMapper());
-	}
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
 
-	public <T, V> List<RelationTuple<T, V>> getRelations(Class<T> modelClass) {
-		return (List)_relationTupleLists.get(modelClass.getName());
+		Optional<TreeSet<ModelRepresentorMapperTuple<?>>>
+			modelRepresentorMapperTuplesOptional = Optional.ofNullable(
+				modelRepresentorMapperTuples);
+
+		Optional<ModelRepresentorMapperTuple<?>>
+			firstModelRepresentorMapperTuple =
+				modelRepresentorMapperTuplesOptional.map(TreeSet::first);
+
+		return firstModelRepresentorMapperTuple.map(
+			modelRepresentorMapperTuple ->
+				(ModelRepresentorMapper<T>)modelRepresentorMapperTuple.
+					getModelRepresentorMapper());
 	}
 
 	public <T> List<String> getTypes(Class<T> modelClass) {
-		return _typeLists.get(modelClass.getName());
+		return _types.get(modelClass.getName());
 	}
 
 	@Reference(
@@ -86,7 +103,7 @@ public class RepresentorManager {
 	)
 	protected <T> void setServiceReference(
 			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
-		throws InvalidGenericException {
+		throws IllegalArgumentException {
 
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
@@ -96,12 +113,12 @@ public class RepresentorManager {
 		_addModelRepresentorMapper(
 			serviceReference, modelRepresentorMapper, modelClass);
 
-		_createRepresentorMaps(modelRepresentorMapper, modelClass);
+		_buildRepresentor(modelRepresentorMapper, modelClass);
 	}
 
 	protected <T> void unsetServiceReference(
 			ServiceReference<ModelRepresentorMapper<T>> serviceReference)
-		throws InvalidGenericException {
+		throws IllegalArgumentException {
 
 		ModelRepresentorMapper<T> modelRepresentorMapper =
 			_bundleContext.getService(serviceReference);
@@ -110,12 +127,14 @@ public class RepresentorManager {
 
 		_removeModelRepresentorMapper(modelRepresentorMapper, modelClass);
 
-		_removeRepresentorMaps(modelClass);
+		_removeRepresentor(modelClass);
 
-		getModelRepresentorMapper(modelClass).ifPresent(
+		Optional<ModelRepresentorMapper<T>> optional =
+			getModelRepresentorMapperOptional(modelClass);
+
+		optional.ifPresent(
 			firstModelRepresentorMapper ->
-				_createRepresentorMaps(
-					firstModelRepresentorMapper, modelClass));
+				_buildRepresentor(firstModelRepresentorMapper, modelClass));
 	}
 
 	private <T> void _addModelRepresentorMapper(
@@ -125,73 +144,88 @@ public class RepresentorManager {
 		_modelRepresentorMappers.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		ModelRepresentorMapperTuple<T> tuple =
+		ModelRepresentorMapperTuple<T> modelRepresentorMapperTuple =
 			new ModelRepresentorMapperTuple<>(
 				serviceReference, modelRepresentorMapper);
 
 		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
 			_modelRepresentorMappers.get(modelClass.getName());
 
-		modelRepresentorMapperTuples.add(tuple);
+		modelRepresentorMapperTuples.add(modelRepresentorMapperTuple);
 	}
 
-	private <T> void _createRepresentorMaps(
+	private <T> void _buildRepresentor(
 		ModelRepresentorMapper<T> modelRepresentorMapper, Class<T> modelClass) {
 
 		Map<String, Function<?, Object>> fieldFunctions = new HashMap<>();
-		List<RelationTuple<?, ?>> relationTuples = new ArrayList<>();
+
+		_fieldFunctions.put(modelClass.getName(), fieldFunctions);
+
+		List<EmbeddedTuple<?, ?>> embeddedTuples = new ArrayList<>();
+
+		_embeddedTuples.put(modelClass.getName(), embeddedTuples);
+
 		List<String> types = new ArrayList<>();
 
-		_fieldFunctionMaps.put(modelClass.getName(), fieldFunctions);
-		_relationTupleLists.put(modelClass.getName(), relationTuples);
-		_typeLists.put(modelClass.getName(), types);
+		_types.put(modelClass.getName(), types);
 
 		modelRepresentorMapper.buildRepresentor(
 			new RepresentorBuilderImpl<>(
 				modelClass, _identifierFunctions, fieldFunctions,
-				relationTuples, types));
+				embeddedTuples, types));
 	}
 
 	private <T> Class<T> _getModelClass(
 			ModelRepresentorMapper<T> modelRepresentorMapper)
-		throws InvalidGenericException {
+		throws IllegalArgumentException {
 
-		Optional<Class<T>> genericClass = GenericUtil.getGenericClass(
+		Optional<Class<T>> optional = GenericUtil.getGenericClassOptional(
 			modelRepresentorMapper, ModelRepresentorMapper.class);
 
-		if (!genericClass.isPresent()) {
-			throw new InvalidGenericException(
-				modelRepresentorMapper.getClass());
+		if (!optional.isPresent()) {
+			Class<?> clazz = modelRepresentorMapper.getClass();
+
+			throw new IllegalArgumentException(
+				"Class " + clazz.getName() + " must have a generic type");
 		}
 
-		return genericClass.get();
+		return optional.get();
 	}
 
 	private <T> void _removeModelRepresentorMapper(
 		ModelRepresentorMapper modelRepresentorMapper, Class<T> modelClass) {
 
-		_modelRepresentorMappers.get(modelClass.getName()).removeIf(tuple ->
-			tuple.getModelRepresentorMapper() == modelRepresentorMapper);
+		TreeSet<ModelRepresentorMapperTuple<?>> modelRepresentorMapperTuples =
+			_modelRepresentorMappers.get(modelClass.getName());
+
+		modelRepresentorMapperTuples.removeIf(
+			modelRepresentorMapperTuple -> {
+				if (modelRepresentorMapperTuple.getModelRepresentorMapper() ==
+						modelRepresentorMapper) {
+
+					return true;
+				}
+
+				return false;
+			});
 	}
 
-	private <T> void _removeRepresentorMaps(Class<T> modelClass) {
-		_fieldFunctionMaps.remove(modelClass.getName());
+	private <T> void _removeRepresentor(Class<T> modelClass) {
+		_embeddedTuples.remove(modelClass.getName());
+		_fieldFunctions.remove(modelClass.getName());
 		_identifierFunctions.remove(modelClass.getName());
-		_relationTupleLists.remove(modelClass.getName());
-		_typeLists.remove(modelClass.getName());
+		_types.remove(modelClass.getName());
 	}
 
-	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
-		RepresentorManager.class).getBundleContext();
-	private final ConcurrentMap<String, Map<String, Function<?, Object>>>
-		_fieldFunctionMaps = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, Function<?, String>>
-		_identifierFunctions = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, TreeSet<ModelRepresentorMapperTuple<?>>>
-		_modelRepresentorMappers = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<RelationTuple<?, ?>>>
-		_relationTupleLists = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, List<String>> _typeLists =
+	private final BundleContext _bundleContext;
+	private final Map<String, List<EmbeddedTuple<?, ?>>> _embeddedTuples =
 		new ConcurrentHashMap<>();
+	private final Map<String, Map<String, Function<?, Object>>>
+		_fieldFunctions = new ConcurrentHashMap<>();
+	private final Map<String, Function<?, String>> _identifierFunctions =
+		new ConcurrentHashMap<>();
+	private final Map<String, TreeSet<ModelRepresentorMapperTuple<?>>>
+		_modelRepresentorMappers = new ConcurrentHashMap<>();
+	private final Map<String, List<String>> _types = new ConcurrentHashMap<>();
 
 }

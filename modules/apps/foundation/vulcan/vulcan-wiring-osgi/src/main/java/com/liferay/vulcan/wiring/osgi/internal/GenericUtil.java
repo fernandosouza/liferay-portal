@@ -31,10 +31,10 @@ import java.util.Optional;
  */
 public class GenericUtil {
 
-	public static <T, S> Optional<Class<S>> getGenericClass(
-		T service, Class<T> clazz) {
+	public static <T, S> Optional<Class<S>> getGenericClassOptional(
+		T t, Class<T> clazz) {
 
-		Type genericType = ReflectionUtil.getGenericInterface(service, clazz);
+		Type genericType = ReflectionUtil.getGenericInterface(t, clazz);
 
 		if ((genericType != null) &&
 			(genericType instanceof ParameterizedType)) {
@@ -52,7 +52,7 @@ public class GenericUtil {
 				}
 				catch (ClassCastException cce) {
 					if (_log.isWarnEnabled()) {
-						_log.warn(cce);
+						_log.warn(cce, cce);
 					}
 				}
 			}
