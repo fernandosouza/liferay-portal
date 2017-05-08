@@ -29,6 +29,10 @@ portletURL.setParameter("displayStyle", displayStyle);
 <liferay-util:include page="/admin/toolbar.jsp" servletContext="<%= application %>" />
 
 <div class="container-fluid-1280" id="<portlet:namespace />formContainer">
+	Icone: <liferay-frontend:icon symbol="star" id="ddlIcon" />
+	Icone 2: <liferay-frontend:icon symbol="trash" />
+	Icone 3: <liferay-frontend:icon elementClasses="glyphicon glyphicon-asterisk" />
+
 	<aui:form action="<%= portletURL.toString() %>" method="post" name="searchContainerForm">
 		<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
 		<aui:input name="deleteRecordSetIds" type="hidden" />

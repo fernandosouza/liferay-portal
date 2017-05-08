@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -85,12 +84,10 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 		return EVAL_BODY_INCLUDE;
 	}
 
-	public String getComponentId() {
-		if (Validator.isNull(_componentId)) {
-			_componentId = StringUtil.randomId();
-		}
+	public String getId() {
+		Map<String, Object> context = getContext();
 
-		return _componentId;
+		return (String)context.get("id");
 	}
 
 	public String getModule() {
@@ -118,12 +115,12 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 		context.put(key, value);
 	}
 
-	public void setComponentId(String componentId) {
-		_componentId = componentId;
-	}
-
 	public void setContext(Map<String, Object> context) {
 		_context = context;
+	}
+
+	public void setId(String id) {
+		putValue("id", id);
 	}
 
 	public void setModule(String module) {
@@ -136,7 +133,6 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 
 	protected void cleanUp() {
 		if (!ServerDetector.isResin()) {
-			_componentId = null;
 			_context = null;
 			_module = null;
 			_templateNamespace = null;
@@ -152,7 +148,7 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 	}
 
 	protected String getElementSelector() {
-		return StringPool.POUND.concat(getComponentId()).concat(" > div");
+		return StringPool.POUND.concat(getId());
 	}
 
 	protected boolean isRenderJavaScript() {
@@ -164,6 +160,9 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 	}
 
 	protected void prepareContext(Map<String, Object> context) {
+		if (!context.containsKey("id")) {
+			putValue("id", StringUtil.randomId());
+		}
 	}
 
 	protected void renderJavaScript(
@@ -178,7 +177,7 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 		}
 
 		String componentJavaScript = javaScriptComponentRenderer.getJavaScript(
-			context, getComponentId(), SetUtil.fromString(getModule()));
+			context, getId(), SetUtil.fromString(getModule()));
 
 		jspWriter.write(componentJavaScript);
 	}
@@ -193,13 +192,7 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 
 		_template.prepare(request);
 
-		jspWriter.append("<div id=\"");
-		jspWriter.append(HtmlUtil.escapeAttribute(getComponentId()));
-		jspWriter.append("\">");
-
 		_template.processTemplate(jspWriter);
-
-		jspWriter.append("</div>");
 	}
 
 	private SoyJavaScriptRenderer _getJavaScriptComponentRenderer()
@@ -218,7 +211,6 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 	}
 
 	private Bundle _bundle;
-	private String _componentId;
 	private Map<String, Object> _context;
 	private String _module;
 	private Template _template;
