@@ -127,6 +127,7 @@ public class TemplateRendererTag extends ParamAndPropertyAncestorTagImpl {
 	@java.lang.Deprecated
 	public void setComponentId(String componentId) {
 		_componentId = componentId;
+
 		putValue("id", _componentId);
 	}
 
