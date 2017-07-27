@@ -226,7 +226,7 @@ while (manageableCalendarsIterator.hasNext()) {
 			);
 
 			var destroyInstance = function(event) {
-				if (event.portletId === '<%= portletDisplay.getRootPortletId() %>') {
+				if (event.portletId === '<%= portletDisplay.getId() %>') {
 					calendarContainer.destroy();
 
 					Liferay.component('<portlet:namespace />calendarContainer', null);
@@ -251,7 +251,7 @@ while (manageableCalendarsIterator.hasNext()) {
 			);
 
 			var destroyInstance = function(event) {
-				if (event.portletId === '<%= portletDisplay.getRootPortletId() %>') {
+				if (event.portletId === '<%= portletDisplay.getId() %>') {
 					remoteServices.destroy();
 
 					Liferay.component('<portlet:namespace />remoteServices', null);
