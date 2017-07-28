@@ -491,7 +491,7 @@ while (manageableCalendarsIterator.hasNext()) {
 
 <aui:script>
 	function <portlet:namespace />filterCalendarBookings(calendarBooking) {
-		return '<%= calendarBookingId %>' !== calendarBooking.calendarBookingId;
+		return calendarBooking.calendarBookingId !== '<%= calendarBookingId %>';
 	}
 
 	function <portlet:namespace />resolver(data) {
@@ -718,7 +718,7 @@ while (manageableCalendarsIterator.hasNext()) {
 
 	new Liferay.DatePickerSanitizer(
 		{
-			datePickers : [
+			datePickers: [
 				Liferay.component('<portlet:namespace />endTimeDatePicker'),
 				Liferay.component('<portlet:namespace />endTimeDatePicker')
 			],
