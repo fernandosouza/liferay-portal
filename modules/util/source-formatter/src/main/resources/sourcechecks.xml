@@ -23,6 +23,12 @@
 		<check name="BNDIncludeResourceCheck" />
 		<check name="BNDWebContextPathCheck" />
 	</source-processor>
+	<source-processor name="CodeownersSourceProcessor">
+		<check name="CodeownersFileLocationCheck" />
+		<check name="CodeownersWhitespaceCheck">
+			<property name="allowLeadingSpaces" value="true" />
+		</check>
+	</source-processor>
 	<source-processor name="CQLSourceProcessor">
 		<check name="CQLKeywordCheck" />
 		<check name="WhitespaceCheck">
@@ -37,7 +43,9 @@
 		<check name="CSSWhitespaceCheck" />
 	</source-processor>
 	<source-processor name="DockerfileSourceProcessor">
-		<check name="WhitespaceCheck" />
+		<check name="WhitespaceCheck">
+			<property name="allowLeadingSpaces" value="true" />
+		</check>
 	</source-processor>
 	<source-processor name="FTLSourceProcessor">
 		<check name="FTLEmptyLinesCheck" />
